@@ -14,6 +14,6 @@
     "isolatedModules": true,
     "jsx": "preserve"
   },
-  "include": ["./src/**/*"],
+  "include": ["./src/**/*", "wrap-with-provider.js"],
   "exclude": ["node_modules", "public", ".cache"]
 }

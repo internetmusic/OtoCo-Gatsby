@@ -1,0 +1,19 @@
+@import 'scss/colors.scss';
+
+.account-widget {
+  color: $white;
+  float: right;
+  position: fixed;
+  top: 25px;
+  right: 25px;
+  cursor: pointer;
+  p {
+      text-align: right;
+  }
+  .network {
+      background: $teal;
+      border-radius: 2px;
+      padding: 2px 4px;
+      color: black;
+  }
+}

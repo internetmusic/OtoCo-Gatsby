@@ -4,32 +4,33 @@
 
 // Start with assigning color names to specific hex values.
 //
-// Color system
+// COLOR SYSTEM
 //
 @import './colors.scss';
 
 // Reassign color vars to semantic color scheme
 $theme-colors: (
   primary: $cyan,
-  secondary: $cyan,
-  success: $green,
+  secondary: $teal,
+  success: $teal,
   info: $cyan,
   warning: $yellow,
   danger: $red,
   light: $gray-100,
-  dark: $gray-800,
-) !default;
+  dark: $gray-100,
+  background: $black,
+);
 
 // Options
 //
 // Quickly modify global styling by enabling or disabling optional features.
-$enable-rounded: true !default;
-$enable-shadows: true !default;
-$enable-gradients: false !default;
-$enable-transitions: false !default;
-$enable-hover-media-query: false !default;
-$enable-grid-classes: true !default;
-$enable-print-styles: true !default;
+$enable-rounded: true ;
+$enable-shadows: true ;
+$enable-gradients: true ;
+$enable-transitions: true ;
+$enable-hover-media-query: false ;
+$enable-grid-classes: true ;
+$enable-print-styles: true ;
 
 // Grid containers
 //
@@ -40,22 +41,15 @@ $container-max-widths: (
   md: 640px,
   lg: 710px,
   xl: 780px,
-) !default;
+) ;
 
 // Body
 //
 // Settings for the `<body>` element.
-
-$body-bg: $black !default;
-$body-color: $gray-100 !default;
-$inverse-bg: $gray-900 !default;
-$inverse-color: $gray-600 !default;
-
-// Links
-//
-// Style anchor elements.
-$link-decoration: none !default;
-$link-hover-decoration: none !default;
+$body-bg: $black;
+$body-color: $white;
+$inverse-bg: $white;
+$inverse-color: $black;
 
 // Fonts
 //
@@ -67,11 +61,72 @@ html,
 body {
   height: 100%;
   width: 100%;
+  background-color: $black;
+  background-repeat: no-repeat;
+  background-size: 100% 40%;
+  background-position: 0px calc(80vh - 5vw);
+  background-attachment: fixed;
+  background-blend-mode: lighten;
+  background-image: url("../../public/img/bg_small.png");
 }
 
 * {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+
+// Buttons
+.btn-primary{
+  color: $black;
+  &:hover, &:active, &:visited, &:focus{
+    color: $black;
+  }
+}
+
+.input-group-append {
+  background: transparent;
+  .btn.disabled{
+    background: transparent;
+    color: $white !important;
+    border: 1px solid $gray-400 !important;
+    margin: 0px 1px;  
+    border-left: none;
+    border-right: none;
+  }
+  .dropdown-toggle,
+  .dropdown-toggle:focus,
+  .dropdown-toggle:active,
+  .dropdown-toggle:hover{
+    background: transparent;
+    color: $white !important;
+    border: 1px solid $gray-400;
+    border-radius: 4px;
+    border-left: none;
+    border-radius: 0px 6px 6px 0px !important;
+  }
+  .dropdown-item{
+    color: $white;
+  }
+  .dropdown-menu{
+    background: $black;
+    border: 1px solid $gray-400;
+    color: $white !important;
+  }
+}
+
+.form-control,
+input[type="text"]{
+  background: transparent !important;
+  color: $white !important;
+  &:focus,
+  &:focus-visible,
+  &:active{
+    background: transparent !important;
+  }
+  &.right{
+    border-right: none;
+  }
 }
 
 p {
@@ -87,4 +142,43 @@ img {
 
 img:hover {
   animation: pulse 0.5s;
+}
+
+.padded {
+  padding: 40px;
+}
+
+@media (max-width: 640px) {
+  .padded {
+    padding: 16px;
+  }
+}
+
+.column-centered {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// TERMS
+.terms {
+  .c3 {
+      font-weight: 600;
+      margin: 14pt 0px;
+  }
+}
+// PRIVACY
+.privacy {
+  .c23 {
+      font-style: italic;
+  }
+
+  .c9, .c6 {
+      font-weight: 800;
+  }
+
+  .c13 {
+      font-weight: 800;
+      margin: 30pt 0px;
+  }
 }

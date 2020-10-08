@@ -46,31 +46,31 @@ module.exports = {
         ],
       },
     },
-    {
-      resolve: `gatsby-plugin-manifest`,
-      options: {
-        name: 'Otoco Web APP',
-        short_name: 'Otoco',
-        description: 'Instantly spin up your real-world LLC here.',
-        homepage_url: 'https://otoco.io',
-        start_url: '/',
-        background_color: '#0F0F0F',
-        theme_color: '#fff',
-        display: 'standalone',
-        icons: [
-          {
-            src: '/img/android-chrome-192x192.png',
-            sizes: '192x192',
-            type: 'image/png',
-          },
-          {
-            src: '/img/android-chrome-512x512.png',
-            sizes: '512x512',
-            type: 'image/png',
-          },
-        ],
-      },
-    },
+    // {
+    //   resolve: `gatsby-plugin-manifest`,
+    //   options: {
+    //     name: 'Otoco Web APP',
+    //     short_name: 'Otoco',
+    //     description: 'Instantly spin up your real-world LLC here.',
+    //     homepage_url: 'https://otoco.io',
+    //     start_url: '/',
+    //     background_color: '#0F0F0F',
+    //     theme_color: '#fff',
+    //     display: 'standalone',
+    //     icons: [
+    //       {
+    //         src: '/img/android-chrome-192x192.png',
+    //         sizes: '192x192',
+    //         type: 'image/png',
+    //       },
+    //       {
+    //         src: '/img/android-chrome-512x512.png',
+    //         sizes: '512x512',
+    //         type: 'image/png',
+    //       },
+    //     ],
+    //   },
+    // },
     {
       resolve: 'gatsby-plugin-netlify',
       options: {
@@ -79,18 +79,18 @@ module.exports = {
         mergeCachingHeaders: true,
       },
     },
-    {
-      resolve: 'gatsby-plugin-graphql-codegen',
-      options: {
-        fileName: `types/graphql-types.d.ts`,
-      },
-    },
+    // {
+    //   resolve: 'gatsby-plugin-graphql-codegen',
+    //   options: {
+    //     fileName: `types/graphql-types.d.ts`,
+    //   },
+    // },
     'gatsby-plugin-catch-links',
     'gatsby-plugin-offline',
     'gatsby-plugin-react-helmet',
     'gatsby-plugin-sass',
     'gatsby-plugin-sharp',
-    'gatsby-plugin-sitemap',
+    // 'gatsby-plugin-sitemap',
     'gatsby-plugin-typescript',
     'gatsby-transformer-sharp',
   ],

@@ -1,26 +1,33 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { library, IconName } from '@fortawesome/fontawesome-svg-core'
-import {
-  faCog,
-  faTimes,
-  faExclamationTriangle,
-  faCopy,
-  faDownload,
-} from '@fortawesome/free-solid-svg-icons'
+import { IconDefinition } from '@fortawesome/fontawesome-svg-core'
+
 import React from 'react'
 
 import './style.scss'
 
-library.add(faCog, faTimes, faCopy, faExclamationTriangle, faDownload)
-
 interface Props {
-  name: IconName
-  title: string
+  icon: IconDefinition
+  size?:
+    | 'xs'
+    | 'lg'
+    | 'sm'
+    | '1x'
+    | '2x'
+    | '3x'
+    | '4x'
+    | '5x'
+    | '6x'
+    | '7x'
+    | '8x'
+    | '9x'
+    | '10x'
+    | undefined
+  spin?: boolean | undefined
 }
 
-const Icon: React.FC<Props> = ({ name, title }: Props) => (
-  <div className="icon" title={title}>
-    <FontAwesomeIcon icon={['fab', name as IconName]} />
+const Icon: React.FC<Props> = ({ icon, size = '1x', spin = false }: Props) => (
+  <div className="icon">
+    <FontAwesomeIcon icon={icon} size={size} spin={spin} />
   </div>
 )
 

@@ -1,7 +1,6 @@
 @import 'scss/colors.scss';
 
 .footer {
-
   position: fixed;
   right: 20px;
   bottom: 20px;
@@ -9,4 +8,12 @@
   float: right;
   text-align: right;
   
+}
+
+@media (max-width: 640px) {
+  .footer {
+    position: relative;
+    padding: 40px 0px 20px 0px;
+
+  }
 }

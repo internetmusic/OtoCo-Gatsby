@@ -1,10 +1,18 @@
-import { createStore } from 'redux'
+import { createStore, combineReducers, StoreCreator } from 'redux'
 
-function reducer() {
-  //...
-}
+import spinUpState from './spinUp/reducer'
+import accountState from './account/reducer'
+import { IState } from './types'
 
-// preloadedState will be passed in by the plugin
-export default (preloadedState) => {
-  return createStore(reducer, preloadedState)
+const rootReducer = combineReducers({
+  spinUp: spinUpState,
+  account: accountState,
+})
+
+const getLoadedState = (preloadedState: IState) => ({
+  ...preloadedState,
+})
+
+export default (preloadedState: IState): StoreCreator => {
+  return createStore(rootReducer, getLoadedState(preloadedState))
 }
