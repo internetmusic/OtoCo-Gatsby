@@ -14,16 +14,16 @@ interface Props {
 
 const pdfs = {
   de: {
-    agreement: require('../../../public/pdfs/DOA_de.pdf'),
-    page1: require('../../../public/pdfs/page1_de.pdf'),
-    page21: require('../../../public/pdfs/page21_de.pdf'),
-    page22: require('../../../public/pdfs/page22_de.pdf'),
+    agreement: require('../../../static/pdfs/DOA_de.pdf'),
+    page1: require('../../../static/pdfs/page1_de.pdf'),
+    page21: require('../../../static/pdfs/page21_de.pdf'),
+    page22: require('../../../static/pdfs/page22_de.pdf'),
   },
   wy: {
-    agreement: require('../../../public/pdfs/DOA_wy.pdf'),
-    page1: require('../../../public/pdfs/page1_wy.pdf'),
-    page21: require('../../../public/pdfs/page21_wy.pdf'),
-    page22: require('../../../public/pdfs/page22_wy.pdf'),
+    agreement: require('../../../static/pdfs/DOA_wy.pdf'),
+    page1: require('../../../static/pdfs/page1_wy.pdf'),
+    page21: require('../../../static/pdfs/page21_wy.pdf'),
+    page22: require('../../../static/pdfs/page22_wy.pdf'),
   },
 }
 
