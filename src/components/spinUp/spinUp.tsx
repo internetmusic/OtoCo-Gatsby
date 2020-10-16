@@ -1,18 +1,18 @@
-import React, { Dispatch, FC, useState } from 'react'
+import React, { FC } from 'react'
 import { connect } from 'react-redux'
 import { IState } from '../../state/types'
-import { SpinUpActionTypes } from '../../state/spinUp/types'
-import './style.scss'
 import CheckName from './checkName'
 import ConnectWallet from './connectWallet'
 import ApprovePayment from './approvePayment'
+import ActivateCompany from './activateCompany'
+
+import './style.scss'
 
 interface Props {
   currentStep: number
-  dispatch: Dispatch<SpinUpActionTypes>
 }
 
-const SpinUp: FC<Props> = ({ currentStep, dispatch }: Props) => {
+const SpinUp: FC<Props> = ({ currentStep }: Props) => {
   return (
     <div className="row">
       <div className="col-4 d-none d-md-block">
@@ -42,7 +42,8 @@ const SpinUp: FC<Props> = ({ currentStep, dispatch }: Props) => {
       <div className="col-12 col-md-8">
         {currentStep === 0 && <CheckName></CheckName>}
         {currentStep === 1 && <ConnectWallet></ConnectWallet>}
-        {currentStep === 1 && <ApprovePayment></ApprovePayment>}
+        {currentStep === 2 && <ApprovePayment></ApprovePayment>}
+        {currentStep === 3 && <ActivateCompany></ActivateCompany>}
       </div>
     </div>
   )

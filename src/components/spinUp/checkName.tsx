@@ -1,4 +1,5 @@
 import React, { Dispatch, FC, useState } from 'react'
+import { Link } from 'gatsby'
 import axios from 'axios'
 import { connect } from 'react-redux'
 import { IState } from '../../state/types'
@@ -108,9 +109,9 @@ const CheckName: FC<Props> = ({
           <p className="small">
             Click <b>`My Dashboard`</b> if you want to manage your deployed LLC.
           </p>
-          <button type="button" className="btn btn-primary mr-4">
+          <Link to="/dashboard/" className="btn btn-primary mr-4">
             My Dashboard
-          </button>
+          </Link>
           {!loading && (
             <button
               type="button"

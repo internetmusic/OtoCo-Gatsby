@@ -1,4 +1,3 @@
-export const SET_LOADING = 'SET_LOADING'
 export const SET_CURRENT_STEP = 'SET_CURRENT_STEP'
 export const SET_FAST_FEE = 'SET_FAST_FEE'
 export const SET_TOTAL_COST = 'SET_TOTAL_COST'
@@ -6,11 +5,6 @@ export const SET_COMPANY_NAME = 'SET_COMPANY_NAME'
 export const SET_AVAILABLE_NAME = 'SET_AVAILABLE_NAME'
 export const CLEAR_AVAILABLE_NAME = 'CLEAR_AVAILABLE_NAME'
 export const SET_JURISDICTION = 'SET_JURISDICTION'
-
-interface SetLoading {
-  type: typeof SET_LOADING
-  payload: boolean
-}
 
 interface SetCurrentStep {
   type: typeof SET_CURRENT_STEP
@@ -52,7 +46,6 @@ export interface IJurisdictionOption {
 }
 
 export interface ISpinUpState {
-  loading: boolean
   currentStep: number
   fastFee: number
   totalCost: number
@@ -66,7 +59,6 @@ export interface ISpinUpState {
 }
 
 export type SpinUpActionTypes =
-  | SetLoading
   | SetCurrentStep
   | SetFastFee
   | SetTotalCost

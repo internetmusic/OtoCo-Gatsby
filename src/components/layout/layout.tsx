@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import emergence from 'emergence.js'
+// import emergence from 'emergence.js'
 
 import Footer from '../footer/footer'
 import Logo from '../logo/logo'
@@ -16,9 +16,9 @@ interface Props {
 }
 
 const Layout: React.FC<Props> = ({ children }: Props) => {
-  useEffect(() => {
-    emergence.init()
-  })
+  // useEffect(() => {
+  //   emergence.init()
+  // })
 
   return (
     <div className="padded">

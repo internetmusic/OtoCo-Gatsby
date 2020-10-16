@@ -47,6 +47,7 @@ const Modal: ModalType = {
     if (this.web3Modal) this.web3Modal.clearCachedProvider()
     this.provider = null
     window.web3 = undefined
+    this.callModal()
   },
 }
 

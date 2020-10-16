@@ -60,7 +60,9 @@ $inverse-color: $black;
 html,
 body {
   height: 100%;
-  width: 100%;
+  width: 100vw;
+  overflow-y: auto;
+  overflow-x: hidden;
   background-color: $black;
   background-repeat: no-repeat;
   background-size: 100% 40%;
@@ -181,4 +183,61 @@ img:hover {
       font-weight: 800;
       margin: 30pt 0px;
   }
+}
+
+.card {
+  background: $black;
+  border: 1px solid $gray-300;
+  // border-radius: 0px;
+  // border: none;
+  box-shadow: 0px 0px 10px $gray-600;
+  .card-body {
+    padding: 8px;
+  }
+  
+  .card-header {
+    background: $gray-700
+  }
+}
+
+.table thead th{
+  border-bottom: none;
+}
+
+.my-node-enter {
+  transform: translate3d(50px, 0px, 0px);
+  opacity: 0;
+}
+.my-node-enter-active {
+  transform: translate3d(0px, 0px, 0px);
+  opacity: 1;
+  transition: opacity 200ms, transform 200ms;
+}
+.my-node-exit {
+  transform: translate3d(0px, 0px, 0px);
+  opacity: 1;
+}
+.my-node-exit-active {
+  transform: translate3d(-50px, 0px, 0px);
+  opacity: 0;
+  transition: opacity 500ms, transform 500ms;
+}
+
+.slide-up-enter {
+  transform: translate3d(0px, -50px, 0px);
+  opacity: 0;
+}
+.slide-up-enter-active {
+  transform: translate3d(0px, 0px, 0px);
+  opacity: 1;
+  transition: opacity 200ms, transform 200ms;
+}
+.slide-up-exit {
+  transform: translate3d(0px, 0px, 0px);
+  opacity: 1;
+}
+.slide-up-exit-active {
+  transform: translate3d(0px, -50px, 0px);
+  opacity: 0;
+  transition: opacity 200ms, transform 200ms;
 }

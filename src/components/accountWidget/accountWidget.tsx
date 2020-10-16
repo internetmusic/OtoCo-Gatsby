@@ -1,5 +1,6 @@
-import React, { Dispatch, FC, useState } from 'react'
+import React, { useEffect, Dispatch, FC, useState } from 'react'
 import Web3 from 'web3'
+import { CSSTransition } from 'react-transition-group'
 import Web3Integrate from '../../services/web3-integrate'
 import { connect } from 'react-redux'
 import { IState } from '../../state/types'
@@ -19,6 +20,8 @@ interface Props {
 }
 
 const AccountWidget: FC<Props> = ({ account, network, dispatch }: Props) => {
+  const [show, setShow] = useState(true)
+
   const handleConnect = async () => {
     await Web3Integrate.callModal()
     const web3: Web3 = window.web3
@@ -30,7 +33,17 @@ const AccountWidget: FC<Props> = ({ account, network, dispatch }: Props) => {
     dispatch({ type: SET_ACCOUNT, payload: accounts[0] })
   }
 
-  const handleManage = () => {}
+  const handleScroll = (event) => {
+    if (event.target.scrollTop < 20) {
+      setShow(true)
+    } else {
+      setShow(false)
+    }
+  }
+
+  React.useEffect(() => {
+    window.addEventListener('scroll', handleScroll, true)
+  }, [])
 
   const handleDisconnect = () => {
     Web3Integrate.disconnect()
@@ -38,31 +51,23 @@ const AccountWidget: FC<Props> = ({ account, network, dispatch }: Props) => {
   }
 
   return (
-    <div className="account-widget">
-      {account && (
-        <div>
-          <p className="small disabled" onClick={handleManage}>
+    <CSSTransition in={show} timeout={200} classNames="slide-up" unmountOnExit>
+      <div className="account-widget">
+        {account && (
+          <div className="small disabled" onClick={handleDisconnect}>
             {account.substring(0, 8)}...{' '}
             <span className="network">{network}</span>
-          </p>
-          <p>
-            <button
-              className="btn btn-sm btn-outline-primary"
-              onClick={handleDisconnect}
-            >
-              disconnect
-            </button>
-          </p>
-        </div>
-      )}
-      {!account && (
-        <div className="account-details">
-          <p>
-            <span onClick={handleConnect}>disconnected</span>
-          </p>
-        </div>
-      )}
-    </div>
+          </div>
+        )}
+        {!account && (
+          <div className="account-details">
+            <p>
+              <span onClick={handleConnect}>disconnected</span>
+            </p>
+          </div>
+        )}
+      </div>
+    </CSSTransition>
   )
 }
 

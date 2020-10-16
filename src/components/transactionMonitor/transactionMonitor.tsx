@@ -12,6 +12,8 @@ import {
   faClock,
 } from '@fortawesome/free-solid-svg-icons'
 
+import './style.scss'
+
 interface Props {
   hash: string
   title: string
@@ -56,9 +58,18 @@ const TransactionMonitor: FC<Props> = ({
         })
         if (transaction) setExists(true)
         else setMessage('Fetching transaction')
+        const receipt = await new Promise<TransactionReceipt>(
+          (resolve, reject) => {
+            web3.eth.getTransactionReceipt(hash, (err, tx) => {
+              if (err) reject(err)
+              else resolve(tx)
+            })
+          }
+        )
         if (receipt) {
           setBlockNumber(receipt.blockNumber)
           web3.eth.getBlockNumber((error, blockNum) => {
+            console.log(blockNum)
             setConfirmations(Math.max(0, blockNum - receipt.blockNumber))
             setReceipt(receipt)
             if (blockNum - receipt.blockNumber <= 0)
@@ -78,45 +89,59 @@ const TransactionMonitor: FC<Props> = ({
       }
       setCounter(counter + 2)
     }, 2000)
-  }, [hash, counter])
+  })
 
   return (
     <div className="card transaction-card">
       <div className="card-body">
-        <div className="card-title">
-          <i className="file outline massive icon"></i>
-          {error && <Icon icon={faExclamationCircle} size="10x" />}
-          {!exists && !error && <Icon icon={faSpinner} size="9x" />}
-          {exists && !error && <Icon icon={faCheck} size="9x" />}
-          {confirmations === 0 && !error && (
-            <Icon icon={faSpinner} size="2x" spin={true} />
-          )}
-          {confirmations > 0 && !error && (
-            <Icon icon={faCheckDouble} size="9x" />
-          )}
-        </div>
-        <div className="card-title">{title}</div>
-        <div className="card-text">
-          <div className="small">
-            Transaction hash:{' '}
-            <a
-              href={`https://${
-                network === 'main' ? '' : network + '.'
-              }etherscan.io/tx/${hash}`}
-              target="_blank"
-              rel="noreferrer"
-            >
-              {hash.substring(0, 32)} ...
-            </a>{' '}
+        <h6 className="card-title">{title}</h6>
+        <div className="row">
+          <div className="col-4">
+            <i className="file outline massive icon"></i>
+            {error && <Icon icon={faExclamationCircle} size="5x" />}
+            {!exists && !error && (
+              <Icon icon={faSpinner} size="5x" spin={true} />
+            )}
+            {exists && !confirmations && !error && (
+              <Icon icon={faSpinner} size="5x" spin={true} />
+            )}
+            {confirmations > 0 && !error && <Icon icon={faCheck} size="5x" />}
           </div>
-          <div className="small">Transaction Block: {blockNumber}</div>
-          <div className="small">Confirmations: {confirmations}</div>
-          <div className="small">Estimated cost: {cost} ETH</div>
+          <div className="col-8">
+            <div className="small">
+              Transaction hash:{' '}
+              <a
+                href={`https://${
+                  network === 'main' ? '' : network + '.'
+                }etherscan.io/tx/${hash}`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                {hash.substring(0, 8)} ...
+              </a>{' '}
+            </div>
+            <div className="small">Transaction Block: {blockNumber}</div>
+            <div className="small">Confirmations: {confirmations}</div>
+            <div className="small">Estimated cost: {cost} ETH</div>
+            <div className="small" style={{ display: 'inline', float: 'left' }}>
+              <Icon icon={faClock} size="1x" spin={true} />
+              &nbsp;{counter} seconds ...
+            </div>
+          </div>
         </div>
         <div className="card-footer">
-          <Icon icon={faClock} size="1x" spin={true} /> {counter} seconds ...
-          {error && <div style={{ float: 'right' }}>{error}</div>}
-          {!error && <div style={{ float: 'right' }}>{message}</div>}
+          {error && (
+            <div className="small" style={{ float: 'right' }}>
+              {error}
+            </div>
+          )}
+          {!error && (
+            <div className="small" style={{ float: 'right' }}>
+              {message}&nbsp;&nbsp;
+              {confirmations > 0 && !error && <Icon icon={faCheck} />}
+              {exists && !error && <Icon icon={faCheck} />}
+            </div>
+          )}
         </div>
       </div>
     </div>

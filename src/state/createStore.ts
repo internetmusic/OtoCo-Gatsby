@@ -2,11 +2,13 @@ import { createStore, combineReducers, StoreCreator } from 'redux'
 
 import spinUpState from './spinUp/reducer'
 import accountState from './account/reducer'
+import managementState from './management/reducer'
 import { IState } from './types'
 
 const rootReducer = combineReducers({
   spinUp: spinUpState,
   account: accountState,
+  management: managementState,
 })
 
 const getLoadedState = (preloadedState: IState) => ({

@@ -3,8 +3,6 @@ import { IconDefinition } from '@fortawesome/fontawesome-svg-core'
 
 import React from 'react'
 
-import './style.scss'
-
 interface Props {
   icon: IconDefinition
   size?:
@@ -26,9 +24,7 @@ interface Props {
 }
 
 const Icon: React.FC<Props> = ({ icon, size = '1x', spin = false }: Props) => (
-  <div className="icon">
-    <FontAwesomeIcon icon={icon} size={size} spin={spin} />
-  </div>
+  <FontAwesomeIcon icon={icon} size={size} spin={spin} />
 )
 
 export default Icon

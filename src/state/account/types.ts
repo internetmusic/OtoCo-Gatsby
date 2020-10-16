@@ -17,8 +17,8 @@ interface SetNetwork {
 }
 
 export interface IAccountState {
-  account: string | null
-  network: string | null
+  account?: string
+  network?: string
 }
 
 export type AccountActionTypes = Disconnect | SetAccount | SetNetwork

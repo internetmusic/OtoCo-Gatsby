@@ -10,7 +10,7 @@ interface Props {
   location: Location
 }
 
-const BlogIndex: React.FC<Props> = ({ location }: Props) => {
+const Index: React.FC<Props> = ({ location }: Props) => {
   return (
     <Layout location={location}>
       <div className="container-xl content">
@@ -22,7 +22,7 @@ const BlogIndex: React.FC<Props> = ({ location }: Props) => {
         >
           <div className="row no-gutters">
             <div className="col-4 col-sm-2 column-centered">
-              <Icon icon={faExclamationTriangle} size="9x" />
+              <Icon icon={faExclamationTriangle} size="4x" />
             </div>
             <div className="col-8 col-sm-10">
               <h6 className="card-title">Before you start</h6>
@@ -42,4 +42,4 @@ const BlogIndex: React.FC<Props> = ({ location }: Props) => {
   )
 }
 
-export default BlogIndex
+export default Index

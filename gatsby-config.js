@@ -10,6 +10,22 @@ module.exports = {
   pathPrefix: '/',
   plugins: [
     {
+      resolve: `gatsby-plugin-create-client-paths`,
+      options: { prefixes: [`/tokens/*`] },
+    },
+    {
+      resolve: 'gatsby-plugin-firebase',
+      options: {
+        credentials: {
+          apiKey: 'AIzaSyDfskU_rkwnxDQ83BoZt4bnhPw_uV2fBao',
+          authDomain: 'otoco-281518.firebaseapp.com',
+          databaseURL: 'https://otoco-281518.firebaseio.com',
+          storageBucket: 'otoco-281518.appspot.com',
+          projectID: 'otoco-281518',
+        },
+      },
+    },
+    {
       resolve: `gatsby-plugin-react-redux`,
       options: {
         pathToCreateStoreModule: './src/state/createStore',
