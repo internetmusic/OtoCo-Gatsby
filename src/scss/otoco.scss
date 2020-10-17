@@ -118,7 +118,7 @@ body {
 }
 
 .form-control,
-input[type="text"]{
+.input-group input{
   background: transparent !important;
   color: $white !important;
   &:focus,
