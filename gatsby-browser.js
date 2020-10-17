@@ -5,6 +5,8 @@ import 'bootstrap/js/dist/util'
 import 'bootstrap/js/dist/carousel'
 import 'bootstrap/js/dist/dropdown'
 import 'firebase/database'
+import 'font-awesome/css/font-awesome.css'
+import './src/scss/otoco.scss'
 
 import wrapWithProvider from './wrap-with-provider'
 export const wrapRootElement = wrapWithProvider
