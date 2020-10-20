@@ -3,16 +3,19 @@ import Web3 from 'web3'
 import axios from 'axios'
 import { navigate } from '@reach/router'
 import { connect } from 'react-redux'
-import { IState } from '../../state/types'
-import TransactionMonitor from '../transactionMonitor/transactionMonitor'
-import MainContract from '../../smart-contracts/MainContract'
+import { IState } from '../../../state/types'
+import TransactionMonitor from '../../transactionMonitor/transactionMonitor'
+import MainContract from '../../../smart-contracts/MainContract'
 import {
   SET_ACCOUNT,
   SET_NETWORK,
   AccountActionTypes,
-} from '../../state/account/types'
-import { SET_CURRENT_STEP, SpinUpActionTypes } from '../../state/spinUp/types'
-import transactionMonitor from '../transactionMonitor/transactionMonitor'
+} from '../../../state/account/types'
+import {
+  SET_CURRENT_STEP,
+  SpinUpActionTypes,
+} from '../../../state/spinUp/types'
+import transactionMonitor from '../../transactionMonitor/transactionMonitor'
 
 interface Props {
   account?: string

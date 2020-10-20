@@ -1,12 +1,12 @@
 import React, { Dispatch, FC, useState } from 'react'
 import { connect } from 'react-redux'
-import { IState } from '../../state/types'
+import { IState } from '../../../state/types'
 import {
   SET_JURISDICTION,
   SpinUpActionTypes,
   ISpinUpState,
   IJurisdictionOption,
-} from '../../state/spinUp/types'
+} from '../../../state/spinUp/types'
 import './style.scss'
 
 interface Props {

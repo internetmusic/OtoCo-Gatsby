@@ -23,8 +23,8 @@ const AccountWidget: FC<Props> = ({ account, network, dispatch }: Props) => {
   const [show, setShow] = useState(true)
 
   const handleConnect = async () => {
-    await Web3Integrate.callModal()
-    const web3: Web3 = window.web3
+    const web3: Web3 = await Web3Integrate.callModal()
+    //const web3: Web3 = window.web3
     const accounts = await web3.eth.getAccounts()
     dispatch({
       type: SET_NETWORK,

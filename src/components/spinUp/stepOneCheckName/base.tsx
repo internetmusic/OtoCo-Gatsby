@@ -2,16 +2,16 @@ import React, { Dispatch, FC, useState } from 'react'
 import { Link } from 'gatsby'
 import axios from 'axios'
 import { connect } from 'react-redux'
-import { IState } from '../../state/types'
+import { IState } from '../../../state/types'
 import {
   SET_CURRENT_STEP,
   SET_COMPANY_NAME,
   SET_AVAILABLE_NAME,
   CLEAR_AVAILABLE_NAME,
   SpinUpActionTypes,
-} from '../../state/spinUp/types'
+} from '../../../state/spinUp/types'
 
-import JurisdictionSelector from './jurisdictionSelector'
+import JurisdictionSelector from '../jurisdictionSelector/jurisdictionSelector'
 
 interface Props {
   companyName: string

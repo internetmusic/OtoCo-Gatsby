@@ -1,5 +1,4 @@
 import {
-  SET_LOADING,
   SET_CURRENT_STEP,
   SET_AVAILABLE_NAME,
   CLEAR_AVAILABLE_NAME,
@@ -44,11 +43,6 @@ const reducer = (
   action: SpinUpActionTypes
 ): ISpinUpState => {
   switch (action.type) {
-    case SET_LOADING:
-      return {
-        ...state,
-        loading: action.payload,
-      }
     case SET_CURRENT_STEP:
       return {
         ...state,

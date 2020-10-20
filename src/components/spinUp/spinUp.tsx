@@ -1,12 +1,10 @@
 import React, { FC } from 'react'
 import { connect } from 'react-redux'
 import { IState } from '../../state/types'
-import CheckName from './checkName'
-import ConnectWallet from './connectWallet'
-import ApprovePayment from './approvePayment'
-import ActivateCompany from './activateCompany'
-
-import './style.scss'
+import CheckName from './stepOneCheckName/base'
+import ConnectWallet from './stepTwoConnectWallet/base'
+import Payment from './stepThreePayment/base'
+import ActivateCompany from './stepFourActivateCompany/base'
 
 interface Props {
   currentStep: number
@@ -42,7 +40,7 @@ const SpinUp: FC<Props> = ({ currentStep }: Props) => {
       <div className="col-12 col-md-8">
         {currentStep === 0 && <CheckName></CheckName>}
         {currentStep === 1 && <ConnectWallet></ConnectWallet>}
-        {currentStep === 2 && <ApprovePayment></ApprovePayment>}
+        {currentStep === 2 && <Payment></Payment>}
         {currentStep === 3 && <ActivateCompany></ActivateCompany>}
       </div>
     </div>

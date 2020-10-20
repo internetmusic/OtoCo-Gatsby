@@ -2,23 +2,28 @@ import React, { Dispatch, FC, useState } from 'react'
 import Web3 from 'web3'
 import BN from 'bn.js'
 import { connect } from 'react-redux'
-import { IState } from '../../state/types'
-import AddressWidget from '../addressWidget/addressWidget'
-import { SET_CURRENT_STEP, SpinUpActionTypes } from '../../state/spinUp/types'
-import TransactionMonitor from '../transactionMonitor/transactionMonitor'
+import { IState } from '../../../state/types'
+import {
+  SET_CURRENT_STEP,
+  SpinUpActionTypes,
+} from '../../../state/spinUp/types'
+import TransactionMonitor from '../../transactionMonitor/transactionMonitor'
 
-import ERC20Contract from '../../smart-contracts/ERC20'
-import MainContract from '../../smart-contracts/MainContract'
+import ERC20Contract from '../../../smart-contracts/ERC20'
+import MainContract from '../../../smart-contracts/MainContract'
+
+// import  EnoughBalance from './enoughBalanceForm'
+import NoBalanceForm from './noBalanceForm'
 
 interface Props {
-  account: string | null
-  network: string | null
+  account?: string
+  network?: string
   availableName: string
   jurisdictionSelected: string
   dispatch: Dispatch<SpinUpActionTypes>
 }
 
-const ApprovePayment: FC<Props> = ({
+const Payment: FC<Props> = ({
   account,
   network,
   jurisdictionSelected,
@@ -33,7 +38,7 @@ const ApprovePayment: FC<Props> = ({
 
   const erc20 = {
     symbol: 'DAI',
-    spinUpFee: 5,
+    spinUpFee: 29,
   }
 
   // TODO : Verify if company already not allow master to address payment
@@ -110,70 +115,34 @@ const ApprovePayment: FC<Props> = ({
     dispatch({ type: SET_CURRENT_STEP, payload: 0 })
   }
 
-  function Form() {
-    if (transaction) {
-      return (
-        <div className="animate-slide-left">
-          <TransactionMonitor
-            hash={transaction}
-            title="Approving Tokens"
-            callbackSuccess={nextStepHandler}
-          ></TransactionMonitor>
-          <p>
-            * Once transaction is confirmed, it will automatically proceed to
-            next step.
-          </p>
-        </div>
-      )
-    }
-    return (
-      <div className="animate-slide-left">
-        <p>
-          All it takes to activate your LLC is to approve
-          <b style={{ padding: '0px 8px' }}>
-            {erc20.spinUpFee} {erc20.symbol}
-          </b>
-          to OtoCo from your connected wallet.
-        </p>
-        <p>
-          Approved
-          <b style={{ padding: '0px 8px' }}>
-            {accountAllowance} {erc20.symbol}
-          </b>
-          of total
-          <b style={{ padding: '0px 8px' }}>
-            {accountBalance} {erc20.symbol}
-          </b>
-          available.
-        </p>
-        {account && (
-          <p>
-            From Your Account: <AddressWidget address={account}></AddressWidget>
-          </p>
-        )}
-        {erc20Target && (
-          <p>
-            To Address: <AddressWidget address={erc20Target}></AddressWidget>
-          </p>
-        )}
-      </div>
-    )
-  }
-
   return (
     <div>
       <div>
-        <Form></Form>
-        {!transaction && (
-          <p className="align-right">
-            <button className="btn btn-primary mr-4" onClick={clickBackHandler}>
-              Back
-            </button>
-            <button className="btn btn-primary" onClick={clickApproveHandler}>
-              Approve
-            </button>
-          </p>
+        {transaction && (
+          <div className="animate-slide-left">
+            <TransactionMonitor
+              hash={transaction}
+              title="Approving Tokens"
+              callbackSuccess={nextStepHandler}
+            ></TransactionMonitor>
+            <p>
+              * Once transaction is confirmed, it will automatically proceed to
+              next step.
+            </p>
+          </div>
         )}
+        {parseInt(accountBalance) < erc20.spinUpFee && (
+          <NoBalanceForm
+            balance={accountBalance}
+            fee={erc20.spinUpFee}
+            currency={erc20.symbol}
+            environment="test"
+          ></NoBalanceForm>
+        )}
+        {/* {parseInt(accountAllowance) < erc20.spinUpFee &&
+          parseInt(accountBalance) >= erc20.spinUpFee && (
+            <EnoughBalance></EnoughBalance>
+          )} */}
       </div>
     </div>
   )
@@ -184,4 +153,4 @@ export default connect((state: IState) => ({
   network: state.account.network,
   availableName: state.spinUp.availableName,
   jurisdictionSelected: state.spinUp.jurisdictionSelected,
-}))(ApprovePayment)
+}))(Payment)
