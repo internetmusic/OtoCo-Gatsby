@@ -81,17 +81,17 @@ const ActivateCompany: FC<Props> = ({
       console.log('Could not fetch gas fee for transaction.')
     }
     console.log(network, requestInfo)
-    // MainContract.getContract(network, jurisdictionSelected)
-    //   .methods.createSeries(availableName)
-    //   .send(requestInfo, (error: any, hash: string) => {
-    //     if (error) alert('Something went wrong! Please Try Again Later!')
-    //     else {
-    //       setTransaction(hash)
-    //     }
-    //   })
-    setTransaction(
-      '0x628048caa2a7e94d994556fc2fbd3ebddb20bb4e99df191cc45bff7558977cf0'
-    )
+    MainContract.getContract(network, jurisdictionSelected)
+      .methods.createSeries(availableName)
+      .send(requestInfo, (error: any, hash: string) => {
+        if (error) alert('Something went wrong! Please Try Again Later!')
+        else {
+          setTransaction(hash)
+        }
+      })
+    // setTransaction(
+    //   '0x628048caa2a7e94d994556fc2fbd3ebddb20bb4e99df191cc45bff7558977cf0'
+    // )
   }
 
   const handleConfirmedTransaction = () => {

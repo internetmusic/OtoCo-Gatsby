@@ -130,14 +130,14 @@ const Config: FC<Props> = ({ account, network, managing, dispatch }: Props) => {
 
   return (
     <div>
-      <p className="small">
+      <div className="small">
         We made it easy for your new company to issue ERC20 tokens.
-      </p>
-      <p className="small">
+      </div>
+      <div className="small pb-2">
         You decide what the tokens represent: equity in your company, a usage
         right, a convertible, etc. Simply set you token parameters and click
         `Next` to create the new contract.
-      </p>
+      </div>
       {error && <p className="small text-danger">{error}</p>}
       {!transaction && (
         <div className="row">

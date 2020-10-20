@@ -38,7 +38,7 @@ const Payment: FC<Props> = ({
 
   const erc20 = {
     symbol: 'DAI',
-    spinUpFee: 29,
+    spinUpFee: 0,
   }
 
   // TODO : Verify if company already not allow master to address payment

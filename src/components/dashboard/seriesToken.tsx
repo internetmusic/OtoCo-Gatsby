@@ -44,6 +44,10 @@ const SeriesToken: FC<Props> = ({
       const token = await FactoryContract.getContract(network)
         .methods.seriesToken(managing.contract)
         .call({ from: account })
+      if (token === '0x0000000000000000000000000000000000000000') {
+        setLoading(false)
+        return
+      }
       const shares = await TokenContract.getContract(token)
         .methods.totalSupply()
         .call({ from: account })
