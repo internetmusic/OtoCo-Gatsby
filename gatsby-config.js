@@ -75,6 +75,7 @@ module.exports = {
         theme_color: '#fff',
         display: 'standalone',
         providedBy: { name: 'Otoco', url: 'https://otoco.io' },
+        crossOrigin: '*',
         icons: [
           {
             src: '/img/android-chrome-192x192.png',
@@ -95,6 +96,16 @@ module.exports = {
         mergeSecurityHeaders: true,
         mergeLinkHeaders: true,
         mergeCachingHeaders: true,
+      },
+    },
+    {
+      resolve: 'gatsby-plugin-netlify-headers',
+      options: {
+        allPageHeaders: [
+          'Access-Control-Allow-Origin: *',
+          'Access-Control-Allow-Methods: GET',
+          'Access-Control-Allow-Headers: X-Requested-With, content-type, Authorization',
+        ],
       },
     },
     // {
