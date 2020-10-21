@@ -12,8 +12,9 @@ import TransactionMonitor from '../../transactionMonitor/transactionMonitor'
 import ERC20Contract from '../../../smart-contracts/ERC20'
 import MainContract from '../../../smart-contracts/MainContract'
 
-// import  EnoughBalance from './enoughBalanceForm'
+import EnoughBalance from './enoughBalanceForm'
 import NoBalanceForm from './noBalanceForm'
+import spinUp from '../spinUp'
 
 interface Props {
   account?: string
@@ -35,6 +36,7 @@ const Payment: FC<Props> = ({
   const [accountBalance, setBalance] = useState('0')
   const [decimals, setDecimals] = useState(18)
   const [erc20Target, setERC20Target] = useState('')
+  const [feeBN, setFeeBN] = useState('')
 
   const erc20 = {
     symbol: 'DAI',
@@ -66,11 +68,13 @@ const Payment: FC<Props> = ({
       const divisor = new BN(10).pow(decimalBN)
       const allowanceBN = new BN(allowance)
       const balanceBN = new BN(balance)
+      const feeBN = new BN(erc20.spinUpFee)
 
       console.log(allowance, balance)
 
       setAllowance(allowanceBN.div(divisor).toString())
       setBalance(balanceBN.div(divisor).toString())
+      setFeeBN(feeBN.mul(divisor).toString())
       //setBalance(parseFloat(balance / 10 ** dec))
       if (
         erc20.spinUpFee <= allowanceBN.div(divisor).toNumber() &&
@@ -131,7 +135,7 @@ const Payment: FC<Props> = ({
             </p>
           </div>
         )}
-        {parseInt(accountBalance) < erc20.spinUpFee && (
+        {!transaction && parseInt(accountBalance) < erc20.spinUpFee && (
           <NoBalanceForm
             balance={accountBalance}
             fee={erc20.spinUpFee}
@@ -139,10 +143,21 @@ const Payment: FC<Props> = ({
             environment="testwyre"
           ></NoBalanceForm>
         )}
-        {/* {parseInt(accountAllowance) < erc20.spinUpFee &&
+        {!transaction &&
+          parseInt(accountAllowance) < erc20.spinUpFee &&
           parseInt(accountBalance) >= erc20.spinUpFee && (
-            <EnoughBalance></EnoughBalance>
-          )} */}
+            <EnoughBalance
+              balance={accountBalance}
+              allowance={accountAllowance}
+              fee={erc20.spinUpFee}
+              currency={erc20.symbol}
+              feeBN={feeBN}
+              mainContractAddress={
+                MainContract.addresses[network + '_' + jurisdictionSelected]
+              }
+              setTransaction={setTransaction}
+            ></EnoughBalance>
+          )}
       </div>
     </div>
   )

@@ -4,29 +4,39 @@ import BN from 'bn.js'
 import { connect } from 'react-redux'
 import { IState } from '../../../state/types'
 import AddressWidget from '../../addressWidget/addressWidget'
-import TransactionMonitor from '../../transactionMonitor/transactionMonitor'
+import {
+  SET_CURRENT_STEP,
+  SpinUpActionTypes,
+} from '../../../state/spinUp/types'
 
 import ERC20Contract from '../../../smart-contracts/ERC20'
-import MainContract from '../../../smart-contracts/MainContract'
 
 interface Props {
+  balance: string
+  allowance: string
+  fee: number
+  feeBN: string
+  currency: string
+  mainContractAddress: string
+  setTransaction: React.Dispatch<React.SetStateAction<string>>
   account?: string | null
   network?: string | null
   jurisdictionSelected: string
+  dispatch: Dispatch<SpinUpActionTypes>
 }
 
-const EnoughBalanceForm: FC<Props> = ({ account, network }: Props) => {
+const EnoughBalanceForm: FC<Props> = ({
+  balance,
+  allowance,
+  fee,
+  feeBN,
+  currency,
+  mainContractAddress,
+  account,
+  network,
+  setTransaction,
+}: Props) => {
   const web3: Web3 = window.web3
-  const [transaction, setTransaction] = useState('')
-  const [accountAllowance, setAllowance] = useState('0')
-  const [accountBalance, setBalance] = useState('0')
-  const [decimals, setDecimals] = useState(18)
-  const [erc20Target, setERC20Target] = useState('')
-
-  const erc20 = {
-    symbol: 'DAI',
-    spinUpFee: 5,
-  }
 
   const clickApproveHandler = async () => {
     const requestInfo = { from: account, gas: 200000, gasPrice: 0 }
@@ -43,10 +53,7 @@ const EnoughBalanceForm: FC<Props> = ({ account, network }: Props) => {
     console.log(network, requestInfo)
     try {
       ERC20Contract.getContract(network)
-        .methods.approve(
-          erc20Target,
-          (erc20.spinUpFee * 10 ** decimals).toString()
-        )
+        .methods.approve(mainContractAddress, feeBN)
         .send(requestInfo, (error: any, hash: string) => {
           setTransaction(hash)
         })
@@ -55,44 +62,45 @@ const EnoughBalanceForm: FC<Props> = ({ account, network }: Props) => {
     }
   }
 
-  const nextStepHandler = () => {
-    dispatch({ type: SET_CURRENT_STEP, payload: 3 })
-  }
-
   const clickBackHandler = () => {
     dispatch({ type: SET_CURRENT_STEP, payload: 0 })
   }
 
   return (
     <div>
-      <p>
+      <p className="small">
         Now to activate your LLC is to approve
         <b style={{ padding: '0px 8px' }}>
-          {erc20.spinUpFee} {erc20.symbol}
+          {fee} {currency}
         </b>
         to OtoCo from your connected wallet.
       </p>
-      <p>
+      <p className="small">
         Approved
         <b style={{ padding: '0px 8px' }}>
-          {accountAllowance} {erc20.symbol}
+          {allowance} {currency}
         </b>
         of total
         <b style={{ padding: '0px 8px' }}>
-          {accountBalance} {erc20.symbol}
+          {balance} {currency}
         </b>
         available.
       </p>
       {account && (
-        <p>
+        <div className="small">
           From Your Account: <AddressWidget address={account}></AddressWidget>
-        </p>
+        </div>
       )}
-      {erc20Target && (
-        <p>
-          To Address: <AddressWidget address={erc20Target}></AddressWidget>
-        </p>
-      )}
+      <p className="small">
+        To Address:{' '}
+        <AddressWidget address={mainContractAddress}></AddressWidget>
+      </p>
+      <button className="btn btn-primary mr-4" onClick={clickBackHandler}>
+        Back
+      </button>
+      <button className="btn btn-primary" onClick={clickApproveHandler}>
+        Approve Payment
+      </button>
     </div>
   )
 }
