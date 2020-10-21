@@ -38,7 +38,7 @@ const Payment: FC<Props> = ({
 
   const erc20 = {
     symbol: 'DAI',
-    spinUpFee: 0,
+    spinUpFee: 20,
   }
 
   // TODO : Verify if company already not allow master to address payment
@@ -136,7 +136,7 @@ const Payment: FC<Props> = ({
             balance={accountBalance}
             fee={erc20.spinUpFee}
             currency={erc20.symbol}
-            environment="test"
+            environment="testwyre"
           ></NoBalanceForm>
         )}
         {/* {parseInt(accountAllowance) < erc20.spinUpFee &&

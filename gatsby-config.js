@@ -75,7 +75,7 @@ module.exports = {
         theme_color: '#fff',
         display: 'standalone',
         providedBy: { name: 'Otoco', url: 'https://otoco.io' },
-        crossOrigin: '*',
+        crossOrigin: 'use-credentials',
         icons: [
           {
             src: '/img/android-chrome-192x192.png',

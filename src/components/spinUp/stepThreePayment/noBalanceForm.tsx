@@ -27,6 +27,7 @@ const NoBalanceForm: FC<Props> = ({
   dispatch,
 }: Props) => {
   const [formVisible, setFormVisible] = useState(false)
+  const [paymentCompleted, setPaymentCompleted] = useState(false)
 
   const clickBackHandler = () => {
     dispatch({ type: SET_CURRENT_STEP, payload: 0 })
@@ -36,7 +37,9 @@ const NoBalanceForm: FC<Props> = ({
     <Wyre
       config={{
         env: environment, // test
-        accountId: 'AC_JEFLTVQQPQH',
+        // accountId: 'AC_JEFLTVQQPQH',
+        accountId: 'AC_BAAA2222',
+        // auth: { type: 'metamask' },
         auth: {
           type: 'secretKey',
           secretKey: 'SK-FAAJVVC2-A8LPDU9H-U2HMXUNH-HNTTW8U4',
@@ -52,8 +55,10 @@ const NoBalanceForm: FC<Props> = ({
         },
       }}
       onReady={() => console.log('ready')}
-      onClose={(event) => console.log('close', event)}
-      onComplete={(event) => console.log('complete', event)}
+      onClose={() => console.log('close', () => setFormVisible(false))}
+      onComplete={() =>
+        console.log('complete', () => setPaymentCompleted(true))
+      }
       open={formVisible}
     >
       <button className="btn btn-primary" onClick={() => setFormVisible(true)}>
@@ -78,13 +83,24 @@ const NoBalanceForm: FC<Props> = ({
       <p className="small">
         Your Account: <AddressWidget address={account}></AddressWidget>
       </p>
-      <p className="small">Choose a form of payment to proceed:</p>
-      <div className="align-right">
-        <button className="btn btn-primary mr-4" onClick={clickBackHandler}>
-          Back
-        </button>
-        <WyreForm></WyreForm>
-      </div>
+      {/* <p className="small">Choose a form of payment to proceed:</p> */}
+      <p>
+        Deposit enough <b>{currency}</b> on your account and try again.
+      </p>
+      {!formVisible && !paymentCompleted && (
+        <div className="align-right">
+          <button className="btn btn-primary mr-4" onClick={clickBackHandler}>
+            Back
+          </button>
+          <WyreForm></WyreForm>
+        </div>
+      )}
+      {paymentCompleted && (
+        <p>
+          Payment procedure completed. You will be redirected to next step soon
+          enough balance appear on your account.
+        </p>
+      )}
     </div>
   )
 }
