@@ -43,7 +43,7 @@ const Payment: FC<Props> = ({
 
   const erc20 = {
     symbol: 'DAI',
-    spinUpFee: 20,
+    spinUpFee: 0,
   }
 
   React.useEffect(() => {
@@ -85,6 +85,10 @@ const Payment: FC<Props> = ({
         dispatch({ type: SET_CURRENT_STEP, payload: 3 })
     }, 0)
   }, [account])
+
+  // https://docs.sendwyre.com/docs/getting-started-wyre-checkout
+  // https://docs.sendwyre.com/docs/wallet-order-reservations
+  // https://docs.sendwyre.com/docs/wyre-checkout-hosted-dialog
 
   // UNMOUNT COMPONENT
   // React.useEffect(() => {

@@ -1,6 +1,8 @@
 import React, { useState, FC } from 'react'
 import Web3 from 'web3'
 import ENS from 'ethereum-ens'
+import Icon from '../icon/icon'
+import { faCopy } from '@fortawesome/free-solid-svg-icons'
 import { connect } from 'react-redux'
 import { IState } from '../../state/types'
 
@@ -80,10 +82,9 @@ const AddressWidget: FC<Props> = ({ address, network }: Props) => {
         </a>
       )}
       &nbsp;
-      <i
-        className="copy link icon"
-        onClick={clickCopyHandler.bind(undefined, address)}
-      ></i>
+      <a href="#" onClick={clickCopyHandler.bind(undefined, address)}>
+        <Icon icon={faCopy}></Icon>
+      </a>
     </span>
   )
 }

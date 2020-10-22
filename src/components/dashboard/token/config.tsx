@@ -96,7 +96,9 @@ const Config: FC<Props> = ({ account, network, managing, dispatch }: Props) => {
           symbol,
           managing.contract
         )
-        .send(requestInfo, (hash: string) => {
+        .send(requestInfo, (error, hash: string) => {
+          if (error) return console.log(error)
+          console.log('deployed token', hash)
           setTransaction(hash)
         })
     } catch (err) {
@@ -135,8 +137,8 @@ const Config: FC<Props> = ({ account, network, managing, dispatch }: Props) => {
       </div>
       <div className="small pb-2">
         You decide what the tokens represent: equity in your company, a usage
-        right, a convertible, etc. Simply set you token parameters and click
-        <b>Next</b> to create the new contract.
+        right, a convertible, etc. Simply set you token parameters and click{' '}
+        <b>Deploy Token</b> to create the new contract.
       </div>
       {error && <p className="small text-danger">{error}</p>}
       {!transaction && (

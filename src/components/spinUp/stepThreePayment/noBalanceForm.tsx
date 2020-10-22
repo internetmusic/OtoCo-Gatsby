@@ -30,14 +30,6 @@ const NoBalanceForm: FC<Props> = ({
     dispatch({ type: SET_CURRENT_STEP, payload: 0 })
   }
 
-  const genSecretKey = () => {
-    return Array.prototype.map
-      .call(window.crypto.getRandomValues(new Uint8Array(25)), (x) =>
-        ('00' + x.toString(16)).slice(-2)
-      )
-      .join('')
-  }
-
   // env: 'testwyre',
   // accountId: 'AC_JEFLTVQQPQH', // put your account number here
   // auth: {
@@ -57,9 +49,8 @@ const NoBalanceForm: FC<Props> = ({
 
   const options = {
     headers: {
-      Authorization: 'Bearer SK-4EZV7WXH-HPR9XZ9J-NZ4WDNU7-3YJZ4GQP',
+      Authorization: 'Bearer xxxxxx',
       'Content-Type': 'application/json',
-      'cache-control': 'no-cache',
     },
   }
 
@@ -87,7 +78,7 @@ const NoBalanceForm: FC<Props> = ({
   return (
     <div>
       <p>
-        You have not enough <b>{currency}</b> to pay for spin up t`ax`.{' '}
+        You have not enough <b>{currency}</b> to pay for spin up tax.{' '}
         <b>
           {balance} {currency}
         </b>{' '}
@@ -122,10 +113,14 @@ const NoBalanceForm: FC<Props> = ({
         </ul>
         <div>
           You can also{' '}
-          <a href="#" className="" onClick={requestPaymentWyre}>
-            Buy {currency}
+          <a
+            href={`https://pay.testwyre.com/purchase?&destCurrency=${currency}&dest=ethereum:${account}&amount=${fee}`}
+            target="_blank"
+            rel="noreferrer"
+          >
+            Buy {currency} with Wyre
           </a>{' '}
-          with Wyre using debit-card.
+          using debit-card.
         </div>
       </div>
       <div className="align-right mt-4">
