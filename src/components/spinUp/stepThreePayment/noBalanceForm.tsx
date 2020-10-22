@@ -1,9 +1,8 @@
 import React, { Dispatch, FC, useState } from 'react'
-import Wyre from 'wyre-widget'
+import axios, { AxiosError, AxiosResponse } from 'axios'
 import { connect } from 'react-redux'
 import { IState } from '../../../state/types'
 import AddressWidget from '../../addressWidget/addressWidget'
-import { TokenConversionWidget } from 'react-defi-widget'
 import {
   SET_CURRENT_STEP,
   SpinUpActionTypes,
@@ -27,10 +26,6 @@ const NoBalanceForm: FC<Props> = ({
   account,
   dispatch,
 }: Props) => {
-  const [formVisible, setFormVisible] = useState(false)
-  const [swapVisible, setSwapVisible] = useState(false)
-  const [paymentCompleted, setPaymentCompleted] = useState(false)
-
   const clickBackHandler = () => {
     dispatch({ type: SET_CURRENT_STEP, payload: 0 })
   }
@@ -43,10 +38,56 @@ const NoBalanceForm: FC<Props> = ({
       .join('')
   }
 
+  // env: 'testwyre',
+  // accountId: 'AC_JEFLTVQQPQH', // put your account number here
+  // auth: {
+  //   type: 'secretKey',
+  //   secretKey: 'SK-4EZV7WXH-HPR9XZ9J-NZ4WDNU7-3YJZ4GQP', // make an API key, put the secret here :)
+  // },
+  // operation: {
+  //   type: 'debitcard',
+  //   destCurrency: currency,
+  //   destAmount: fee,
+  //   dest: `ethereum:${account}`,
+
+  type WyreResponseType = {
+    url: string
+    reservation: string
+  }
+
+  const options = {
+    headers: {
+      Authorization: 'Bearer SK-4EZV7WXH-HPR9XZ9J-NZ4WDNU7-3YJZ4GQP',
+      'Content-Type': 'application/json',
+      'cache-control': 'no-cache',
+    },
+  }
+
+  const requestPaymentWyre = () => {
+    axios
+      .post(
+        'https://api.testwyre.com/v3/orders/reserve',
+        {
+          destCurrency: currency,
+          paymentMethod: 'debit-card',
+          referrerAccountId: 'AC_JEFLTVQQPQH',
+          dest: `ethereum:${account}`,
+          lockFields: ['dest', 'destCurrency', 'paymentMethod'],
+        },
+        options
+      )
+      .then((response: AxiosResponse<WyreResponseType>) => {
+        window.open(response.data.url, '_blank')
+      })
+      .catch((err: AxiosError) => {
+        console.log(err)
+      })
+  }
+
   return (
     <div>
       <p>
-        You have not enough <b>{currency}</b> to pay for spin up tax.{' '}
+        You have not enough <b>{currency}</b> to pay for spin up t`ax`.{' '}
         <b>
           {balance} {currency}
         </b>{' '}
@@ -58,74 +99,40 @@ const NoBalanceForm: FC<Props> = ({
       </p>
       {/* <p className="small">Choose a form of payment to proceed:</p> */}
       <div className="small">
-        Some suggested places to swap some DAI:
+        Some suggested places to acquire some DAI:
         <ul>
           <li>
-            <a href="http://app.uniswap.org" target="_blank" rel="noreferrer">
+            <a href="https://app.uniswap.org" target="_blank" rel="noreferrer">
               UniSwap Dex
             </a>{' '}
             Trade ETH/DAI
           </li>
           <li>
-            <a href="http://1inch.exchange" target="_blank" rel="noreferrer">
+            <a href="https://1inch.exchange" target="_blank" rel="noreferrer">
               1inch Enchange
             </a>{' '}
             Trade ETH/DAI
           </li>
           <li>
-            <a href="http://1inch.exchange" target="_blank" rel="noreferrer">
+            <a href="https://oasis.app" target="_blank" rel="noreferrer">
               Maker DAO Oasis
             </a>{' '}
             Trade or Borrow ETH/DAI
           </li>
         </ul>
-        <Wyre
-          config={{
-            env: 'testwyre',
-            accountId: 'AC_JEFLTVQQPQH', // put your account number here
-            auth: {
-              type: 'secretKey',
-              secretKey: 'SK-4EZV7WXH-HPR9XZ9J-NZ4WDNU7-3YJZ4GQP', // make an API key, put the secret here :)
-            },
-            operation: {
-              type: 'debitcard',
-              destCurrency: currency,
-              destAmount: fee,
-              dest: `ethereum:${account}`,
-            },
-            style: {
-              primaryColor: '#2EE8CF',
-            },
-          }}
-          onReady={() => console.log('ready')}
-          onClose={() => console.log('close', () => setFormVisible(false))}
-          onComplete={() =>
-            console.log('complete', () => setPaymentCompleted(true))
-          }
-          open={formVisible}
-        >
-          <span>
-            You can also{' '}
-            <a href="#" className="" onClick={() => setFormVisible(true)}>
-              Buy {currency}
-            </a>{' '}
-            with Wyre using debit-card.
-          </span>
-        </Wyre>
-      </div>
-      {!paymentCompleted && (
-        <div className="align-right mt-4">
-          <button className="btn btn-primary mr-4" onClick={clickBackHandler}>
-            Back
-          </button>
+        <div>
+          You can also{' '}
+          <a href="#" className="" onClick={requestPaymentWyre}>
+            Buy {currency}
+          </a>{' '}
+          with Wyre using debit-card.
         </div>
-      )}
-      {paymentCompleted && (
-        <p>
-          Payment procedure completed. You will be redirected to next step soon
-          enough balance appear on your account.
-        </p>
-      )}
+      </div>
+      <div className="align-right mt-4">
+        <button className="btn btn-primary mr-4" onClick={clickBackHandler}>
+          Back
+        </button>
+      </div>
     </div>
   )
 }

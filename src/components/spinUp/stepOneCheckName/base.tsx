@@ -104,10 +104,10 @@ const CheckName: FC<Props> = ({
             Enter your company name exactly as you want it registered.
           </p>
           <p className="small">
-            Click <b>`Check`</b> to verify if your preferred name is available.
+            Click <b>Check</b> to verify if your preferred name is available.
           </p>
           <p className="small">
-            Click <b>`My Dashboard`</b> if you want to manage your deployed LLC.
+            Click <b>My Dashboard</b> if you want to manage your deployed LLC.
           </p>
           <Link to="/dashboard/" className="btn btn-primary mr-4">
             My Dashboard
@@ -146,13 +146,13 @@ const CheckName: FC<Props> = ({
           </p>
           {jurisdictionSelected == 'us_wy' && (
             <p className="bold-text small">
-              The full legal name is `
-              <b>OtoCo WY LLC - {availableName} - Series #</b>` (the series
+              The full legal name is{' '}
+              <b>OtoCo WY LLC - {availableName} - Series #</b> (the series
               number).
             </p>
           )}
           <p className="small">
-            Click `<b>Next</b>` to proceed or go `Back` to try a different name.
+            Click <b>Next</b> to proceed or go Back to try a different name.
           </p>
           <button
             type="button"

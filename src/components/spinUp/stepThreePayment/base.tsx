@@ -21,6 +21,7 @@ interface Props {
   network?: string
   availableName: string
   jurisdictionSelected: string
+  currentStep: number
   dispatch: Dispatch<SpinUpActionTypes>
 }
 
@@ -28,6 +29,7 @@ const Payment: FC<Props> = ({
   account,
   network,
   jurisdictionSelected,
+  currentStep,
   dispatch,
 }: Props) => {
   const web3: Web3 = window.web3
@@ -37,13 +39,13 @@ const Payment: FC<Props> = ({
   const [decimals, setDecimals] = useState(18)
   const [erc20Target, setERC20Target] = useState('')
   const [feeBN, setFeeBN] = useState('')
+  const [updateInterval, setUpdateInterval] = useState<number | undefined>()
 
   const erc20 = {
     symbol: 'DAI',
     spinUpFee: 20,
   }
 
-  // TODO : Verify if company already not allow master to address payment
   React.useEffect(() => {
     setTimeout(async () => {
       const allowance: BN = await ERC20Contract.getContract(network)
@@ -66,8 +68,8 @@ const Payment: FC<Props> = ({
       setDecimals(dec)
       const decimalBN = new BN(dec)
       const divisor = new BN(10).pow(decimalBN)
-      const allowanceBN = new BN(allowance)
       const balanceBN = new BN(balance)
+      const allowanceBN = new BN(allowance)
       const feeBN = new BN(erc20.spinUpFee)
 
       console.log(allowance, balance)
@@ -75,14 +77,49 @@ const Payment: FC<Props> = ({
       setAllowance(allowanceBN.div(divisor).toString())
       setBalance(balanceBN.div(divisor).toString())
       setFeeBN(feeBN.mul(divisor).toString())
-      //setBalance(parseFloat(balance / 10 ** dec))
+
       if (
         erc20.spinUpFee <= allowanceBN.div(divisor).toNumber() &&
         balance >= allowance
       )
         dispatch({ type: SET_CURRENT_STEP, payload: 3 })
     }, 0)
-  }, [account, network, jurisdictionSelected])
+  }, [account])
+
+  // UNMOUNT COMPONENT
+  // React.useEffect(() => {
+  //   setTimeout(async () => {
+  //     const balance: BN = await ERC20Contract.getContract(network)
+  //       .methods.balanceOf(account)
+  //       .call({ from: account })
+  //     const decimalBN = new BN(decimals)
+  //     const divisor = new BN(10).pow(decimalBN)
+  //     const balanceBN = new BN(balance)
+  //     if (
+  //       erc20.spinUpFee > balanceBN.div(divisor).toNumber() &&
+  //       !updateInterval
+  //     ) {
+  //       if (!updateInterval)
+  //         setUpdateInterval(window.setInterval(updateBalance, 3000))
+  //     }
+  //   })
+  //   return () => {
+  //     if (updateInterval) window.clearInterval(updateInterval)
+  //     setUpdateInterval(undefined)
+  //   }
+  // }, [currentStep])
+
+  const updateBalance = async () => {
+    const balance: BN = await ERC20Contract.getContract(network)
+      .methods.balanceOf(account)
+      .call({ from: account })
+    const decimalBN = new BN(decimals)
+    const divisor = new BN(10).pow(decimalBN)
+    const balanceBN = new BN(balance)
+
+    console.log(balanceBN)
+    setBalance(balanceBN.div(divisor).toString())
+  }
 
   const clickApproveHandler = async () => {
     const requestInfo = { from: account, gas: 200000, gasPrice: 0 }
@@ -168,4 +205,5 @@ export default connect((state: IState) => ({
   network: state.account.network,
   availableName: state.spinUp.availableName,
   jurisdictionSelected: state.spinUp.jurisdictionSelected,
+  currentStep: state.spinUp.currentStep,
 }))(Payment)
