@@ -111,7 +111,7 @@ const NoBalanceForm: FC<Props> = ({
             Trade or Borrow ETH/DAI
           </li>
         </ul>
-        <div>
+        {/* <div>
           You can also{' '}
           <a
             href={`https://pay.testwyre.com/purchase?&destCurrency=${currency}&dest=ethereum:${account}&amount=${fee}`}
@@ -121,7 +121,7 @@ const NoBalanceForm: FC<Props> = ({
             Buy {currency} with Wyre
           </a>{' '}
           using debit-card.
-        </div>
+        </div> */}
       </div>
       <div className="align-right mt-4">
         <button className="btn btn-primary mr-4" onClick={clickBackHandler}>
