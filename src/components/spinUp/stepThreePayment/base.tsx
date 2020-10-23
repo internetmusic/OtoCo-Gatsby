@@ -42,7 +42,7 @@ const Payment: FC<Props> = ({
 
   const erc20 = {
     symbol: 'DAI',
-    spinUpFee: 0,
+    spinUpFee: 39,
   }
 
   React.useEffect(() => {
