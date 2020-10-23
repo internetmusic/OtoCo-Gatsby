@@ -39,7 +39,6 @@ const Payment: FC<Props> = ({
   const [decimals, setDecimals] = useState(18)
   const [erc20Target, setERC20Target] = useState('')
   const [feeBN, setFeeBN] = useState('')
-  const [updateInterval, setUpdateInterval] = useState<number | undefined>()
 
   const erc20 = {
     symbol: 'DAI',
@@ -91,27 +90,25 @@ const Payment: FC<Props> = ({
   // https://docs.sendwyre.com/docs/wyre-checkout-hosted-dialog
 
   // UNMOUNT COMPONENT
-  // React.useEffect(() => {
-  //   setTimeout(async () => {
-  //     const balance: BN = await ERC20Contract.getContract(network)
-  //       .methods.balanceOf(account)
-  //       .call({ from: account })
-  //     const decimalBN = new BN(decimals)
-  //     const divisor = new BN(10).pow(decimalBN)
-  //     const balanceBN = new BN(balance)
-  //     if (
-  //       erc20.spinUpFee > balanceBN.div(divisor).toNumber() &&
-  //       !updateInterval
-  //     ) {
-  //       if (!updateInterval)
-  //         setUpdateInterval(window.setInterval(updateBalance, 3000))
-  //     }
-  //   })
-  //   return () => {
-  //     if (updateInterval) window.clearInterval(updateInterval)
-  //     setUpdateInterval(undefined)
-  //   }
-  // }, [currentStep])
+  React.useEffect(() => {
+    const interval = window.setInterval(updateBalance, 3000)
+    setTimeout(async () => {
+      const balance: BN = await ERC20Contract.getContract(network)
+        .methods.balanceOf(account)
+        .call({ from: account })
+      const decimalBN = new BN(decimals)
+      const divisor = new BN(10).pow(decimalBN)
+      const balanceBN = new BN(balance)
+      console.log(balance)
+      setBalance(balanceBN.div(divisor).toString())
+      if (erc20.spinUpFee <= balanceBN.div(divisor).toNumber()) {
+        window.clearInterval(interval)
+      }
+    })
+    return () => {
+      window.clearInterval(interval)
+    }
+  })
 
   const updateBalance = async () => {
     const balance: BN = await ERC20Contract.getContract(network)

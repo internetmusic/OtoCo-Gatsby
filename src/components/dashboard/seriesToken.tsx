@@ -93,7 +93,16 @@ const SeriesToken: FC<Props> = ({
     <div className="card">
       <h6 className="card-header">Token</h6>
       <div className="card-body">
-        {loading && <div>Loading...</div>}
+        {loading && (
+          <div className="d-flex justify-content-center">
+            <div className="row">
+              <div className="col-12 text-center">Loading</div>
+              <div className="col-12 text-center">
+                <div className="spinner-border" role="status"></div>
+              </div>
+            </div>
+          </div>
+        )}
         {!loading && !tokenDeployed && <Config></Config>}
         {!loading && tokenDeployed !== undefined && <Shares></Shares>}
       </div>

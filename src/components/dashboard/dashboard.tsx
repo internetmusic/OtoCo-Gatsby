@@ -167,9 +167,11 @@ const Dashboard: FC<Props> = ({
         unmountOnExit
       >
         <div className="d-flex justify-content-center">
-          <strong>Loading...</strong>
-          <div className="spinner-border" role="status">
-            <span className="sr-only">Loading...</span>
+          <div className="row">
+            <div className="col-12 text-center">Loading Companies</div>
+            <div className="col-12 text-center">
+              <div className="spinner-border" role="status"></div>
+            </div>
           </div>
         </div>
       </CSSTransition>

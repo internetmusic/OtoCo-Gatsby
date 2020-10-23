@@ -123,7 +123,7 @@ const CheckName: FC<Props> = ({
           )}
           {loading && (
             <button className="btn" type="button">
-              Checking...
+              Checking...{' '}
               <span
                 className="spinner-border spinner-border-sm"
                 role="status"
