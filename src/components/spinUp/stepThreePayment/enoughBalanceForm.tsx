@@ -68,22 +68,22 @@ const EnoughBalanceForm: FC<Props> = ({
 
   return (
     <div>
-      <p className="small">
-        Now to activate your LLC is to approve
-        <b style={{ padding: '0px 8px' }}>
+      <p>
+        Please approve payment of{' '}
+        <b>
           {fee} {currency}
-        </b>
-        to OtoCo from your connected wallet.
+        </b>{' '}
+        to OtoCo from your connected wallet to instantly activate your new LLC.
       </p>
       <p className="small">
-        Approved
-        <b style={{ padding: '0px 8px' }}>
+        Approved{' '}
+        <b>
           {allowance} {currency}
-        </b>
-        of total
-        <b style={{ padding: '0px 8px' }}>
+        </b>{' '}
+        of total{' '}
+        <b>
           {balance} {currency}
-        </b>
+        </b>{' '}
         available.
       </p>
       {account && (
