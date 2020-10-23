@@ -28,10 +28,9 @@ const Index: React.FC<Props> = ({ location }: Props) => {
               <h6 className="card-title">Before you start</h6>
               <small className="card-text">
                 OtoCo is live on the Ethereum Mainnet. Please use a Web3
-                compatible browser like Opera, or a Web3 extension like
-                MetaMask. Activating a company using OtoCo will create a valid
-                legal entity. PLEASE READ OUR{' '}
-                <Link to="/terms">TERMS OF USE</Link>.
+                compatible browser like Firefox or Chrome with MetaMask.
+                Activating a company using OtoCo will create a valid legal
+                entity. PLEASE READ OUR <Link to="/terms">TERMS OF USE</Link>.
               </small>
             </div>
           </div>
