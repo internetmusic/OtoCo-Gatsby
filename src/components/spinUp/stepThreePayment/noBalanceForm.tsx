@@ -15,6 +15,7 @@ interface Props {
   environment: string
   account?: string
   network?: string
+  jurisdictionName?: string
   dispatch: Dispatch<SpinUpActionTypes>
 }
 
@@ -24,6 +25,7 @@ const NoBalanceForm: FC<Props> = ({
   currency,
   environment,
   account,
+  jurisdictionName,
   dispatch,
 }: Props) => {
   const clickBackHandler = () => {
@@ -78,25 +80,22 @@ const NoBalanceForm: FC<Props> = ({
   return (
     <div>
       <p>
-        You have not enough <b>{currency}</b> to pay for spin up tax.{' '}
+        We let you create a company for FREE but you need to cover the{' '}
+        <b>USD 39 (in DAI)</b> in first year’s maintenance which includes its{' '}
+        registered address in {jurisdictionName}.
+      </p>
+      <div className="small">
+        You ony have{' '}
         <b>
           {balance} {currency}
         </b>{' '}
-        available from{' '}
-        <b>
-          {fee} {currency}
-        </b>{' '}
-        needed.
-      </p>
-      {/* <p className="small">Choose a form of payment to proceed:</p> */}
-      <div className="small">
-        Some suggested places to acquire some DAI:
+        available. You can top up DAI from here:
         <ul>
           <li>
-            <a href="https://app.uniswap.org" target="_blank" rel="noreferrer">
-              UniSwap Dex
+            <a href="https://oasis.app" target="_blank" rel="noreferrer">
+              Maker DAO Oasis
             </a>{' '}
-            Trade ETH/DAI
+            Trade or Borrow ETH/DAI
           </li>
           <li>
             <a href="https://1inch.exchange" target="_blank" rel="noreferrer">
@@ -105,10 +104,10 @@ const NoBalanceForm: FC<Props> = ({
             Trade ETH/DAI
           </li>
           <li>
-            <a href="https://oasis.app" target="_blank" rel="noreferrer">
-              Maker DAO Oasis
+            <a href="https://app.uniswap.org" target="_blank" rel="noreferrer">
+              UniSwap Dex
             </a>{' '}
-            Trade or Borrow ETH/DAI
+            Trade ETH/DAI
           </li>
         </ul>
         {/* <div>
@@ -135,4 +134,5 @@ const NoBalanceForm: FC<Props> = ({
 export default connect((state: IState) => ({
   account: state.account.account,
   network: state.account.network,
+  jurisdictionName: state.spinUp.jurisdictionName,
 }))(NoBalanceForm)
