@@ -64,9 +64,11 @@ const reducer = (
         companyName: action.payload,
       }
     case SET_AVAILABLE_NAME:
+      let name = state.companyName
+      if (state.jurisdictionSelected == 'us_de') name += ' LLC'
       return {
         ...state,
-        availableName: state.companyName,
+        availableName: name,
       }
     case CLEAR_AVAILABLE_NAME:
       return {
