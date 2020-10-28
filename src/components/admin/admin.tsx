@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import { IState } from '../../state/types'
 import Web3Integrate from '../../services/web3-integrate'
 import MainContract from '../../smart-contracts/MainContract'
+import ERC20 from '../../smart-contracts/ERC20'
 
 import {
   SET_ACCOUNT,
@@ -42,6 +43,8 @@ const Admin: FC<Props> = ({
   const [error, setError] = useState<string | null>(null)
   const [tokenAddress, setTokenAddress] = useState('')
   const [amountTax, setAmount] = useState('')
+  const [balanceDelaware, setBalanceDe] = useState('')
+  const [balanceWyoming, setBalanceWy] = useState('')
 
   const getBNDecimals = (decimals) => {
     const BN = web3.utils.BN
@@ -76,6 +79,19 @@ const Admin: FC<Props> = ({
           .call({ from: accounts[0] })) !== accounts[0]
       )
         setError('Not the contract owner WYOMING')
+
+      const balanceDelaware = await ERC20.getContract(network)
+        .methods.balanceOf(MainContract.addresses[network + '_us_de'])
+        .call({ from: accounts[0] })
+      const balanceWyoming = await ERC20.getContract(network)
+        .methods.balanceOf(MainContract.addresses[network + '_us_wy'])
+        .call({ from: accounts[0] })
+
+      const balanceDeBN = new BN(balanceDelaware)
+      const balanceWyBN = new BN(balanceWyoming)
+
+      setBalanceDe(balanceDeBN.div(getBNDecimals(18)).toString())
+      setBalanceWy(balanceWyBN.div(getBNDecimals(18)).toString())
     }, 10)
   }, [account])
 
@@ -91,7 +107,7 @@ const Admin: FC<Props> = ({
     }
   }
 
-  const sendTaxChange = async (jurisdiction) => {
+  const sendTaxChange = async (jurisdiction: string) => {
     try {
       console.log(
         jurisdiction,
@@ -101,6 +117,22 @@ const Admin: FC<Props> = ({
         .methods.changeSeriesFee(
           new BN(amountTax).mul(getBNDecimals(18)).toString()
         )
+        .send({ from: account }, (error, hash) => {
+          if (error) alert(error.message)
+        })
+    } catch (err) {
+      alert(err)
+    }
+  }
+
+  const sendWithdraw = async (jurisdiction: string) => {
+    try {
+      console.log(
+        jurisdiction,
+        new BN(amountTax).mul(getBNDecimals(18)).toString()
+      )
+      MainContract.getContract(network, jurisdiction)
+        .methods.withdrawTkn()
         .send({ from: account }, (error, hash) => {
           if (error) alert(error.message)
         })
@@ -174,6 +206,23 @@ const Admin: FC<Props> = ({
                 onClick={sendTaxChange.bind(undefined, 'us_wy')}
               >
                 Change Wyoming
+              </button>
+            </div>
+          </div>
+          <div className="col-12 col-md-6">
+            <div className="col-12 card card-body">
+              <h3>Withdraw Tokens</h3>
+              <button
+                className="btn btn-primary mb-2"
+                onClick={sendWithdraw.bind(undefined, 'us_de')}
+              >
+                Delaware : {balanceDelaware}
+              </button>
+              <button
+                className="btn btn-primary"
+                onClick={sendWithdraw.bind(undefined, 'us_wy')}
+              >
+                Wyoming : {balanceWyoming}
               </button>
             </div>
           </div>
