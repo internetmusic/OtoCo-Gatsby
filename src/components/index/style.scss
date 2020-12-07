@@ -1,0 +1,137 @@
+@import '../../scss/colors.scss';
+
+.content {
+    margin-top: 38px;
+}
+
+h2 {
+    font-size: 32px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 40px;
+    letter-spacing: 0em;
+}
+
+h4 {
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 24px;
+    letter-spacing: 0em;
+    text-align: center;
+}
+
+h5 {
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 300;
+    line-height: 16px;
+    letter-spacing: 0.2em;
+}
+
+.quick-links {
+    color: $white;
+    float: right;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    padding: 32px;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 16px;
+    letter-spacing: 0em;
+    a {
+        margin-left: 16px;
+    }
+}
+
+@media (max-width: 640px) {
+    .quick-links {
+        padding: 24px;
+    }
+}
+
+.styled-link {
+    color: white;
+    display: inline;
+    text-decoration: none;
+    background-image: linear-gradient(transparent, transparent),linear-gradient(transparent, transparent),linear-gradient(to right, $teal, $cyan);
+    background-repeat: no-repeat;
+    background-position: 120%, 122%, 0 130%;
+    padding-bottom:6px;
+    background-size: 0% 6px;
+    transition: background-size 300ms ease-in;
+    -moz-transition: background-size 300ms ease-in;
+    -ms-transition: background-size 300ms ease-in;
+    -o-transition: background-size 300ms ease-in;
+    -webkit-transition: background-size 300ms ease-in;
+    &:hover {
+        color: white;
+        text-decoration: none;
+        background-size: 100% 6px;
+    }
+}
+
+.styled-button {
+    border-radius: 100rem;
+    padding: 1rem;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 22px;
+    letter-spacing: 0em;
+    text-align: center;
+    box-shadow: 0 0 6px 0 rgba(157, 96, 212, 0.5);
+    border: solid 3px transparent;
+    background-image: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0)), linear-gradient(101deg, $teal, $cyan);
+    background-origin: border-box;
+    background-clip: content-box, border-box;
+    box-shadow: 2px 1000px 1px $black inset;
+    &:hover {
+        box-shadow: none;
+        color: white;
+    }
+}
+
+.styled-counter {
+    font-family: IBM Plex Sans;
+    font-size: 144px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 187px;
+    letter-spacing: 0em;
+    /* Warning: no fallback */
+    background: -webkit-linear-gradient(0deg, $teal 0%, $cyan 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-stroke: 4px transparent;
+    color: $black;
+}
+
+.feature-background {
+  background: url('../../../static/img/background-stars.svg') bottom center;
+    background-size: 1000px;
+    background-repeat: repeat;
+}
+
+.feature-icon {
+    position: relative;
+    z-index: 1;
+}
+
+.feature-text {
+    position: relative;
+    top: -54px;
+    max-width: 306px;
+    background: #0B162D;
+    border-radius: 8px;
+    padding: 8px;
+    padding-top: 60px;
+    /* Elevation 24p */
+    box-shadow: 0px 24px 38px rgba(0, 0, 0, 0.14), 0px 9px 46px rgba(0, 0, 0, 0.12), 0px 11px 15px rgba(0, 0, 0, 0.2);
+}
+
+.counter-spacing {
+    margin: 100px 0px 100px 0px;
+}
