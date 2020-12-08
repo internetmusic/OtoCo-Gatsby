@@ -33,13 +33,14 @@ const JurisdictionSelector: FC<Props> = ({
   }
 
   const listJurisdictions = jurisdictionOptions.map((j, idx) => (
-    <a
-      key={idx}
-      className="dropdown-item"
-      onClick={selectJurisdictionHandler.bind(undefined, j)}
-    >
-      {j.text}
-    </a>
+    <li key={idx}>
+      <a
+        className="dropdown-item"
+        onClick={selectJurisdictionHandler.bind(undefined, j)}
+      >
+        {j.text}
+      </a>
+    </li>
   ))
 
   return (
@@ -56,7 +57,7 @@ const JurisdictionSelector: FC<Props> = ({
       >
         {jurisdictionName}
       </button>
-      <div className="dropdown-menu">{listJurisdictions}</div>
+      <ul className="dropdown-menu">{listJurisdictions}</ul>
     </div>
   )
 }
