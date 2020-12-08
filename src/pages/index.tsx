@@ -1,7 +1,7 @@
 import React from 'react'
 
-import Header from '../components/index/header'
-import Features from '../components/index/features'
+import Header from '../components/landing/header'
+import Features from '../components/landing/features'
 import Footer from '../components/footer/footer'
 
 interface Props {

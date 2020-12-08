@@ -17,7 +17,7 @@ const Header: React.FC<unknown> = () => {
         <Link className="styled-link" to="/spinup/">
           Spin up company
         </Link>
-        <Link className="styled-link" to="/dashpanel/">
+        <Link className="styled-link" to="/dashboard/">
           Dashpanel
         </Link>
       </div>

@@ -1,14 +1,15 @@
 @import 'scss/colors.scss';
 
 .footer {
-  // position: fixed;
+  position: relative;
   // right: 20px;
   // bottom: 20px;
   font-size: 14px !important;
   // float: right;
   // text-align: right;
+  z-index: 1;
   padding: 40px;
-  margin-top: 60px;
+  // margin-top: 60px;
 }
 
 .footer-links {
