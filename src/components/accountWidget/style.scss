@@ -11,11 +11,13 @@
       text-align: right;
   }
   .network {
-      border: solid 3px transparent;
-      border-image-source: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0)), linear-gradient(90deg, $teal, $cyan);
-      border-radius: 2px;
-      background: transparent;
-      // padding: 2px 4px;
-      color: black;
+    border-radius: 8px;
+    padding: 2px 4px;
+    color: $white;
+    border: solid 1px transparent;
+    background-image: linear-gradient($black,$black), linear-gradient(90deg, $teal, $cyan);
+    background-origin: border-box;
+    background-clip: content-box, border-box;
+    box-shadow: 2px 1000px 1px $black inset;
   }
 }
