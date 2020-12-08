@@ -4,4 +4,4 @@ public
 .DS_Store
 .intermediate-representation
 .cache
-.env.develop
+.env.development
