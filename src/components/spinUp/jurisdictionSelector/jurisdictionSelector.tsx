@@ -48,16 +48,17 @@ const JurisdictionSelector: FC<Props> = ({
       <button type="button" className="btn disabled">
         LLC
       </button>
-      <button
-        className="btn btn-outline-secondary dropdown-toggle"
-        type="button"
-        data-toggle="dropdown"
-        aria-haspopup="true"
-        aria-expanded="false"
-      >
-        {jurisdictionName}
-      </button>
-      <ul className="dropdown-menu">{listJurisdictions}</ul>
+      <div className="d-inline dropdown">
+        <button
+          className="btn btn-outline-secondary dropdown-toggle"
+          type="button"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+        >
+          {jurisdictionName}
+        </button>
+        <ul className="dropdown-menu">{listJurisdictions}</ul>
+      </div>
     </div>
   )
 }

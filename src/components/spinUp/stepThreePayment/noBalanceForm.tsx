@@ -123,7 +123,7 @@ const NoBalanceForm: FC<Props> = ({
         </div> */}
       </div>
       <div className="align-right mt-4">
-        <button className="btn btn-primary mr-4" onClick={clickBackHandler}>
+        <button className="btn btn-primary me-4" onClick={clickBackHandler}>
           Back
         </button>
       </div>

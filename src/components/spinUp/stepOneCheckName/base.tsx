@@ -111,7 +111,7 @@ const CheckName: FC<Props> = ({
           <p className="small">
             Click <b>My Dashboard</b> if you want to manage your deployed LLC.
           </p>
-          <Link to="/dashboard/" className="btn btn-primary mr-4">
+          <Link to="/dashboard/" className="btn btn-primary me-4">
             My Dashboard
           </Link>
           {!loading && (
@@ -158,7 +158,7 @@ const CheckName: FC<Props> = ({
           </p>
           <button
             type="button"
-            className="btn btn-primary mr-4"
+            className="btn btn-primary ms-4"
             onClick={clickBackHandle}
           >
             Back

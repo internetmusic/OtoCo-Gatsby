@@ -95,7 +95,7 @@ const EnoughBalanceForm: FC<Props> = ({
         To Address:{' '}
         <AddressWidget address={mainContractAddress}></AddressWidget>
       </p>
-      <button className="btn btn-primary mr-4" onClick={clickBackHandler}>
+      <button className="btn btn-primary me-4" onClick={clickBackHandler}>
         Back
       </button>
       <button className="btn btn-primary" onClick={clickApproveHandler}>

@@ -110,7 +110,7 @@ const ActivateCompany: FC<Props> = ({
             Click <b>Activate</b> to spin up <b>{availableName}</b> in{' '}
             <b>{jurisdictionName}</b>.
           </p>
-          <button className="btn btn-primary mr-4" onClick={clickCancelHandler}>
+          <button className="btn btn-primary me-4" onClick={clickCancelHandler}>
             Cancel
           </button>
           <button className="btn btn-primary" onClick={clickActivateHandler}>

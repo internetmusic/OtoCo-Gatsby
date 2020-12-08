@@ -9,17 +9,16 @@
 @import './colors.scss';
 
 // Reassign color vars to semantic color scheme
-$theme-colors: (
-  primary: $cyan,
-  secondary: $teal,
-  success: $teal,
-  info: $cyan,
-  warning: $yellow,
-  danger: $red,
-  light: $gray-100,
-  dark: $gray-100,
-  background: $black,
-);
+
+$primary: $cyan;
+$secondary: $teal;
+$success: $teal;
+$info: $cyan;
+$warning: $yellow;
+$danger: $red;
+$light: $gray-100;
+$dark: $gray-100;
+$background: $black;
 
 // Options
 //
@@ -149,13 +148,13 @@ img:hover {
   position: relative;
   padding: 32px 32px 167px 32px;
   min-height: 100vh;
-  margin-bottom: -207px;
+  margin-bottom: -177px;
 }
 
 @media (max-width: 640px) {
   .padded {
     padding: 24px 24px 233px 24px;
-    margin-bottom: -240px;
+    margin-bottom: -200px;
   }
 }
 
