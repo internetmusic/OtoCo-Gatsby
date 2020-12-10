@@ -1,10 +1,12 @@
 import React, { FC } from 'react'
 import { connect } from 'react-redux'
 import { IState } from '../../state/types'
-import CheckName from './stepOneCheckName/base'
-import ConnectWallet from './stepTwoConnectWallet/base'
-import Payment from './stepThreePayment/base'
-import ActivateCompany from './stepFourActivateCompany/base'
+import CheckName from './stepCheckName/base'
+import ConnectWallet from './stepConnectWallet/base'
+import Payment from './stepPayment/base'
+import ActivateCompany from './stepActivateCompany/base'
+import Introduction from './stepIntroduction/base'
+import Navigator from './navigator/navigator'
 
 interface Props {
   currentStep: number
@@ -12,36 +14,21 @@ interface Props {
 
 const SpinUp: FC<Props> = ({ currentStep }: Props) => {
   return (
-    <div className="row">
-      <div className="col-4 d-none d-md-block">
-        <ul className="list-group">
-          <li
-            className={`list-group-item ${currentStep === 0 ? 'active' : ''}`}
-          >
-            Check Name
-          </li>
-          <li
-            className={`list-group-item ${currentStep === 1 ? 'active' : ''}`}
-          >
-            Connect Wallet
-          </li>
-          <li
-            className={`list-group-item ${currentStep === 2 ? 'active' : ''}`}
-          >
-            Approve Payment
-          </li>
-          <li
-            className={`list-group-item ${currentStep === 3 ? 'active' : ''}`}
-          >
-            Activate Company
-          </li>
-        </ul>
-      </div>
-      <div className="col-12 col-md-8">
-        {currentStep === 0 && <CheckName></CheckName>}
-        {currentStep === 1 && <ConnectWallet></ConnectWallet>}
-        {currentStep === 2 && <Payment></Payment>}
-        {currentStep === 3 && <ActivateCompany></ActivateCompany>}
+    <div className="card">
+      <div className="row">
+        {currentStep > 0 && (
+          <div className="col-12">
+            <Navigator></Navigator>
+          </div>
+        )}
+        <div className="col-12">
+          {currentStep === 0 && <Introduction></Introduction>}
+          {currentStep === 1 && <CheckName></CheckName>}
+          {currentStep === 2 && <ConnectWallet></ConnectWallet>}
+          {currentStep === 3 && <Payment></Payment>}
+          {currentStep === 4 && <ActivateCompany></ActivateCompany>}
+          {currentStep === 5 && <Confirmation></Confirmation>}
+        </div>
       </div>
     </div>
   )

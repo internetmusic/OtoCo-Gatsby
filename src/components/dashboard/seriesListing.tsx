@@ -53,9 +53,9 @@ const SeriesListing: React.FC<PropsSeries> = ({
           <div className="card-text small">
             Creation: <UTCDate date={s.created} separator="-"></UTCDate>
           </div>
-          <div style={{ paddingTop: '8px' }}>
+          <div className="d-grid my-2 gap-2">
             <button
-              className="btn btn-primary float-right"
+              className="btn btn-primary btn-block"
               onClick={clickManageHandle.bind(undefined, s)}
             >
               <Icon icon={faCog} />

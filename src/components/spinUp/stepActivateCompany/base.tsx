@@ -32,7 +32,7 @@ interface Request {
   gasPrice?: string
 }
 
-const ActivateCompany: FC<Props> = ({
+const StepActivateCompany: FC<Props> = ({
   account,
   network,
   availableName,
@@ -95,7 +95,7 @@ const ActivateCompany: FC<Props> = ({
   }
 
   const handleConfirmedTransaction = () => {
-    navigate('/dashboard')
+    dispatch({ type: SET_CURRENT_STEP, payload: 5 })
   }
 
   return (
@@ -135,4 +135,4 @@ export default connect((state: IState) => ({
   availableName: state.spinUp.availableName,
   jurisdictionSelected: state.spinUp.jurisdictionSelected,
   jurisdictionName: state.spinUp.jurisdictionName,
-}))(ActivateCompany)
+}))(StepActivateCompany)

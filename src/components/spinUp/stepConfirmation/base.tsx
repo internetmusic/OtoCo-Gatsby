@@ -19,21 +19,13 @@ interface Props {
   dispatch: Dispatch<AccountActionTypes | SpinUpActionTypes>
 }
 
-const ConnectWallet: FC<Props> = ({ account, network, dispatch }: Props) => {
+const StepConfirmation: FC<Props> = ({ account, network, dispatch }: Props) => {
   React.useEffect(() => {
     if (account && network) dispatch({ type: SET_CURRENT_STEP, payload: 2 })
   }, [account, dispatch, network])
 
-  const clickConnectHandler = async () => {
-    await Web3Integrate.callModal()
-    const web3: Web3 = window.web3
-    const accounts = await web3.eth.getAccounts()
-    dispatch({
-      type: SET_NETWORK,
-      payload: await web3.eth.net.getNetworkType(),
-    })
-    dispatch({ type: SET_ACCOUNT, payload: accounts[0] })
-    dispatch({ type: SET_CURRENT_STEP, payload: 2 })
+  const clickToDashboard = async () => {
+    navigate('/dashboard')
   }
 
   return (
@@ -59,4 +51,4 @@ const ConnectWallet: FC<Props> = ({ account, network, dispatch }: Props) => {
 export default connect((state: IState) => ({
   account: state.account.account,
   network: state.account.network,
-}))(ConnectWallet)
+}))(StepConfirmation)

@@ -25,7 +25,7 @@ interface Props {
   dispatch: Dispatch<SpinUpActionTypes>
 }
 
-const Payment: FC<Props> = ({
+const StepPayment: FC<Props> = ({
   account,
   network,
   jurisdictionSelected,
@@ -150,7 +150,7 @@ const Payment: FC<Props> = ({
   }
 
   const nextStepHandler = () => {
-    dispatch({ type: SET_CURRENT_STEP, payload: 3 })
+    dispatch({ type: SET_CURRENT_STEP, payload: 4 })
   }
 
   const clickBackHandler = () => {
@@ -207,4 +207,4 @@ export default connect((state: IState) => ({
   availableName: state.spinUp.availableName,
   jurisdictionSelected: state.spinUp.jurisdictionSelected,
   currentStep: state.spinUp.currentStep,
-}))(Payment)
+}))(StepPayment)

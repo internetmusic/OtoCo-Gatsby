@@ -13,10 +13,8 @@ interface Props {
 const SpinUpPage: React.FC<Props> = ({ location }: Props) => {
   return (
     <Layout location={location}>
-      <div className="container-xl content">
-        <h1>Welcome to OtoCo</h1>
-        <h3 className="mb-4">Instantly spin up your real-world LLC here.</h3>
-        <div
+      <div className="container-sm content">
+        {/* <div
           className="card w-100 text-white bg-background mb-4"
           style={{ border: '1px solid white', padding: '8px' }}
         >
@@ -34,7 +32,7 @@ const SpinUpPage: React.FC<Props> = ({ location }: Props) => {
               </small>
             </div>
           </div>
-        </div>
+        </div> */}
         <SpinUp></SpinUp>
       </div>
     </Layout>

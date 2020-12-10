@@ -185,9 +185,9 @@ const Config: FC<Props> = ({
                 onChange={handleOwnerInputChange}
               />
               <div className="input-group-append">
-                <p className="btn btn-primary" onClick={handleAddOwner}>
+                <button className="btn btn-primary" onClick={handleAddOwner}>
                   Insert Owner
-                </p>
+                </button>
               </div>
             </div>
           </div>
@@ -201,7 +201,9 @@ const Config: FC<Props> = ({
                 onChange={handleThresholdChange}
               />
               <div className="input-group-append">
-                <p className="btn btn-primary disabled">Approval threshold</p>
+                <span className="btn btn-primary disabled">
+                  Approval threshold
+                </span>
               </div>
             </div>
           </div>

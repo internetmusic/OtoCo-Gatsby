@@ -20,6 +20,9 @@ $light: $gray-100;
 $dark: $gray-100;
 $background: $black;
 
+$border-radius: 16px;
+$border-color: transparent;
+
 // Options
 //
 // Quickly modify global styling by enabling or disabling optional features.
@@ -80,7 +83,6 @@ body {
 .btn-primary{
   color: $white;
   font-size: 16px;
-  line-height: 22px;
   border-radius: 16px;
   padding: 16px 16px;
   border: solid 1px transparent;
@@ -99,31 +101,30 @@ body {
 
 .input-group-append {
   background: transparent;
+  .btn{
+    padding: 12px 16px;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+  }
   .btn.disabled{
-    background: transparent;
     color: $white !important;
-    border: 1px solid $gray-400 !important;
-    margin: 0px 1px;  
+    border: 1px solid $gray-400 !important; 
     border-left: none;
     border-right: none;
-  }
-  .dropdown-toggle,
-  .dropdown-toggle:focus,
-  .dropdown-toggle:active,
-  .dropdown-toggle:hover{
-    background: transparent;
-    color: $white !important;
-    border: 1px solid $gray-400;
-    border-radius: 4px;
-    border-left: none;
-    border-radius: 0px 6px 6px 0px !important;
+    &:not(:last-child) {
+      border-top-right-radius: 0px;
+      border-bottom-right-radius: 0px;
+    }
   }
   .dropdown-item{
     color: $white;
+    &:hover, &:active, &:focus {
+      background: linear-gradient(90deg, $cornflower, $purple);    
+    }
   }
   .dropdown-menu{
     background: $black;
-    border: 1px solid $gray-400;
+    border: 1px solid $teal;
     color: $white !important;
   }
 }
@@ -200,19 +201,13 @@ img:hover {
   }
 }
 
+$card-spacer-x: 0px;
+$card-bg: $black;
+
 .card {
+  padding: 16px;
   background: $black;
-  border: 1px solid $gray-300;
-  // border-radius: 0px;
-  // border: none;
   box-shadow: 0px 0px 10px $gray-600;
-  .card-body {
-    padding: 8px;
-  }
-  
-  .card-header {
-    background: $gray-700
-  }
 }
 
 .table thead th{

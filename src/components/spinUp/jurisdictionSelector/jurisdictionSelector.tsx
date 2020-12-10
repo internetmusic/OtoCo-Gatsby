@@ -44,21 +44,16 @@ const JurisdictionSelector: FC<Props> = ({
   ))
 
   return (
-    <div className="input-group-append">
-      <button type="button" className="btn disabled">
-        LLC
+    <div className="dropdown d-flex">
+      <button
+        className="btn btn-primary dropdown-toggle flex-fill"
+        type="button"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+      >
+        {jurisdictionName}
       </button>
-      <div className="d-inline dropdown">
-        <button
-          className="btn btn-outline-secondary dropdown-toggle"
-          type="button"
-          data-bs-toggle="dropdown"
-          aria-expanded="false"
-        >
-          {jurisdictionName}
-        </button>
-        <ul className="dropdown-menu">{listJurisdictions}</ul>
-      </div>
+      <ul className="dropdown-menu">{listJurisdictions}</ul>
     </div>
   )
 }

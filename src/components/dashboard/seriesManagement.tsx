@@ -36,12 +36,12 @@ const SeriesManagement: FC<Props> = ({
 
   return (
     <div>
-      <button className="btn btn-primary-outline" onClick={handleClickBack}>
+      <button className="btn btn-primary" onClick={handleClickBack}>
         <Icon icon={faChevronLeft} />
         <span style={{ paddingLeft: '10px' }}>Back to Series</span>
       </button>
       {managing !== undefined && (
-        <div>
+        <div className="my-4">
           <div className="row">
             <h3 className="col-9">{managing?.name}</h3>
             <div className="col-3 pull-right">
