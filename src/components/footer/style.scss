@@ -10,12 +10,18 @@
   z-index: 1;
   padding: 40px;
   // margin-top: 60px;
+  color: $gray-200;
 }
 
 .footer-links {
   width: 100%;
   color: $white !important;
   a {
+    color: $gray-200 !important;
+    text-decoration: none;
+    transition: color 200ms ease-out;
+  &:hover {
     color: $white !important;
+  }
   }
 }

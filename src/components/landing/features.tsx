@@ -13,7 +13,10 @@ const Features: React.FC<unknown> = () => {
     <div>
       <div className="content feature-background">
         <div className="row">
-          <div className="col-12 col-md-4 d-flex justify-content-center">
+          <div className="col-12 my-5">
+            <h5 className="feature-title">Real-world Company Formation using your Digital Wallet</h5>
+          </div>
+          <div className="col-12 col-lg-4 d-flex justify-content-center">
             <div className="align-self-top text-center">
               <img
                 className="feature-icon"
@@ -33,7 +36,7 @@ const Features: React.FC<unknown> = () => {
               </div>
             </div>
           </div>
-          <div className="col-12 col-md-4 d-flex justify-content-center">
+          <div className="col-12 col-lg-4 d-flex justify-content-center">
             <div className="align-self-top text-center">
               <img
                 className="feature-icon"
@@ -52,7 +55,7 @@ const Features: React.FC<unknown> = () => {
               </div>
             </div>
           </div>
-          <div className="col-12 col-md-4 d-flex justify-content-center">
+          <div className="col-12 col-lg-4 d-flex justify-content-center">
             <div className="align-self-top text-center">
               <img
                 className="feature-icon"
@@ -73,12 +76,12 @@ const Features: React.FC<unknown> = () => {
           </div>
           <div className="col-12 d-flex counter-spacing justify-content-center">
             <div className="align-self-top text-center">
-              <div className="">
+              <div className="counter">
                 <div>
-                  <h5>COUNTER</h5>
+                  <h5 className="counter-title">COUNTER</h5>
                   <div className="styled-counter">156</div>
                 </div>
-                <div>on-chain LLCs created as of today on OtoCo</div>
+                <div className="lead">on-chain LLCs created as of today on OtoCo</div>
               </div>
             </div>
           </div>

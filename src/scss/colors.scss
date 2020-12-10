@@ -1,13 +1,13 @@
-$white: rgba(255, 255, 255, 0.8) !default;
-$gray-100: rgba(255, 255, 255, 0.7) !default;
-$gray-200: rgba(255, 255, 255, 0.6) !default;
-$gray-300: rgba(255, 255, 255, 0.5) !default;
-$gray-400: rgba(255, 255, 255, 0.5) !default;
+$white: rgba(255, 255, 255, 1) !default;
+$gray-100: rgba(255, 255, 255, 0.9) !default;
+$gray-200: rgba(255, 255, 255, 0.8) !default;
+$gray-300: rgba(255, 255, 255, 0.7) !default;
+$gray-400: rgba(255, 255, 255, 0.6) !default;
 $gray-500: rgba(255, 255, 255, 0.5) !default;
-$gray-600: rgba(255, 255, 255, 0.2) !default;
-$gray-700: rgba(255, 255, 255, 0.1) !default;
-$gray-800: rgba(255, 255, 255, 0.0) !default;
-$gray-900: rgba(255, 255, 255, 0.0) !default;
+$gray-600: rgba(255, 255, 255, 0.4) !default;
+$gray-700: rgba(255, 255, 255, 0.3) !default;
+$gray-800: rgba(255, 255, 255, 0.2) !default;
+$gray-900: rgba(255, 255, 255, 0.1) !default;
 $black: #030B13 !default;
 
 $blue: #03a9f4 !default;
@@ -21,3 +21,4 @@ $cornflower: #5E4DFD !default;      // Button Left
 $purple: #8E83F0 !default;          // Button Right
 $teal: #7479FF !default;            // 
 $cyan: #0FEEF1 !default;
+$cyan-80: rgba(15, 238, 241, 0.8) !default;

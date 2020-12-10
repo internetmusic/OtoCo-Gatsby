@@ -11,7 +11,7 @@ interface Props {
 const Index: React.FC<Props> = ({ location }: Props) => {
   return (
     <div>
-      <div className="padded">
+      <div className="padded container">
         <Header></Header>
         <Features></Features>
       </div>
