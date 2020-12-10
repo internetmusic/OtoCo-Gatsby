@@ -40,9 +40,10 @@ $enable-print-styles: true ;
 
 $container-max-widths: (
   sm: 540px,
-  md: 640px,
-  lg: 710px,
-  xl: 780px,
+  md: 720px,
+  lg: 960px,
+  xl: 1140px,
+  xxl: 1320px,
 ) ;
 
 // Body
@@ -65,12 +66,13 @@ body {
   width: 100vw;
   overflow-y: auto;
   overflow-x: hidden;
-  background-color: $black;
+  background: url('../../static/img/background-stars-v2.svg') bottom center;
   background-repeat: no-repeat;
-  background-size: 100% 40%;
-  background-position: 0px calc(80vh - 5vw);
-  background-attachment: fixed;
-  background-blend-mode: lighten;
+  // // background-size: 100% 40%;
+  // background-position: 0px calc(80vh - 5vw);
+  background-attachment: local;
+  // background-blend-mode: lighten;
+  background-color: $black;
 }
 
 * {
@@ -163,6 +165,7 @@ img:hover {
   padding: 32px 32px 167px 32px;
   min-height: 100vh;
   margin-bottom: -177px;
+  // background: url('../../static/img/background-stars.svg') bottom center;
 }
 
 @media (max-width: 640px) {

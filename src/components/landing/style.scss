@@ -1,7 +1,13 @@
 @import '../../scss/colors.scss';
 
 .content {
-    margin-top: 38px;
+    margin-top: 56px;
+}
+
+h1 {
+    line-height: 1.25 !important;
+    font-weight: 500 !important;
+    // text-align: center;
 }
 
 h2 {
@@ -13,12 +19,13 @@ h2 {
 }
 
 h4 {
-    font-size: 18px;
+    font-size: 1em;
     font-style: normal;
-    font-weight: 600;
+    font-weight: 700;
     line-height: 24px;
     letter-spacing: 0em;
-    text-align: center;
+    text-align: left;
+    color: $white;
 }
 
 h5 {
@@ -53,29 +60,29 @@ h5 {
 }
 
 .styled-link {
-    color: white;
+    color: $gray-200;
     display: inline;
     text-decoration: none;
     background-image: linear-gradient(transparent, transparent),linear-gradient(transparent, transparent),linear-gradient(to right, $teal, $cyan);
     background-repeat: no-repeat;
     background-position: 120%, 122%, 0 130%;
     padding-bottom:6px;
-    background-size: 0% 6px;
-    transition: background-size 300ms ease-in;
-    -moz-transition: background-size 300ms ease-in;
-    -ms-transition: background-size 300ms ease-in;
-    -o-transition: background-size 300ms ease-in;
-    -webkit-transition: background-size 300ms ease-in;
+    background-size: 0% 7px;
+    transition: background-size 200ms ease-out;
+    -moz-transition: background-size 200ms ease-out;
+    -ms-transition: background-size 200ms ease-out;
+    -o-transition: background-size 200ms ease-out;
+    -webkit-transition: background-size 200ms ease-out;
     &:hover {
-        color: white;
+        color: $white;
         text-decoration: none;
-        background-size: 100% 6px;
+        background-size: 100% 7px;
     }
 }
 
 .styled-button {
     border-radius: 100rem;
-    padding: 1rem;
+    padding: 1rem 2rem;
     font-size: 16px;
     font-style: normal;
     font-weight: 500;
@@ -88,9 +95,12 @@ h5 {
     background-origin: border-box;
     background-clip: content-box, border-box;
     box-shadow: 2px 1000px 1px $black inset;
+    min-width: 287px;
+    transition: box-shadow 0.5s, color 0.7s;
+    transition-timing-function: ease-out;
     &:hover {
         box-shadow: none;
-        color: white;
+        color: $black;
     }
 }
 
@@ -109,11 +119,11 @@ h5 {
     color: $black;
 }
 
-.feature-background {
-  background: url('../../../static/img/background-stars.svg') bottom center;
-    background-size: 1000px;
-    background-repeat: repeat;
-}
+// .feature-background {
+//   background: url('../../../static/img/background-stars.svg') bottom center;
+    // background-size: 1000px;
+    // background-repeat: repeat;
+// }
 
 .feature-icon {
     position: relative;
@@ -121,17 +131,47 @@ h5 {
 }
 
 .feature-text {
+    color: $gray-100;
     position: relative;
     top: -54px;
-    max-width: 306px;
-    background: #0B162D;
-    border-radius: 8px;
-    padding: 8px;
+    max-width: 480px;
+    // background: #0B162D;
+    border-radius: 16px;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    padding-bottom: 3rem;
     padding-top: 60px;
     /* Elevation 24p */
-    box-shadow: 0px 24px 38px rgba(0, 0, 0, 0.14), 0px 9px 46px rgba(0, 0, 0, 0.12), 0px 11px 15px rgba(0, 0, 0, 0.2);
+    // box-shadow: 0px 24px 38px rgba(0, 0, 0, 0.14), 0px 9px 46px rgba(0, 0, 0, 0.12), 0px 11px 15px rgba(0, 0, 0, 0.2);
+    text-align: left;
+    background: rgb(11,22,45);
+    background: linear-gradient(180deg, rgba(11,22,45,1) 0%, rgba(2,0,36,0) 100%);
+}
+
+.feature-title {
+    font-size: 1.25rem;
+    line-height: 1.5;
+    font-weight: 600;
+    text-align: center;
+    letter-spacing: 0;
+    color: $cyan-80;
+
+}
+
+.counter {
+    color: $white;
 }
 
 .counter-spacing {
-    margin: 100px 0px 100px 0px;
+    margin: 100px 0px 200px 0px;
+}
+
+.counter-title {
+    font-size: 1.125rem;
+    text-transform: uppercase;
+    color: $cyan-80;
+}
+
+.lead {
+    font-size: 1.5rem
 }
