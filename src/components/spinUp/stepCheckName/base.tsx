@@ -1,8 +1,10 @@
 import React, { Dispatch, FC, useState } from 'react'
 import { Link } from 'gatsby'
+import Icon from '../../icon/icon'
 import axios from 'axios'
 import { connect } from 'react-redux'
 import { IState } from '../../../state/types'
+import { faCheckCircle, faTimesCircle } from '@fortawesome/free-solid-svg-icons'
 import {
   SET_CURRENT_STEP,
   SET_COMPANY_NAME,
@@ -10,6 +12,7 @@ import {
   CLEAR_AVAILABLE_NAME,
   SpinUpActionTypes,
 } from '../../../state/spinUp/types'
+import './style.scss'
 
 import JurisdictionSelector from '../jurisdictionSelector/jurisdictionSelector'
 
@@ -81,73 +84,74 @@ const StepCheckName: FC<Props> = ({
 
   return (
     <div className="row">
-      <p>
+      {/* <p>
         Congrats! <b>{availableName}</b> is available for registration with the{' '}
         <b>{jurisdictionName}</b> State Registry.
-      </p>
-      {jurisdictionSelected == 'us_wy' && (
-        <p className="bold-text small">
-          The full legal name is{' '}
-          <b>OtoCo WY LLC - {availableName} - Series #</b> (the series number).
+      </p> */}
+      <div className="col-12">
+        <p>
+          Enter your company name exactly
+          <br />
+          as you want it registered.
         </p>
-      )}
-      {!availableName && (
-        <div className="col-12">
-          <p>
-            Enter your company name exactly
-            <br />
-            as you want it registered.
-          </p>
-        </div>
-      )}
-      {!availableName && (
-        <div className="col-12">
-          <div className="input-group mb-4">
-            <input
-              type="text"
-              className="form-control right"
-              placeholder="Choose your company name"
-              aria-label="Text input with dropdown button"
-              onChange={changeNameHandler}
-            />
-            <div className="input-group-append">
-              <button type="button" className="btn disabled">
-                LLC
-              </button>
-            </div>
+      </div>
+      <div className="col-12">
+        <div className="input-group mb-4">
+          <input
+            type="text"
+            className="form-control right"
+            placeholder="Choose your company name"
+            aria-label="Text input with dropdown button"
+            onChange={changeNameHandler}
+          />
+          <div className="input-group-append">
+            <button type="button" className="btn disabled">
+              LLC
+            </button>
           </div>
         </div>
-      )}
-      <div className="col-6">
-        {!availableName && (
-          <div className="col">
-            <JurisdictionSelector></JurisdictionSelector>
-          </div>
-        )}
+      </div>
+      <div className="col-6 spacer-h">
         <div>
+          <JurisdictionSelector></JurisdictionSelector>
+        </div>
+        <div>
+          {availableName && (
+            <div className="mt-4">
+              <div className="text-success">
+                <Icon icon={faCheckCircle}></Icon>{' '}
+                <span className="mx-2">Available Name.</span>
+              </div>
+            </div>
+          )}
           {error === 'taken' && (
             <div className="mt-4">
-              <div className="text-danger">Sorry! This name has been used.</div>
-              <div className="small">Please Enter Another Company Name.</div>
+              <div className="text-danger">
+                <Icon icon={faTimesCircle}></Icon>{' '}
+                <span className="mx-2">This name has been used.</span>
+              </div>
             </div>
           )}
           {error === 'unavailable' && (
             <div className="mt-4">
-              <div className="text-danger">Sorry! Please try again later.</div>
-              <div className="small">Search API service is busy.</div>
+              <div className="text-danger">
+                <Icon icon={faTimesCircle}></Icon>{' '}
+                <span className="mx-2">Search service is busy.</span>
+                <div>Try again later.</div>
+              </div>
             </div>
           )}
         </div>
       </div>
-      <div className="col-6">
+      <div className="col-6 spacer-h">
         <p>{formatBreakLines(jurisdictionStreet[jurisdictionSelected])}</p>
       </div>
       <div className="col-12">
         {!availableName && (
-          <div className="d-flex pt-4 gap-2 flex-row">
+          <div className="d-flex row-cols-2 pt-4 gap-5 flex-row">
             <button
               type="button"
-              className="btn btn-primary flex-fill"
+              className="btn btn-primary-outline flex-fill"
               onClick={clickBackHandle}
             >
               Back
@@ -162,7 +166,7 @@ const StepCheckName: FC<Props> = ({
               </button>
             )}
             {loading && (
-              <button className="btn" type="button">
+              <button type="button" className="btn flex-fill">
                 Checking...{' '}
                 <span
                   className="spinner-border spinner-border-sm"
@@ -174,10 +178,10 @@ const StepCheckName: FC<Props> = ({
           </div>
         )}
         {availableName && (
-          <div className="d-flex pt-4 gap-2 flex-row">
+          <div className="d-flex pt-4 gap-5 flex-row">
             <button
               type="button"
-              className="btn btn-primary flex-fill"
+              className="btn btn-primary-outline flex-fill"
               onClick={clickBackHandle}
             >
               Back

@@ -23,6 +23,7 @@ interface Props {
   availableName?: string
   jurisdictionName: string
   jurisdictionSelected: string
+  jurisdictionStreet: { [key: string]: string }
   dispatch: Dispatch<AccountActionTypes | SpinUpActionTypes>
 }
 
@@ -38,6 +39,7 @@ const StepActivateCompany: FC<Props> = ({
   availableName,
   jurisdictionSelected,
   jurisdictionName,
+  jurisdictionStreet,
   dispatch,
 }: Props) => {
   const web3: Web3 = window.web3
@@ -63,8 +65,12 @@ const StepActivateCompany: FC<Props> = ({
     populateFees()
   }, [])
 
+  const formatBreakLines = (text: string) => {
+    return text.split(',').map((elem, idx) => <div key={idx}>{elem}</div>)
+  }
+
   const clickCancelHandler = () => {
-    dispatch({ type: SET_CURRENT_STEP, payload: 0 })
+    dispatch({ type: SET_CURRENT_STEP, payload: 1 })
   }
 
   const clickActivateHandler = async () => {
@@ -102,20 +108,44 @@ const StepActivateCompany: FC<Props> = ({
     <div className="animate-slide-left">
       {!transaction && (
         <div>
-          <p className="normal-text">
+          {/* <p className="normal-text">
             The current deployment cost is approximately. <b>{totalCost} ETH</b>
             .
+          </p> */}
+          <div>Upon activation, your wallet with address </div>
+          <p className="text-primary">{account}</p>
+          <div>will be the First Member and Manager of: </div>
+          {jurisdictionSelected === 'us_de' && (
+            <div>
+              <b>{availableName}</b> with registered address at:
+            </div>
+          )}
+          {jurisdictionSelected === 'us_wy' && (
+            <div>
+              <b>{availableName} - Series ##</b> with registered address at:
+            </div>
+          )}
+          <div className="text-muted">
+            {formatBreakLines(jurisdictionStreet[jurisdictionSelected])}
+          </div>
+          <p>
+            You will be able to download your new entity&apos;s Operating
+            Agreement after activation.
           </p>
-          <p className="normal-text">
-            Click <b>Activate</b> to spin up <b>{availableName}</b> in{' '}
-            <b>{jurisdictionName}</b>.
-          </p>
-          <button className="btn btn-primary me-4" onClick={clickCancelHandler}>
-            Cancel
-          </button>
-          <button className="btn btn-primary" onClick={clickActivateHandler}>
-            Activate Company
-          </button>
+          <div className="d-flex row-cols-2 pt-4 gap-5 flex-row">
+            <button
+              className="btn btn-primary-outline flex-fill"
+              onClick={clickCancelHandler}
+            >
+              Cancel
+            </button>
+            <button
+              className="btn btn-primary flex-fill"
+              onClick={clickActivateHandler}
+            >
+              Activate Company
+            </button>
+          </div>
         </div>
       )}
       {transaction && (
@@ -135,4 +165,5 @@ export default connect((state: IState) => ({
   availableName: state.spinUp.availableName,
   jurisdictionSelected: state.spinUp.jurisdictionSelected,
   jurisdictionName: state.spinUp.jurisdictionName,
+  jurisdictionStreet: state.spinUp.jurisdictionStreet,
 }))(StepActivateCompany)

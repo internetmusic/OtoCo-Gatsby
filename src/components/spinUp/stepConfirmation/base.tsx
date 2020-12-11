@@ -1,13 +1,8 @@
 import React, { Dispatch, FC, useState } from 'react'
 import Web3 from 'web3'
+import { navigate } from '@reach/router'
 import { connect } from 'react-redux'
 import { IState } from '../../../state/types'
-import Web3Integrate from '../../../services/web3-integrate'
-import {
-  SET_ACCOUNT,
-  SET_NETWORK,
-  AccountActionTypes,
-} from '../../../state/account/types'
 import {
   SET_CURRENT_STEP,
   SpinUpActionTypes,
@@ -39,9 +34,9 @@ const StepConfirmation: FC<Props> = ({ account, network, dispatch }: Props) => {
         <button
           type="button"
           className="btn btn-primary"
-          onClick={clickConnectHandler}
+          onClick={clickToDashboard}
         >
-          Connect Wallet
+          Go To Dashpanel
         </button>
       </div>
     </div>

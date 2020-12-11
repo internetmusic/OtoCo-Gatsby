@@ -9,6 +9,7 @@ import {
   AccountActionTypes,
 } from '../../../state/account/types'
 import {
+  CLEAR_AVAILABLE_NAME,
   SET_CURRENT_STEP,
   SpinUpActionTypes,
 } from '../../../state/spinUp/types'
@@ -29,6 +30,7 @@ const StepConnectWallet: FC<Props> = ({
   }, [account, dispatch, network])
 
   const clickBackHandle = () => {
+    dispatch({ type: CLEAR_AVAILABLE_NAME })
     dispatch({ type: SET_CURRENT_STEP, payload: 1 })
   }
 
@@ -52,13 +54,22 @@ const StepConnectWallet: FC<Props> = ({
           <p>{account}</p>
           <p>{network}</p>
         </div>
-        <button
-          type="button"
-          className="btn btn-primary"
-          onClick={clickConnectHandler}
-        >
-          Connect Wallet
-        </button>
+        <div className="d-flex row-cols-2 pt-4 gap-5 flex-row">
+          <button
+            type="button"
+            className="btn btn-primary-outline flex-fill"
+            onClick={clickBackHandle}
+          >
+            Back
+          </button>
+          <button
+            type="button"
+            className="btn btn-primary"
+            onClick={clickConnectHandler}
+          >
+            Connect Wallet
+          </button>
+        </div>
       </div>
     </div>
   )

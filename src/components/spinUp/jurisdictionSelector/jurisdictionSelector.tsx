@@ -46,7 +46,7 @@ const JurisdictionSelector: FC<Props> = ({
   return (
     <div className="dropdown d-flex">
       <button
-        className="btn btn-primary dropdown-toggle flex-fill"
+        className="btn btn-primary-outline dropdown-toggle flex-fill"
         type="button"
         data-bs-toggle="dropdown"
         aria-expanded="false"

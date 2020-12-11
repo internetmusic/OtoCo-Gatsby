@@ -77,11 +77,8 @@ const StepPayment: FC<Props> = ({
       setBalance(balanceBN.div(divisor).toString())
       setFeeBN(feeBN.mul(divisor).toString())
 
-      if (
-        erc20.spinUpFee <= allowanceBN.div(divisor).toNumber() &&
-        balance >= allowance
-      )
-        dispatch({ type: SET_CURRENT_STEP, payload: 3 })
+      if (feeBN <= allowanceBN.div(divisor) && balance >= allowance)
+        dispatch({ type: SET_CURRENT_STEP, payload: 4 })
     }, 0)
   }, [account])
 
@@ -99,9 +96,10 @@ const StepPayment: FC<Props> = ({
       const decimalBN = new BN(decimals)
       const divisor = new BN(10).pow(decimalBN)
       const balanceBN = new BN(balance)
+      const feeBN = new BN(erc20.spinUpFee)
       console.log(balance)
       setBalance(balanceBN.div(divisor).toString())
-      if (erc20.spinUpFee <= balanceBN.div(divisor).toNumber()) {
+      if (feeBN <= balanceBN.div(divisor)) {
         window.clearInterval(interval)
       }
     })

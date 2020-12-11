@@ -12,7 +12,7 @@
 
 $primary: $teal;
 $secondary: $purple;
-$success: $teal;
+$success: $green;
 $info: $cyan;
 $warning: $yellow;
 $danger: $red;
@@ -45,6 +45,20 @@ $container-max-widths: (
   xl: 1140px,
   xxl: 1320px,
 ) ;
+
+// @include _assert-ascending($container-max-widths, "$container-max-widths");
+
+.limiter-sm {
+  max-width: map-get($container-max-widths, sm) !important;
+}
+
+.limiter-md {
+  max-width: map-get($container-max-widths, md) !important;
+}
+
+.limiter-lg {
+  max-width: map-get($container-max-widths, lg) !important;
+}
 
 // Body
 //
@@ -88,6 +102,22 @@ body {
   border-radius: 16px;
   padding: 16px 16px;
   border: solid 1px transparent;
+  background: linear-gradient(90deg, $cornflower, $purple);
+  transition: all 100ms linear;
+  &:hover, &:active, &:visited, &:focus{
+    color: $white;
+    border: solid 1px transparent;
+    background: linear-gradient(90deg, $cornflower, $purple);
+  }
+}
+
+// Buttons
+.btn-primary-outline{
+  color: $white;
+  font-size: 16px;
+  border-radius: 16px;
+  padding: 16px 16px;
+  border: solid 1px transparent;
   background-image: linear-gradient(90deg,$black,$black), linear-gradient(90deg, $cornflower, $purple);
   background-origin: border-box;
   background-clip: content-box, border-box;
@@ -99,6 +129,20 @@ body {
     box-shadow: 2px 1000px 1px transparent inset;
     background-image: linear-gradient(90deg, $cornflower, $purple),linear-gradient(90deg, $cornflower, $purple);
   }
+}
+
+.dropdown-item{
+  color: $white;
+  &:hover, &:active, &:focus {
+    color: $white;
+    background: linear-gradient(90deg, $cornflower, $purple);    
+  }
+}
+.dropdown-menu{
+  background: $black;
+  border: 1px solid $teal;
+  color: $white !important;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.6);
 }
 
 .input-group-append {
@@ -117,17 +161,6 @@ body {
       border-top-right-radius: 0px;
       border-bottom-right-radius: 0px;
     }
-  }
-  .dropdown-item{
-    color: $white;
-    &:hover, &:active, &:focus {
-      background: linear-gradient(90deg, $cornflower, $purple);    
-    }
-  }
-  .dropdown-menu{
-    background: $black;
-    border: 1px solid $teal;
-    color: $white !important;
   }
 }
 

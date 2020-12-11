@@ -95,12 +95,20 @@ const EnoughBalanceForm: FC<Props> = ({
         To Address:{' '}
         <AddressWidget address={mainContractAddress}></AddressWidget>
       </p>
-      <button className="btn btn-primary me-4" onClick={clickBackHandler}>
-        Back
-      </button>
-      <button className="btn btn-primary" onClick={clickApproveHandler}>
-        Approve Payment
-      </button>
+      <div className="d-flex row-cols-2 pt-4 gap-5 flex-row">
+        <button
+          className="btn btn-primary-outline flex-fill"
+          onClick={clickBackHandler}
+        >
+          Back
+        </button>
+        <button
+          className="btn btn-primary flex-fill"
+          onClick={clickApproveHandler}
+        >
+          Approve Payment
+        </button>
+      </div>
     </div>
   )
 }

@@ -151,7 +151,7 @@ const Tokens: FC<Props> = ({
   }
 
   return (
-    <div className="container-xl content">
+    <div className="container-sm limiter-md content">
       <h1>Token Transfer Tool</h1>
       <h5 className="mb-4">Easily transfer your tokens.</h5>
       <div className="card card-body">

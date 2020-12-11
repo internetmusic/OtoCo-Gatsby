@@ -9,7 +9,7 @@ interface Props {
 const DashboardIndex: React.FC<Props> = ({ location }: Props) => {
   return (
     <Layout location={location}>
-      <div className="container-xl content">
+      <div className="container-md limiter-md">
         <h1>Dashboard</h1>
         <h5 className="mb-4">Manage your on-chain companies.</h5>
         <Dashboard></Dashboard>

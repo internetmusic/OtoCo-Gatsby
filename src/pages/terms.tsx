@@ -16,7 +16,7 @@ const Terms: React.FC<Props> = ({ location }: Props) => {
 
   return (
     <Layout location={location}>
-      <div className="container-xl content terms">
+      <div className="container-sm limiter-lg content terms">
         <h1 className="title">TERMS OF USE</h1>
         <span className="c12">
           Welcome to OtoCo! Please read these Terms of Use (the “Agreement” or

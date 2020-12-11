@@ -122,7 +122,7 @@ const NoBalanceForm: FC<Props> = ({
           using debit-card.
         </div> */}
       </div>
-      <div className="align-right mt-4">
+      <div className="d-flex row-cols-2 pt-4 gap-5 flex-row">
         <button className="btn btn-primary me-4" onClick={clickBackHandler}>
           Back
         </button>

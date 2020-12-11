@@ -36,7 +36,7 @@ const SeriesManagement: FC<Props> = ({
 
   return (
     <div>
-      <button className="btn btn-primary" onClick={handleClickBack}>
+      <button className="btn btn-primary-outline" onClick={handleClickBack}>
         <Icon icon={faChevronLeft} />
         <span style={{ paddingLeft: '10px' }}>Back to Series</span>
       </button>
