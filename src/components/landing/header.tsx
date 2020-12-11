@@ -14,9 +14,6 @@ const Header: React.FC<unknown> = () => {
     <div>
       <Logo></Logo>
       <div className="quick-links">
-        <Link className="styled-link" to="/spinup/">
-          Connect Wallet
-        </Link>
         <Link className="styled-link" to="/dashboard/">
           Dashpanel
         </Link>

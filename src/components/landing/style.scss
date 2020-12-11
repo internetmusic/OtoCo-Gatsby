@@ -119,11 +119,12 @@ h5 {
     color: $black;
 }
 
-// .feature-background {
-//   background: url('../../../static/img/background-stars.svg') bottom center;
-    // background-size: 1000px;
-    // background-repeat: repeat;
-// }
+.features-bg {
+    background: url('../../../static/img/background-stars-v2.svg') bottom center;
+    background-repeat: no-repeat;
+    // background-attachment: local;
+    background-color: $black;
+}
 
 .feature-icon {
     position: relative;
