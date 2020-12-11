@@ -80,13 +80,6 @@ body {
   width: 100vw;
   overflow-y: auto;
   overflow-x: hidden;
-  background: url('../../static/img/background-stars-v2.svg') bottom center;
-  background-repeat: no-repeat;
-  // // background-size: 100% 40%;
-  // background-position: 0px calc(80vh - 5vw);
-  background-attachment: local;
-  // background-blend-mode: lighten;
-  background-color: $black;
 }
 
 * {
@@ -238,12 +231,12 @@ img:hover {
 }
 
 $card-spacer-x: 0px;
-$card-bg: $black;
+$card-bg: $midnight-blue-1;
 
 .card {
-  padding: 16px;
-  background: $black;
-  box-shadow: 0px 0px 10px $gray-600;
+  padding: 48px;
+  background: $midnight-blue-1;
+  // box-shadow: 0px 0px 10px $gray-600;
 }
 
 .table thead th{
