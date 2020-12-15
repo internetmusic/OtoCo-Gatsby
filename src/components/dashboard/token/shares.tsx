@@ -130,7 +130,7 @@ const Shares: FC<Props> = ({
         <AddressWidget address={tokenDeployed?.contract}></AddressWidget>
       </p>
       <div className="small">List of current holders:</div>
-      <table className="table small">
+      <table className="table small table-hover">
         <thead>
           <tr>
             <th scope="col">Wallet</th>

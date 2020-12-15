@@ -176,7 +176,7 @@ const Config: FC<Props> = ({
             </div>
           </div>
           <div className="row">
-            <div className="input-group col-12 col-md-6">
+            <div className="input-group mb-2 col-12 col-md-6">
               <input
                 type="text"
                 className="form-control right"

@@ -1,11 +1,12 @@
 import React, { Dispatch, FC, useState } from 'react'
-import Web3 from 'web3'
+import Web3, { TransactionReceipt } from 'web3'
 import axios from 'axios'
 import { navigate } from '@reach/router'
 import { connect } from 'react-redux'
 import { IState } from '../../../state/types'
 import TransactionMonitor from '../../transactionMonitor/transactionMonitor'
 import MainContract from '../../../smart-contracts/MainContract'
+import SeriesContract from '../../../smart-contracts/SeriesContract'
 import {
   SET_ACCOUNT,
   SET_NETWORK,
@@ -13,6 +14,8 @@ import {
 } from '../../../state/account/types'
 import {
   SET_CURRENT_STEP,
+  SET_COMPANY_NAME,
+  CLEAR_AVAILABLE_NAME,
   SpinUpActionTypes,
 } from '../../../state/spinUp/types'
 import transactionMonitor from '../../transactionMonitor/transactionMonitor'
@@ -48,9 +51,10 @@ const StepActivateCompany: FC<Props> = ({
   const [totalCost, setTotalCost] = useState(0)
   const gasCost = 710000
 
+  /*
   React.useEffect(() => {
     // When enter activate page
-    async function populateFees() {
+    setTimeout(async () => {
       const gasFees = await axios.get(
         `https://ethgasstation.info/api/ethgasAPI.json`
       )
@@ -60,16 +64,17 @@ const StepActivateCompany: FC<Props> = ({
       total = total.match(/^-?\d+(?:\.\d{0,3})?/)[0]
       console.log(gasCost, fee, total)
       setFee(fee)
-      setTotalCost(total)
-    }
-    populateFees()
-  }, [])
+      setTotalCost(parseFloat(total))
+    }, 0)
+  }, [account, network])
+  */
 
   const formatBreakLines = (text: string) => {
     return text.split(',').map((elem, idx) => <div key={idx}>{elem}</div>)
   }
 
   const clickCancelHandler = () => {
+    dispatch({ type: CLEAR_AVAILABLE_NAME })
     dispatch({ type: SET_CURRENT_STEP, payload: 1 })
   }
 
@@ -95,12 +100,17 @@ const StepActivateCompany: FC<Props> = ({
           setTransaction(hash)
         }
       })
-    // setTransaction(
-    //   '0x628048caa2a7e94d994556fc2fbd3ebddb20bb4e99df191cc45bff7558977cf0'
-    // )
   }
 
-  const handleConfirmedTransaction = () => {
+  const handleConfirmedTransaction = async () => {
+    const web3: Web3 = window.web3
+    const receipt = await web3.eth.getTransactionReceipt(transaction)
+    const contract = receipt.logs[3].address
+    const finalName = await SeriesContract.getContract(contract)
+      .methods.getName()
+      .call({ from: account })
+    console.log('RESULT', contract, finalName)
+    dispatch({ type: SET_COMPANY_NAME, payload: finalName })
     dispatch({ type: SET_CURRENT_STEP, payload: 5 })
   }
 

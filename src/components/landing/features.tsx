@@ -34,6 +34,7 @@ const Features: React.FC<unknown> = () => {
         'NewSeriesCreated',
         { fromBlock: 0, toBlock: 'latest' }
       )
+      console.log(delawareCount.length, wyomingCount.length)
       setCounter(delawareCount.length + wyomingCount.length)
     }, 0)
   }, [])

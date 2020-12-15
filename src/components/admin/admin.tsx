@@ -164,7 +164,7 @@ const Admin: FC<Props> = ({
                   onChange={handleChangeToken}
                 />
                 <div className="input-group-append">
-                  <p className="btn btn-primary disabled">Token Address</p>
+                  <div className="btn btn-primary disabled">Token Address</div>
                 </div>
               </div>
               <button
@@ -192,7 +192,7 @@ const Admin: FC<Props> = ({
                   onChange={handleChangeAmount}
                 />
                 <div className="input-group-append">
-                  <p className="btn btn-primary disabled">Spin-Up Tax</p>
+                  <div className="btn btn-primary disabled">Spin-Up Tax</div>
                 </div>
               </div>
               <button

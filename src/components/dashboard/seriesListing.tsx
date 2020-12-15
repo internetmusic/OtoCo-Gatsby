@@ -29,7 +29,7 @@ const SeriesListing: React.FC<PropsSeries> = ({
   }
 
   const listSeries = series.map((s: SeriesType, idx) => (
-    <div key={idx} className="col-12 col-md-6">
+    <div key={idx} className="col-12">
       <div className="card">
         <div className="card-header">
           <div className="row">

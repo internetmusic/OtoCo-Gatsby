@@ -16,7 +16,7 @@ const Footer = () => (
               <Link to="/terms/">Terms</Link>
             </div>
             <div className="mb-1">
-              <Link to="/policy/">Policy</Link>
+              <Link to="/privacy/">Privacy</Link>
             </div>
           </div>
           <div className="col-4 d-block">

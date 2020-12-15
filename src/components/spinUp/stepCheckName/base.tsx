@@ -14,6 +14,7 @@ import {
 } from '../../../state/spinUp/types'
 import './style.scss'
 
+import TransactionMonitor from '../../transactionMonitor/transactionMonitor'
 import JurisdictionSelector from '../jurisdictionSelector/jurisdictionSelector'
 
 interface Props {

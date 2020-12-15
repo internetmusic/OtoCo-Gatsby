@@ -1,10 +1,12 @@
 import React, { Dispatch, FC, useState } from 'react'
 import Web3 from 'web3'
 import BN from 'bn.js'
+import axios from 'axios'
 import { connect } from 'react-redux'
 import { IState } from '../../../state/types'
 import {
   SET_CURRENT_STEP,
+  CLEAR_AVAILABLE_NAME,
   SpinUpActionTypes,
 } from '../../../state/spinUp/types'
 import TransactionMonitor from '../../transactionMonitor/transactionMonitor'
@@ -38,7 +40,9 @@ const StepPayment: FC<Props> = ({
   const [accountBalance, setBalance] = useState('0')
   const [decimals, setDecimals] = useState(18)
   const [erc20Target, setERC20Target] = useState('')
-  const [feeBN, setFeeBN] = useState('')
+  const [feeBN, setFeeBN] = useState<BN>(new BN(0))
+  const [allowanceBN, setAllowanceBN] = useState<BN>(new BN(0))
+  const [balanceBN, setBalanceBN] = useState<BN>(new BN(0))
 
   const erc20 = {
     symbol: 'DAI',
@@ -67,20 +71,22 @@ const StepPayment: FC<Props> = ({
       setDecimals(dec)
       const decimalBN = new BN(dec)
       const divisor = new BN(10).pow(decimalBN)
-      const balanceBN = new BN(balance)
-      const allowanceBN = new BN(allowance)
+      const balBN = new BN(balance)
+      const allBN = new BN(allowance)
       const feeBN = new BN(erc20.spinUpFee)
 
       console.log(allowance, balance)
 
-      setAllowance(allowanceBN.div(divisor).toString())
-      setBalance(balanceBN.div(divisor).toString())
-      setFeeBN(feeBN.mul(divisor).toString())
+      setAllowance(allBN.div(divisor).toString())
+      setBalance(balBN.div(divisor).toString())
+      setFeeBN(feeBN.mul(divisor))
+      setAllowanceBN(allBN.div(divisor))
+      setBalanceBN(balBN.div(divisor))
 
-      if (feeBN <= allowanceBN.div(divisor) && balance >= allowance)
+      if (feeBN.lte(allBN.div(divisor)) && balBN.gte(allBN))
         dispatch({ type: SET_CURRENT_STEP, payload: 4 })
     }, 0)
-  }, [account])
+  }, [account, accountBalance])
 
   // https://docs.sendwyre.com/docs/getting-started-wyre-checkout
   // https://docs.sendwyre.com/docs/wallet-order-reservations
@@ -97,9 +103,8 @@ const StepPayment: FC<Props> = ({
       const divisor = new BN(10).pow(decimalBN)
       const balanceBN = new BN(balance)
       const feeBN = new BN(erc20.spinUpFee)
-      console.log(balance)
       setBalance(balanceBN.div(divisor).toString())
-      if (feeBN <= balanceBN.div(divisor)) {
+      if (!feeBN.gt(balanceBN.div(divisor))) {
         window.clearInterval(interval)
       }
     })
@@ -151,10 +156,6 @@ const StepPayment: FC<Props> = ({
     dispatch({ type: SET_CURRENT_STEP, payload: 4 })
   }
 
-  const clickBackHandler = () => {
-    dispatch({ type: SET_CURRENT_STEP, payload: 0 })
-  }
-
   return (
     <div>
       <div>
@@ -179,21 +180,19 @@ const StepPayment: FC<Props> = ({
             environment="testwyre"
           ></NoBalanceForm>
         )}
-        {!transaction &&
-          parseInt(accountAllowance) < erc20.spinUpFee &&
-          parseInt(accountBalance) >= erc20.spinUpFee && (
-            <EnoughBalance
-              balance={accountBalance}
-              allowance={accountAllowance}
-              fee={erc20.spinUpFee}
-              currency={erc20.symbol}
-              feeBN={feeBN}
-              mainContractAddress={
-                MainContract.addresses[network + '_' + jurisdictionSelected]
-              }
-              setTransaction={setTransaction}
-            ></EnoughBalance>
-          )}
+        {!transaction && allowanceBN?.gte(feeBN) && balanceBN?.gte(feeBN) && (
+          <EnoughBalance
+            balance={accountBalance}
+            allowance={accountAllowance}
+            fee={erc20.spinUpFee}
+            currency={erc20.symbol}
+            feeBN={feeBN}
+            mainContractAddress={
+              MainContract.addresses[network + '_' + jurisdictionSelected]
+            }
+            setTransaction={setTransaction}
+          ></EnoughBalance>
+        )}
       </div>
     </div>
   )

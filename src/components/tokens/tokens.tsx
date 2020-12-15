@@ -7,6 +7,8 @@ import { connect } from 'react-redux'
 import { IState } from '../../state/types'
 import Web3Integrate from '../../services/web3-integrate'
 
+import { faChevronLeft } from '@fortawesome/free-solid-svg-icons'
+import Icon from '../icon/icon'
 import AddressWidget from '../addressWidget/addressWidget'
 import TransactionMonitor from '../transactionMonitor/transactionMonitor'
 
@@ -208,7 +210,7 @@ const Tokens: FC<Props> = ({
                 onChange={handleChangeTo}
               />
               <div className="input-group-append">
-                <p className="btn btn-primary disabled">To</p>
+                <div className="btn btn-primary disabled">To</div>
               </div>
             </div>
             <div className="input-group mb-4">
@@ -220,7 +222,7 @@ const Tokens: FC<Props> = ({
                 onChange={handleChangeAmount}
               />
               <div className="input-group-append">
-                <p className="btn btn-primary disabled">Amount</p>
+                <div className="btn btn-primary disabled">Amount</div>
               </div>
             </div>
             <p>
@@ -230,7 +232,16 @@ const Tokens: FC<Props> = ({
             </p>
           </div>
         )}
-        {!balance && <p>Loading...</p>}
+        {!balance && (
+          <div className="d-flex justify-content-center">
+            <div className="row">
+              <div className="col-12 text-center">Loading Token</div>
+              <div className="col-12 text-center">
+                <div className="spinner-border" role="status"></div>
+              </div>
+            </div>
+          </div>
+        )}
         {transaction && (
           <TransactionMonitor
             hash={transaction}
@@ -241,11 +252,12 @@ const Tokens: FC<Props> = ({
         )}
       </div>
       <button
-        className="btn btn-primary"
+        className="btn btn-primary-outline"
         onClick={clickDashboardHandler}
         style={{ marginTop: '10px' }}
       >
-        Back to Dashboard
+        <Icon icon={faChevronLeft} />
+        <span style={{ paddingLeft: '10px' }}>Back to Dashboard</span>
       </button>
     </div>
   )

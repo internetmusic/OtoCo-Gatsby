@@ -22,7 +22,7 @@ interface Props {
 
 const StepIntroduction: FC<Props> = ({ account, network, dispatch }: Props) => {
   React.useEffect(() => {
-    if (account && network) dispatch({ type: SET_CURRENT_STEP, payload: 2 })
+    // if (account && network) dispatch({ type: SET_CURRENT_STEP, payload: 2 })
   }, [account, dispatch, network])
 
   const clickNextHandler = async () => {

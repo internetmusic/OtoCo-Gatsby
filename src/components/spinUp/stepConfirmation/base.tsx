@@ -3,37 +3,30 @@ import Web3 from 'web3'
 import { navigate } from '@reach/router'
 import { connect } from 'react-redux'
 import { IState } from '../../../state/types'
-import {
-  SET_CURRENT_STEP,
-  SpinUpActionTypes,
-} from '../../../state/spinUp/types'
+import bigIcon from '../../../../static/img/big-icon.svg'
 
 interface Props {
-  account: string | null
-  network: string | null
-  dispatch: Dispatch<AccountActionTypes | SpinUpActionTypes>
+  companyName: string
 }
 
-const StepConfirmation: FC<Props> = ({ account, network, dispatch }: Props) => {
-  React.useEffect(() => {
-    if (account && network) dispatch({ type: SET_CURRENT_STEP, payload: 2 })
-  }, [account, dispatch, network])
-
+const StepConfirmation: FC<Props> = ({ companyName }: Props) => {
   const clickToDashboard = async () => {
     navigate('/dashboard')
   }
 
   return (
-    <div>
-      <div>
-        <div className="small">
-          <p>Connect a wallet that will own your company.</p>
-          <p>{account}</p>
-          <p>{network}</p>
-        </div>
+    <div className="row">
+      <div className="col-12 text-center">
+        <img className="feature-icon" src={bigIcon} alt="Big Feature Icon" />
+      </div>
+      <div className="col-12">
+        All set! {companyName} is activated. Go to the dashpanel to manage it
+        and read our FAQ or use our help desk if you have any questions.
+      </div>
+      <div className="d-flex row-cols-2 pt-4 gap-5 flex-row">
         <button
           type="button"
-          className="btn btn-primary"
+          className="btn btn-primary flex-fill"
           onClick={clickToDashboard}
         >
           Go To Dashpanel
@@ -44,6 +37,5 @@ const StepConfirmation: FC<Props> = ({ account, network, dispatch }: Props) => {
 }
 
 export default connect((state: IState) => ({
-  account: state.account.account,
-  network: state.account.network,
+  companyName: state.spinUp.companyName,
 }))(StepConfirmation)

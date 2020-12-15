@@ -37,7 +37,7 @@ const Navigator: FC<Props> = ({ step }: Props) => {
       ></FontAwesomeIcon>
       <div
         className={
-          step > 2
+          step >= 2
             ? iconClass + 'text-sm-center'
             : iconClass + 'text-sm-center o-50'
         }
@@ -55,7 +55,7 @@ const Navigator: FC<Props> = ({ step }: Props) => {
       ></FontAwesomeIcon>
       <div
         className={
-          step > 3
+          step >= 3
             ? iconClass + 'text-sm-center'
             : iconClass + 'text-sm-center o-50'
         }
@@ -73,7 +73,7 @@ const Navigator: FC<Props> = ({ step }: Props) => {
       ></FontAwesomeIcon>
       <div
         className={
-          step > 2 ? iconClass + 'text-sm-end' : iconClass + 'text-sm-end o-50'
+          step >= 4 ? iconClass + 'text-sm-end' : iconClass + 'text-sm-end o-50'
         }
       >
         <img src={step4Icon} alt="Step 4 Icon" />
