@@ -23,16 +23,19 @@ $background: $black;
 $border-radius: 16px;
 $border-color: transparent;
 
+// Our variables
+$border-radius-sm: 8px;
+
 // Options
 //
 // Quickly modify global styling by enabling or disabling optional features.
-$enable-rounded: true ;
-$enable-shadows: true ;
-$enable-gradients: true ;
-$enable-transitions: true ;
-$enable-hover-media-query: false ;
-$enable-grid-classes: true ;
-$enable-print-styles: true ;
+$enable-rounded: true;
+$enable-shadows: true;
+$enable-gradients: true;
+$enable-transitions: true;
+$enable-hover-media-query: false;
+$enable-grid-classes: true;
+$enable-print-styles: true;
 
 // Grid containers
 //
@@ -44,7 +47,7 @@ $container-max-widths: (
   lg: 960px,
   xl: 1140px,
   xxl: 1320px,
-) ;
+);
 
 // @include _assert-ascending($container-max-widths, "$container-max-widths");
 
@@ -87,54 +90,90 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+a {
+  text-decoration: none;
+  color: $accent-purple-brighter;
+  &:hover {
+    color: $accent-purple-brightest;
+  }
+}
 
 // Buttons
-.btn-primary{
-  color: $white;
+.btn-primary {
+  color: $gray-100;
   font-size: 16px;
-  border-radius: 16px;
-  padding: 16px 16px;
-  border: solid 1px transparent;
-  background: linear-gradient(90deg, $cornflower, $purple);
-  transition: all 100ms linear;
-  &:hover, &:active, &:visited, &:focus{
+  font-weight: 500; // Medium
+  border-radius: $border-radius;
+  padding: 16px 24px;
+  border: none;
+  background: $gradient-subtle;
+  position: relative;
+  z-index: 1;
+  transition: all 200ms ease-out;
+
+  &:hover {
     color: $white;
-    border: solid 1px transparent;
+    background: $gradient-subtle;
+    transform: scale(1.025);
+    &::before {
+      opacity: 1;
+    }
+  }
+  // Gradient transition reference:
+  // https://keithjgrant.com/posts/2017/07/transitioning-gradients
+
+  &::before {
+    position: absolute;
+    content: '';
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    border-radius: $border-radius;
+    background-image: $gradient-medium;
+    z-index: -1;
+    transition: opacity 200ms ease-out;
+    opacity: 0;
+  }
+}
+
+// Buttons
+.btn-primary-outline {
+  color: $gray-100;
+  font-size: 16px;
+  font-weight: 500; // Medium
+  border-radius: $border-radius;
+  padding: 16px 24px;
+  border: solid 1px $accent-purple-80;
+  transition: all 200ms ease-out;
+
+  &:hover {
+    color: $white;
+    // background: $gradient-subtle;
+    transform: scale(1.025);
+    border: solid 1px $accent-purple-100;
+  }
+}
+
+.btn-sm {
+  font-size: 12px;
+  font-weight: 400;
+  border-radius: $border-radius-sm;
+  text-transform: uppercase;
+  padding: 8px 14px;
+  letter-spacing: 0.05em;
+}
+
+.dropdown-item {
+  color: $white;
+  &:hover,
+  &:active,
+  &:focus {
+    color: $white;
     background: linear-gradient(90deg, $cornflower, $purple);
   }
 }
-
-// Buttons
-.btn-primary-outline{
-  color: $white;
-  font-size: 16px;
-  border-radius: 16px;
-  padding: 16px 16px;
-  border: solid 1px $teal;
-  // background: linear-gradient(90deg, transparent transparent);
-  background-image: linear-gradient(90deg, transparent, #5E4DFD, #8E83F0);
-  background-size: 3000%;
-  background-position: -10px;
-  transition: background-position 200ms linear;
-  &:hover, &:active, &:visited, &:focus{
-    color: $white;
-    // border: solid 1px transparent;
-    background-position: 40% 0%;
-    // background-image: linear-gradient(90deg, $cornflower, $purple);
-    // background: linear-gradient(90deg, $cornflower, $purple);
-    // box-shadow: 2px 1000px 1px transparent inset;
-    // background-image: linear-gradient(90deg, $cornflower, $purple),linear-gradient(90deg, $cornflower, $purple);
-  }
-}
-
-.dropdown-item{
-  color: $white;
-  &:hover, &:active, &:focus {
-    color: $white;
-    background: linear-gradient(90deg, $cornflower, $purple);    
-  }
-}
-.dropdown-menu{
+.dropdown-menu {
   background: $black;
   border: 1px solid $teal;
   color: $white !important;
@@ -143,15 +182,15 @@ body {
 
 .input-group-append {
   background: transparent;
-  .btn{
+  .btn {
     padding: 12px 16px;
     border-top-left-radius: 0px;
     border-bottom-left-radius: 0px;
   }
-  .btn.disabled{
+  .btn.disabled {
     background-color: transparent;
     color: $white !important;
-    border: 1px solid $gray-400 !important; 
+    border: 1px solid $gray-400 !important;
     border-left: none;
     border-right: none;
     &:not(:last-child) {
@@ -162,15 +201,15 @@ body {
 }
 
 .form-control,
-.input-group input{
+.input-group input {
   background: transparent !important;
   color: $white !important;
   &:focus,
   &:focus-visible,
-  &:active{
+  &:active {
     background: transparent !important;
   }
-  &.right{
+  &.right {
     border-right: none;
   }
 }
@@ -214,23 +253,24 @@ img:hover {
 // TERMS
 .terms {
   .c3 {
-      font-weight: 600;
-      margin: 14pt 0px;
+    font-weight: 600;
+    margin: 14pt 0px;
   }
 }
 // PRIVACY
 .privacy {
   .c23 {
-      font-style: italic;
+    font-style: italic;
   }
 
-  .c9, .c6 {
-      font-weight: 800;
+  .c9,
+  .c6 {
+    font-weight: 800;
   }
 
   .c13 {
-      font-weight: 800;
-      margin: 30pt 0px;
+    font-weight: 800;
+    margin: 30pt 0px;
   }
 }
 
@@ -249,18 +289,48 @@ $card-bg: $midnight-blue-1;
   }
 }
 
+.card-body {
+  padding: 1rem 0 0 0;
+  color: $gray-200;
+}
+
+.card-header {
+  border: none;
+  padding: 0;
+  margin-top: -0.5rem;
+  color: $gray-100;
+  font-size: 1.5rem;
+  font-weight: 700;
+  &:first-child {
+    border-radius: 0;
+  }
+}
+
+.special-bg {
+  background-color: $accent-purple-40;
+}
+
 .table {
   margin-top: 1rem;
   box-shadow: 0 0 2px 0 $teal inset;
   background-clip: content-box, border-box;
-  border-radius: 16px;
+  border-radius: $border-radius-sm;
 
-  & th, td{
-    padding: 16px;
+  & th {
+    padding: 1rem;
+    font-weight: 400;
+    font-size: 0.75rem;
+    color: $gray-300;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  & td {
+    padding: 0 1rem 1rem 1rem;
   }
 }
 
-.table thead th{
+.table thead th {
   border-bottom: none;
 }
 
@@ -300,4 +370,8 @@ $card-bg: $midnight-blue-1;
   transform: translate3d(0px, -50px, 0px);
   opacity: 0;
   transition: opacity 200ms, transform 200ms;
+}
+
+.fix-icon-alignment {
+  margin-top: -0.25em !important;
 }

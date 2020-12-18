@@ -161,10 +161,10 @@ const Config: FC<Props> = ({
 
   return (
     <div>
-      <div className="small pb-2">
+      <div className="mb-4">
         Create a Gnosis-Safe Multisig wallet to store your company assets.
       </div>
-      <div className="small pb-2">Insert some wallet owners:</div>
+      <div className="">Insert some wallet owners:</div>
       {!transaction && (
         <div>
           <div className="row">
@@ -176,7 +176,7 @@ const Config: FC<Props> = ({
             </div>
           </div>
           <div className="row">
-            <div className="input-group mb-2 col-12 col-md-6">
+            <div className="input-group mb-3 col-12 col-md-6">
               <input
                 type="text"
                 className="form-control right"
@@ -210,7 +210,7 @@ const Config: FC<Props> = ({
         </div>
       )}
       {!transaction && (
-        <button className="btn btn-primary" onClick={handleClickDeploy}>
+        <button className="btn btn-primary mt-4" onClick={handleClickDeploy}>
           Create Wallet
         </button>
       )}

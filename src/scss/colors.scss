@@ -8,11 +8,7 @@ $gray-600: rgba(255, 255, 255, 0.4);
 $gray-700: rgba(255, 255, 255, 0.3);
 $gray-800: rgba(255, 255, 255, 0.2);
 $gray-900: rgba(255, 255, 255, 0.1);
-$black: #030B13 !default;
-
-$midnight-blue-0: #030B13;
-$midnight-blue-1: #0B1326;
-$midnight-blue-2: #0B162D;
+$black: #030b13 !default;
 
 $blue: #03a9f4 !default;
 $indigo: #3f51b5 !default;
@@ -20,10 +16,28 @@ $pink: #e91e63 !default;
 $red: #f44336 !default;
 $orange: #ff5722 !default;
 $yellow: #ffab00 !default;
-$green: #25CE95 !default;
-$cornflower: #5E4DFD !default;      // Button Left
-$purple: #8E83F0 !default;          // Button Right
-$teal: #7479FF !default;            // 
+$green: #25ce95 !default;
+$cornflower: #5e4dfd !default; // Button Left
+$purple: #8e83f0 !default; // Button Right
+$teal: #7479ff !default; //
+$cyan: #0feef1 !default;
 
-$cyan: #0FEEF1 !default;
-$cyan-80: rgba(15, 238, 241, 0.8) !default;
+// Following the color's names convention on Figma
+
+$cyan-80: rgba(15, 238, 241, 0.8);
+
+$gradient-subtle: linear-gradient(90.44deg, #5e4dfd 41.29%, #8e83f0 97.87%);
+$gradient-medium: linear-gradient(91.33deg, #4635e0 38.48%, #6f60fa 84.88%);
+
+$accent-purple-100: #7479ff;
+$accent-purple-80: rgba(116, 121, 255, 0.8);
+$accent-purple-60: rgba(116, 121, 255, 0.6);
+$accent-purple-40: rgba(116, 121, 255, 0.4);
+$accent-purple-20: rgba(116, 121, 255, 0.2);
+
+$accent-purple-brighter: #8f93ff;
+$accent-purple-brightest: #b3b5ff;
+
+$midnight-blue-0: #030b13;
+$midnight-blue-1: #0b1326;
+$midnight-blue-2: #0b1833;
