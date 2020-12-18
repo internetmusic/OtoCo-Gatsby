@@ -3,8 +3,9 @@ import { connect } from 'react-redux'
 import { PDFAssembler } from 'pdfassembler'
 import fileSaver from 'file-saver'
 import { SeriesType, ManagementActionTypes } from '../../state/management/types'
-import Icon from '../icon/icon'
-import { faDownload } from '@fortawesome/free-solid-svg-icons'
+// import Icon from '../icon/icon'
+// import { faDownload } from '@fortawesome/free-solid-svg-icons'
+import { FileEarmarkText } from 'react-bootstrap-icons'
 import { IState } from '../../state/types'
 
 interface Props {
@@ -127,11 +128,14 @@ const SeriesDocuments: FC<Props> = ({
     <div className="card">
       <h6 className="card-header">Documents</h6>
       <div className="card-body">
-        <div className="small">Download documents related to your company:</div>
-        <a href="#" className="small card-link" onClick={exportPDF}>
-          <Icon icon={faDownload}></Icon>
-          <span style={{ marginLeft: '8px' }}>Series Operating Agreement</span>
-        </a>
+        <div>Download documents related to your company:</div>
+        <div className="mt-2">
+          <a href="#" className="card-link" onClick={exportPDF}>
+            {/* <Icon icon={faDownload}></Icon> */}
+            <FileEarmarkText className="fix-icon-alignment"/>
+            <span style={{ marginLeft: '0.5em' }}>Series Operating Agreement</span>
+          </a>
+        </div>
       </div>
     </div>
   )

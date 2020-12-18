@@ -27,7 +27,10 @@ const ListOwners = ({ owners, totalShares }: ListOwnerProps) => {
       </td>
       <td>{m.balance}</td>
       <td className="d-none d-md-block">
-        <div className="progress">
+        <div>
+        {(m.balance / totalShares) * 100}%
+        </div>
+        {/* <div className="progress">
           <div
             className="progress-bar bg-success"
             role="progressbar"
@@ -38,7 +41,7 @@ const ListOwners = ({ owners, totalShares }: ListOwnerProps) => {
           >
             {(m.balance / totalShares) * 100}%
           </div>
-        </div>
+        </div> */}
       </td>
     </tr>
   ))
@@ -117,7 +120,7 @@ const Shares: FC<Props> = ({
 
   return (
     <div>
-      <div className="small">
+      <div>
         A total of{' '}
         <b>
           {tokenConfig?.shares} {tokenConfig?.name}
@@ -125,17 +128,17 @@ const Shares: FC<Props> = ({
         with symbol <b>{tokenConfig?.symbol}</b> were minted on{' '}
         <UTCDate separator="at" date={tokenDeployed?.creation}></UTCDate>.
       </div>
-      <p className="small">
+      <p className="mt-2">
         {tokenConfig?.symbol} token address:
         <AddressWidget address={tokenDeployed?.contract}></AddressWidget>
       </p>
       <div className="small">List of current holders:</div>
-      <table className="table small table-hover">
+      <table className="table table-hover mb-5">
         <thead>
           <tr>
             <th scope="col">Wallet</th>
             <th scope="col">Balance</th>
-            <th scope="col" className="d-none d-md-block"></th>
+            <th scope="col" className="d-none d-md-block">Shares</th>
           </tr>
         </thead>
         <tbody>

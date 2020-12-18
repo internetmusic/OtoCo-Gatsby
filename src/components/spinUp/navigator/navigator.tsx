@@ -23,9 +23,14 @@ const Navigator: FC<Props> = ({ step }: Props) => {
         icon={faCheckCircle}
         size="xs"
       ></FontAwesomeIcon>
-      <div className="text-sm-start">
-        <img src={step1Icon} alt="Step 1 Icon" />
-        <div className="small text-sm-center text-primary">Check Name</div>
+      <div className={
+          step >= 1
+            ? iconClass + 'text-sm-center'
+            : iconClass + 'text-sm-center o-50'
+        }
+      >
+        <img src={step1Icon} className="mb-2" alt="Step 1 Icon" />
+        <div className="small text-sm-center text-primary lh-sm">Check<br/> Name</div>
       </div>
       <div className="nav-hr flex-sm-fill text-sm-start">
         <hr></hr>
@@ -42,8 +47,8 @@ const Navigator: FC<Props> = ({ step }: Props) => {
             : iconClass + 'text-sm-center o-50'
         }
       >
-        <img src={step2Icon} alt="Step 2 Icon" />
-        <div className="small text-sm-center text-primary">Connect Wallet</div>
+        <img src={step2Icon} className="mb-2" alt="Step 2 Icon" />
+        <div className="small text-sm-center text-primary lh-sm">Connect Wallet</div>
       </div>
       <div className="nav-hr flex-sm-fill text-sm-start">
         <hr></hr>
@@ -60,8 +65,8 @@ const Navigator: FC<Props> = ({ step }: Props) => {
             : iconClass + 'text-sm-center o-50'
         }
       >
-        <img src={step3Icon} alt="Step 3 Icon" />
-        <div className="small text-sm-center text-primary">Approve Payment</div>
+        <img src={step3Icon} className="mb-2" alt="Step 3 Icon" />
+        <div className="small text-sm-center text-primary lh-sm">Approve Payment</div>
       </div>
       <div className="nav-hr flex-sm-fill text-sm-start">
         <hr></hr>
@@ -76,8 +81,8 @@ const Navigator: FC<Props> = ({ step }: Props) => {
           step >= 4 ? iconClass + 'text-sm-end' : iconClass + 'text-sm-end o-50'
         }
       >
-        <img src={step4Icon} alt="Step 4 Icon" />
-        <div className="small text-sm-center text-primary">
+        <img src={step4Icon} className="mb-2" alt="Step 4 Icon" />
+        <div className="small text-sm-center text-primary lh-sm">
           Review & Activate
         </div>
       </div>
