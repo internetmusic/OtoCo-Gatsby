@@ -29,6 +29,10 @@ Install all dependencies inside package:
 To serve a development terminal just type
 `gatsby develop`
 
+## Fluxogram for Creating and Managing Companies
+
+![Otoco - Creation and Manage](https://user-images.githubusercontent.com/13040410/102531418-098b1200-4081-11eb-9f8e-8b85a41a2926.jpg)
+
 ## General informations
 
 The app works both on Ropsten and Mainnet. For ropsten app uses a ERC20 in the place of DAI.
