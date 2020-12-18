@@ -164,33 +164,54 @@ a {
   letter-spacing: 0.05em;
 }
 
+.dropdown-toggle {
+  border-radius: $border-radius-sm;
+  padding: 12px 24px;
+  &:hover {
+    transform: scale(1);
+  }
+
+  &::after {
+    margin-left: 1em;
+    margin-bottom: -0.1em;
+  }
+}
+
 .dropdown-item {
+  transition: background-color 200ms ease-out;
   color: $white;
   &:hover,
   &:active,
   &:focus {
     color: $white;
-    background: linear-gradient(90deg, $cornflower, $purple);
+    background: $accent-purple-20;
   }
 }
+
 .dropdown-menu {
-  background: $black;
-  border: 1px solid $teal;
-  color: $white !important;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.6);
+  background: $midnight-blue-2;
+  border-radius: $border-radius-sm;
+  border: 1px solid $accent-purple-20;
 }
 
 .input-group-append {
   background: transparent;
   .btn {
-    padding: 12px 16px;
+    padding: 12px 24px;
+    border-radius: $border-radius-sm;
     border-top-left-radius: 0px;
     border-bottom-left-radius: 0px;
+    &:hover {
+      transform: scale(1);
+    }
+    &::before {
+      border-radius: 0 $border-radius-sm $border-radius-sm 0;
+    }
   }
   .btn.disabled {
     background-color: transparent;
-    color: $white !important;
-    border: 1px solid $gray-400 !important;
+    color: $gray-600 !important;
+    border: 1px solid $gray-800 !important;
     border-left: none;
     border-right: none;
     &:not(:last-child) {
@@ -204,6 +225,10 @@ a {
 .input-group input {
   background: transparent !important;
   color: $white !important;
+  border-radius: $border-radius-sm;
+  border-color: $gray-800;
+  padding-left: 1em;
+
   &:focus,
   &:focus-visible,
   &:active {
@@ -278,7 +303,7 @@ $card-spacer-x: 0px;
 $card-bg: $midnight-blue-1;
 
 .card {
-  padding: 48px;
+  padding: 40px;
   background: $midnight-blue-1;
   // box-shadow: 0px 0px 10px $gray-600;
 }
@@ -307,7 +332,7 @@ $card-bg: $midnight-blue-1;
 }
 
 .special-bg {
-  background-color: $accent-purple-40;
+  background-color: $accent-purple-20;
 }
 
 .table {

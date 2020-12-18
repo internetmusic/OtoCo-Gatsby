@@ -123,7 +123,7 @@ const StepActivateCompany: FC<Props> = ({
             .
           </p> */}
           <div>Upon activation, your wallet with address </div>
-          <p className="text-primary">{account}</p>
+          <p className="text-primary font-monospace">{account}</p>
           <div>will be the First Member and Manager of: </div>
           {jurisdictionSelected === 'us_de' && (
             <div>
@@ -135,7 +135,7 @@ const StepActivateCompany: FC<Props> = ({
               <b>{availableName} - Series ##</b> with registered address at:
             </div>
           )}
-          <div className="text-muted">
+          <div className="my-3 text-primary">
             {formatBreakLines(jurisdictionStreet[jurisdictionSelected])}
           </div>
           <p>

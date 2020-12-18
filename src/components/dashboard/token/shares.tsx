@@ -129,7 +129,7 @@ const Shares: FC<Props> = ({
         <UTCDate separator="at" date={tokenDeployed?.creation}></UTCDate>.
       </div>
       <p className="mt-2">
-        {tokenConfig?.symbol} token address:
+        {tokenConfig?.symbol} token address:&nbsp;&nbsp;
         <AddressWidget address={tokenDeployed?.contract}></AddressWidget>
       </p>
       <div className="small">List of current holders:</div>

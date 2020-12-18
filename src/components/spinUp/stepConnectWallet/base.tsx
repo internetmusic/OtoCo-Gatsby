@@ -49,7 +49,7 @@ const StepConnectWallet: FC<Props> = ({
   return (
     <div>
       <div>
-        <div className="small">
+        <div className="">
           <p>Connect a wallet that will own your company.</p>
           <p>{account}</p>
           <p>{network}</p>

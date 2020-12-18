@@ -88,7 +88,7 @@ const SeriesENS: FC<Props> = ({
           </div>
         )}
         {!(multisigDeployed?.contract || ensDomains?.domains.length) && (
-          <div className="small">
+          <div className="text-muted">
             This option will be available when a Multisig is deployed.
           </div>
         )}

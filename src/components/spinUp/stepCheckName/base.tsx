@@ -145,7 +145,7 @@ const StepCheckName: FC<Props> = ({
         </div>
       </div>
       <div className="col-6 spacer-h">
-        <p>{formatBreakLines(jurisdictionStreet[jurisdictionSelected])}</p>
+        <p className="small">{formatBreakLines(jurisdictionStreet[jurisdictionSelected])}</p>
       </div>
       <div className="col-12">
         {!availableName && (

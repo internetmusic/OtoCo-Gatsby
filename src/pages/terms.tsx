@@ -17,7 +17,8 @@ const Terms: React.FC<Props> = ({ location }: Props) => {
   return (
     <Layout location={location}>
       <div className="container-sm limiter-lg content terms">
-        <h1 className="title">TERMS OF USE</h1>
+        <h1 className="title mb-5">Terms of Use</h1>
+        <p>
         <span className="c12">
           Welcome to OtoCo! Please read these Terms of Use (the “Agreement” or
           “Terms”) carefully, along with any other policies or notices and our
@@ -41,6 +42,7 @@ const Terms: React.FC<Props> = ({ location }: Props) => {
           agreement between each user (“you,” “your,” or “User”) and Otonomos
           LLC (“we,” “us,” or “our”).
         </span>
+        </p>
         <p className="c0">
           <span className="c4">
             By using OtoCo, you agree to follow and be bound by these Terms and

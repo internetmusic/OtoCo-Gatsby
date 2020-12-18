@@ -19,7 +19,7 @@ const StepConfirmation: FC<Props> = ({ companyName }: Props) => {
       <div className="col-12 text-center">
         <img className="feature-icon" src={bigIcon} alt="Big Feature Icon" />
       </div>
-      <div className="col-12">
+      <div className="col-12 mb-4">
         All set! {companyName} is activated. Go to the dashpanel to manage it
         and read our FAQ or use our help desk if you have any questions.
       </div>
