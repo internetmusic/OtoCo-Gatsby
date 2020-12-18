@@ -64,7 +64,6 @@ $container-max-widths: (
 }
 
 // Body
-//
 // Settings for the `<body>` element.
 $body-bg: $black;
 $body-color: $white;
@@ -72,7 +71,6 @@ $inverse-bg: $white;
 $inverse-color: $black;
 
 // Fonts
-//
 @import './fonts.scss';
 
 @import 'node_modules/bootstrap/scss/bootstrap.scss';
@@ -259,7 +257,6 @@ img:hover {
   padding: 32px 32px 167px 32px;
   min-height: 100vh;
   margin-bottom: -177px;
-  // background: url('../../static/img/background-stars.svg') bottom center;
 }
 
 @media (max-width: 640px) {
@@ -275,27 +272,45 @@ img:hover {
   justify-content: center;
 }
 
-// TERMS
-.terms {
-  .c3 {
-    font-weight: 600;
-    margin: 14pt 0px;
+// To handle large amounts of text (best for reading)
+.large-amount-of-text {
+  color: $gray-100;
+  p {
+    font-size: 1.25rem;
+    font-weight: 300;
+    line-height: 1.5;
   }
-}
-// PRIVACY
-.privacy {
-  .c23 {
-    font-style: italic;
+  h1 {
+    color: $gray-100;
+    font-size: 2.5rem;
+    font-weight: 500;
+  }
+  h2 {
+    color: $gray-100;
+    font-size: 1.5rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
   }
 
-  .c9,
-  .c6 {
-    font-weight: 800;
+  h3 {
+    color: $gray-100;
+    margin-bottom: 1em;
+    font-weight: 500;
+  }
+  li {
+    margin-bottom: 1em;
+    &::marker {
+      color: $accent-purple-60;
+    }
   }
 
-  .c13 {
-    font-weight: 800;
-    margin: 30pt 0px;
+  table {
+    color: $gray-100;
+    font-size: 1rem !important;
+
+    caption ol li {
+      margin-bottom: 0;
+    }
   }
 }
 
