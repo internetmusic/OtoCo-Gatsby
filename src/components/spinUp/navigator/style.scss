@@ -7,7 +7,7 @@
 .nav-badge {
   position: relative;
   top: 43px;
-  left: 59px;
+  left: 50px;
   color: $green;
 }
 
@@ -16,8 +16,10 @@
 }
 
 .nav-icon {
+  position: relative;
   max-width: 60px;
   height: 48px;
+  left: -10px;
   & img {
     margin: 4px 6px;
     margin-bottom: 4px;
@@ -36,17 +38,11 @@
     padding: 8px 8px 8px 8px;
   }
   .nav-icon {
-    max-width: 40px;
+    max-width: 43px;
     font-size: 12px;
     & img {
       margin: 4px 6px;
       margin-bottom: 4px;
     }
-  }
-  .nav-badge {
-    position: relative;
-    top: 43px;
-    left: 59px;
-    color: $green;
   }
 }

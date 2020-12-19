@@ -1,5 +1,7 @@
 import React, { FC } from 'react'
 import { connect } from 'react-redux'
+import { CSSTransition } from 'react-transition-group'
+
 import { IState } from '../../state/types'
 import Introduction from './stepIntroduction/base'
 import CheckName from './stepCheckName/base'
@@ -23,12 +25,78 @@ const SpinUp: FC<Props> = ({ currentStep }: Props) => {
           </div>
         )}
         <div className="col-12">
-          {currentStep === 0 && <Introduction></Introduction>}
-          {currentStep === 1 && <CheckName></CheckName>}
-          {currentStep === 2 && <ConnectWallet></ConnectWallet>}
-          {currentStep === 3 && <Payment></Payment>}
-          {currentStep === 4 && <ActivateCompany></ActivateCompany>}
-          {currentStep === 5 && <Confirmation></Confirmation>}
+          <CSSTransition
+            in={currentStep === 0}
+            timeout={{
+              appear: 200,
+              enter: 200,
+              exit: 0,
+            }}
+            classNames="my-node"
+            unmountOnExit
+          >
+            <Introduction></Introduction>
+          </CSSTransition>
+          <CSSTransition
+            in={currentStep === 1}
+            timeout={{
+              appear: 200,
+              enter: 200,
+              exit: 0,
+            }}
+            classNames="my-node"
+            unmountOnExit
+          >
+            <CheckName></CheckName>
+          </CSSTransition>
+          <CSSTransition
+            in={currentStep === 2}
+            timeout={{
+              appear: 200,
+              enter: 200,
+              exit: 0,
+            }}
+            classNames="my-node"
+            unmountOnExit
+          >
+            <ConnectWallet></ConnectWallet>
+          </CSSTransition>
+          <CSSTransition
+            in={currentStep === 3}
+            timeout={{
+              appear: 200,
+              enter: 200,
+              exit: 0,
+            }}
+            classNames="my-node"
+            unmountOnExit
+          >
+            <Payment></Payment>
+          </CSSTransition>
+          <CSSTransition
+            in={currentStep === 4}
+            timeout={{
+              appear: 200,
+              enter: 200,
+              exit: 0,
+            }}
+            classNames="my-node"
+            unmountOnExit
+          >
+            <ActivateCompany></ActivateCompany>
+          </CSSTransition>
+          <CSSTransition
+            in={currentStep === 5}
+            timeout={{
+              appear: 200,
+              enter: 200,
+              exit: 0,
+            }}
+            classNames="my-node"
+            unmountOnExit
+          >
+            <Confirmation></Confirmation>
+          </CSSTransition>
         </div>
       </div>
     </div>

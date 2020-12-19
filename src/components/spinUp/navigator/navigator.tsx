@@ -23,17 +23,19 @@ const Navigator: FC<Props> = ({ step }: Props) => {
         icon={faCheckCircle}
         size="xs"
       ></FontAwesomeIcon>
-      <div className={
-          step >= 1
-            ? iconClass + 'text-sm-center'
-            : iconClass + 'text-sm-center o-50'
+      <div
+        className={
+          step >= 1 ? iconClass + 'text-center' : iconClass + 'text-center o-50'
         }
       >
         <img src={step1Icon} className="mb-2" alt="Step 1 Icon" />
-        <div className="small text-sm-center text-primary lh-sm">Check<br/> Name</div>
+        <div className="small text-center just text-primary lh-sm">
+          Check
+          <br /> Name
+        </div>
       </div>
-      <div className="nav-hr flex-sm-fill text-sm-start">
-        <hr></hr>
+      <div className="nav-hr flex-fill text-sm-start">
+        <hr className="d-none d-sm-block"></hr>
       </div>
       <FontAwesomeIcon
         className={step > 2 ? 'nav-badge' : 'invisible'}
@@ -48,10 +50,12 @@ const Navigator: FC<Props> = ({ step }: Props) => {
         }
       >
         <img src={step2Icon} className="mb-2" alt="Step 2 Icon" />
-        <div className="small text-sm-center text-primary lh-sm">Connect Wallet</div>
+        <div className="small text-center text-primary lh-sm">
+          Connect Wallet
+        </div>
       </div>
-      <div className="nav-hr flex-sm-fill text-sm-start">
-        <hr></hr>
+      <div className="nav-hr flex-fill text-sm-start">
+        <hr className="d-none d-sm-block"></hr>
       </div>
       <FontAwesomeIcon
         className={step > 3 ? 'nav-badge' : 'invisible'}
@@ -60,16 +64,16 @@ const Navigator: FC<Props> = ({ step }: Props) => {
       ></FontAwesomeIcon>
       <div
         className={
-          step >= 3
-            ? iconClass + 'text-sm-center'
-            : iconClass + 'text-sm-center o-50'
+          step >= 3 ? iconClass + 'text-center' : iconClass + 'text-center o-50'
         }
       >
         <img src={step3Icon} className="mb-2" alt="Step 3 Icon" />
-        <div className="small text-sm-center text-primary lh-sm">Approve Payment</div>
+        <div className="small text-sm-center text-primary lh-sm">
+          Approve Payment
+        </div>
       </div>
-      <div className="nav-hr flex-sm-fill text-sm-start">
-        <hr></hr>
+      <div className="nav-hr flex-fill text-sm-start">
+        <hr className="d-none d-sm-block"></hr>
       </div>
       <FontAwesomeIcon
         className={step > 4 ? 'nav-badge' : 'invisible'}
@@ -82,7 +86,7 @@ const Navigator: FC<Props> = ({ step }: Props) => {
         }
       >
         <img src={step4Icon} className="mb-2" alt="Step 4 Icon" />
-        <div className="small text-sm-center text-primary lh-sm">
+        <div className="small text-center text-primary lh-sm">
           Review & Activate
         </div>
       </div>
