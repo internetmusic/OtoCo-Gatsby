@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'gatsby'
 import { navigate } from '@reach/router'
 import Logo from '../logo/logo'
-import assembly from '../../../static/img/assembly–placeholder-2.gif'
+import assembly from '../../../static/img/illustration-1.png'
 import './style.scss'
 
 const Header: React.FC<unknown> = () => {

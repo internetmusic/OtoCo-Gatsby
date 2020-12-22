@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
 import Web3 from 'web3'
 import { navigate } from '@reach/router'
-import bigIcon from '../../../static/img/big-icon.svg'
+import illustrationOne from '../../../static/img/illustration-2a.png'
+import illustrationTwo from '../../../static/img/illustration-2b.png'
+import illustrationThree from '../../../static/img/illustration-2c.png'
 import './style.scss'
 
 import MainContract from '../../smart-contracts/MainContract'
@@ -52,8 +54,9 @@ const Features: React.FC<unknown> = () => {
             <div className="align-self-top text-center">
               <img
                 className="feature-icon"
-                src={bigIcon}
+                src={illustrationOne}
                 alt="Big Feature Icon"
+                height="128px"
               />
               <div className="feature-text">
                 <div>
@@ -72,8 +75,9 @@ const Features: React.FC<unknown> = () => {
             <div className="align-self-top text-center">
               <img
                 className="feature-icon"
-                src={bigIcon}
+                src={illustrationTwo}
                 alt="Big Feature Icon"
+                height="128px"
               />
               <div className="feature-text">
                 <div>
@@ -91,8 +95,9 @@ const Features: React.FC<unknown> = () => {
             <div className="align-self-top text-center">
               <img
                 className="feature-icon"
-                src={bigIcon}
+                src={illustrationThree}
                 alt="Big Feature Icon"
+                height="128px"
               />
               <div className="feature-text">
                 <div>
