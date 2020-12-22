@@ -37,7 +37,10 @@ const SeriesManagement: FC<Props> = ({
 
   return (
     <div>
-      <button className="btn btn-primary-outline btn-sm mb-4" onClick={handleClickBack}>
+      <button
+        className="btn btn-primary-outline btn-sm mb-4"
+        onClick={handleClickBack}
+      >
         {/* <Icon icon={faChevronLeft} /> */}
         <ChevronLeft className="fix-icon-alignment" />
         <span style={{ paddingLeft: '0.5em' }}>Back to Series</span>
@@ -49,20 +52,20 @@ const SeriesManagement: FC<Props> = ({
               {managing?.name} ({managing?.jurisdiction})
             </h3>
             <div className="">
-                Manager: <Address address={managing.owner}></Address>
+              Manager: <Address address={managing.owner}></Address>
             </div>
             <div className="">
-                Address: <Address address={managing.contract}></Address>
+              Address: <Address address={managing.contract}></Address>
             </div>
             <div className="">
-                Creation: <UTCDate date={managing.created} separator=""></UTCDate>
+              Creation: <UTCDate date={managing.created} separator=""></UTCDate>
             </div>
             <div className="small text-warning mt-2">
               <span style={{ marginRight: '0.5em' }}>
-                <ExclamationCircle className="fix-icon-alignment"/>
+                <ExclamationCircle className="fix-icon-alignment" />
               </span>
-                Your company address is not a wallet. Please do never send{' '}
-                ether/tokens to this address.
+              Your company address is not a wallet. Please do never send{' '}
+              ether/tokens to this address.
             </div>
           </div>
           <div>

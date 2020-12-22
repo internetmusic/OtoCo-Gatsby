@@ -13,9 +13,9 @@ $black: #030b13 !default;
 $blue: #03a9f4 !default;
 $indigo: #3f51b5 !default;
 $pink: #e91e63 !default;
-$red: #f44336 !default;
-$orange: #ff5722 !default;
-$yellow: #ffab00 !default;
+$red: #f81e40 !default;
+$orange: #fa8657 !default;
+$yellow: #fa8657 !default;
 $green: #25ce95 !default;
 $cornflower: #5e4dfd !default; // Button Left
 $purple: #8e83f0 !default; // Button Right
@@ -38,6 +38,19 @@ $accent-purple-20: rgba(116, 121, 255, 0.2);
 $accent-purple-brighter: #8f93ff;
 $accent-purple-brightest: #b3b5ff;
 
-$midnight-blue-0: #030b13;
-$midnight-blue-1: #0b1326;
-$midnight-blue-2: #0b1833;
+// Background Colors: deeper=darker
+// Start with base lightness value of 12
+$lightness-base: 12;
+$midnight-blue-0: hsla(232, 46, $lightness-base * 1, 1);
+$midnight-blue-1: hsla(232, 46, $lightness-base * 1.5, 1);
+$midnight-blue-2: hsla(232, 46, $lightness-base * 2, 1);
+
+// Elevations / box-shadow style
+// (Not colors but don't see a better place to do it)
+$elevation-0: 0px 1px 2px rgba(0, 0, 0, 0.09), 0px 1px 3px rgba(0, 0, 0, 0.15);
+$elevation-1: 0px 2px 4px rgba(0, 0, 0, 0.09), 0px 4px 6px rgba(0, 0, 0, 0.15);
+$elevation-2: 0px 10px 15px rgba(0, 0, 0, 0.15),
+  0px 4px 6px rgba(0, 0, 0, 0.075);
+$elevation-3: 0px 20px 25px rgba(0, 0, 0, 0.15),
+  0px 10px 10px rgba(0, 0, 0, 0.06);
+$elevation-4: 0px 25px 50px rgba(0, 0, 0, 0.36);

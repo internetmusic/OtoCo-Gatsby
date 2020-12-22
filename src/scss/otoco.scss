@@ -18,7 +18,7 @@ $warning: $yellow;
 $danger: $red;
 $light: $gray-100;
 $dark: $gray-100;
-$background: $black;
+$background: $midnight-blue-0;
 
 $border-radius: 16px;
 $border-color: transparent;
@@ -65,10 +65,10 @@ $container-max-widths: (
 
 // Body
 // Settings for the `<body>` element.
-$body-bg: $black;
+$body-bg: $midnight-blue-0;
 $body-color: $white;
 $inverse-bg: $white;
-$inverse-color: $black;
+$inverse-color: $midnight-blue-0;
 
 // Fonts
 @import './fonts.scss';
@@ -165,8 +165,10 @@ a {
 .dropdown-toggle {
   border-radius: $border-radius-sm;
   padding: 12px 24px;
-  &:hover {
-    transform: scale(1);
+  &:hover,
+  :active {
+    transform: none;
+    background-color: $midnight-blue-2;
   }
 
   &::after {
@@ -189,7 +191,8 @@ a {
 .dropdown-menu {
   background: $midnight-blue-2;
   border-radius: $border-radius-sm;
-  border: 1px solid $accent-purple-20;
+  // border: 1px solid $accent-purple-20;
+  box-shadow: $elevation-1;
 }
 
 .input-group-append {
@@ -200,7 +203,7 @@ a {
     border-top-left-radius: 0px;
     border-bottom-left-radius: 0px;
     &:hover {
-      transform: scale(1);
+      transform: none;
     }
     &::before {
       border-radius: 0 $border-radius-sm $border-radius-sm 0;
@@ -274,7 +277,6 @@ img:hover {
 
 // To handle large amounts of text (best for reading)
 .large-amount-of-text {
-  color: $gray-100;
   p {
     font-size: 1.25rem;
     font-weight: 300;
@@ -314,13 +316,11 @@ img:hover {
   }
 }
 
-$card-spacer-x: 0px;
-$card-bg: $midnight-blue-1;
-
 .card {
   padding: 40px;
   background: $midnight-blue-1;
-  // box-shadow: 0px 0px 10px $gray-600;
+  box-shadow: $elevation-2;
+  margin: 24px 0;
 }
 
 @media (max-width: 640px) {
@@ -347,7 +347,8 @@ $card-bg: $midnight-blue-1;
 }
 
 .special-bg {
-  background-color: $accent-purple-20;
+  background-color: $midnight-blue-2;
+  box-shadow: $elevation-4;
 }
 
 .table {
