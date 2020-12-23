@@ -1,17 +1,17 @@
 @import 'scss/colors.scss';
 
 .transaction-card {
-    background: transaction;
-    border: 1px solid $teal;
-    border-radius: 16px;
-    max-width: 350px;
+  background: transaction;
+  border: 1px solid $teal;
+  border-radius: 16px;
+  max-width: 350px;
 
-    .card-title {
-        padding-bottom: 8px;
-    }
+  .card-title {
+    padding-bottom: 8px;
+  }
 
-    .transaction-footer {
-        padding-top: 8px;
-        border-top: 1px dashed $teal;
-    }
+  .transaction-footer {
+    padding-top: 8px 24px;
+    // border-top: 1px dashed $teal;
+  }
 }

@@ -75,11 +75,16 @@ const StepPayment: FC<Props> = ({
       const allBN = new BN(allowance)
       const feeBN = new BN(erc20.spinUpFee)
 
-      console.log(allowance, balance)
+      console.log(
+        allBN.div(divisor).toString(),
+        balBN.div(divisor).toString(),
+        erc20.spinUpFee,
+        allBN.div(divisor).gte(feeBN)
+      )
 
       setAllowance(allBN.div(divisor).toString())
       setBalance(balBN.div(divisor).toString())
-      setFeeBN(feeBN.mul(divisor))
+      setFeeBN(feeBN)
       setAllowanceBN(allBN.div(divisor))
       setBalanceBN(balBN.div(divisor))
 
@@ -123,6 +128,7 @@ const StepPayment: FC<Props> = ({
 
     console.log(balanceBN)
     setBalance(balanceBN.div(divisor).toString())
+    console.log(allowanceBN.gte(feeBN), balanceBN.gte(feeBN))
   }
 
   const clickApproveHandler = async () => {
@@ -172,7 +178,7 @@ const StepPayment: FC<Props> = ({
             </p>
           </div>
         )}
-        {!transaction && parseInt(accountBalance) < erc20.spinUpFee && (
+        {!transaction && feeBN.gt(balanceBN) && (
           <NoBalanceForm
             balance={accountBalance}
             fee={erc20.spinUpFee}
@@ -180,7 +186,7 @@ const StepPayment: FC<Props> = ({
             environment="testwyre"
           ></NoBalanceForm>
         )}
-        {!transaction && allowanceBN?.gte(feeBN) && balanceBN?.gte(feeBN) && (
+        {!transaction && feeBN.gt(allowanceBN) && balanceBN.gte(feeBN) && (
           <EnoughBalance
             balance={accountBalance}
             allowance={accountAllowance}
