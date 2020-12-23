@@ -1,11 +1,12 @@
 import React, { Dispatch, FC, useState } from 'react'
-import Web3 from 'web3'
+import Web3, { TransactionReceipt } from 'web3'
 import axios from 'axios'
 import { navigate } from '@reach/router'
 import { connect } from 'react-redux'
 import { IState } from '../../../state/types'
 import TransactionMonitor from '../../transactionMonitor/transactionMonitor'
 import MainContract from '../../../smart-contracts/MainContract'
+import SeriesContract from '../../../smart-contracts/SeriesContract'
 import {
   SET_ACCOUNT,
   SET_NETWORK,
@@ -13,6 +14,8 @@ import {
 } from '../../../state/account/types'
 import {
   SET_CURRENT_STEP,
+  SET_COMPANY_NAME,
+  CLEAR_AVAILABLE_NAME,
   SpinUpActionTypes,
 } from '../../../state/spinUp/types'
 import transactionMonitor from '../../transactionMonitor/transactionMonitor'
@@ -23,6 +26,7 @@ interface Props {
   availableName?: string
   jurisdictionName: string
   jurisdictionSelected: string
+  jurisdictionStreet: { [key: string]: string }
   dispatch: Dispatch<AccountActionTypes | SpinUpActionTypes>
 }
 
@@ -32,12 +36,13 @@ interface Request {
   gasPrice?: string
 }
 
-const ActivateCompany: FC<Props> = ({
+const StepActivateCompany: FC<Props> = ({
   account,
   network,
   availableName,
   jurisdictionSelected,
   jurisdictionName,
+  jurisdictionStreet,
   dispatch,
 }: Props) => {
   const web3: Web3 = window.web3
@@ -46,9 +51,10 @@ const ActivateCompany: FC<Props> = ({
   const [totalCost, setTotalCost] = useState(0)
   const gasCost = 710000
 
+  /*
   React.useEffect(() => {
     // When enter activate page
-    async function populateFees() {
+    setTimeout(async () => {
       const gasFees = await axios.get(
         `https://ethgasstation.info/api/ethgasAPI.json`
       )
@@ -58,13 +64,18 @@ const ActivateCompany: FC<Props> = ({
       total = total.match(/^-?\d+(?:\.\d{0,3})?/)[0]
       console.log(gasCost, fee, total)
       setFee(fee)
-      setTotalCost(total)
-    }
-    populateFees()
-  }, [])
+      setTotalCost(parseFloat(total))
+    }, 0)
+  }, [account, network])
+  */
+
+  const formatBreakLines = (text: string) => {
+    return text.split(',').map((elem, idx) => <div key={idx}>{elem}</div>)
+  }
 
   const clickCancelHandler = () => {
-    dispatch({ type: SET_CURRENT_STEP, payload: 0 })
+    dispatch({ type: CLEAR_AVAILABLE_NAME })
+    dispatch({ type: SET_CURRENT_STEP, payload: 1 })
   }
 
   const clickActivateHandler = async () => {
@@ -89,33 +100,62 @@ const ActivateCompany: FC<Props> = ({
           setTransaction(hash)
         }
       })
-    // setTransaction(
-    //   '0x628048caa2a7e94d994556fc2fbd3ebddb20bb4e99df191cc45bff7558977cf0'
-    // )
   }
 
-  const handleConfirmedTransaction = () => {
-    navigate('/dashboard')
+  const handleConfirmedTransaction = async () => {
+    const web3: Web3 = window.web3
+    const receipt = await web3.eth.getTransactionReceipt(transaction)
+    const contract = receipt.logs[3].address
+    const finalName = await SeriesContract.getContract(contract)
+      .methods.getName()
+      .call({ from: account })
+    console.log('RESULT', contract, finalName)
+    dispatch({ type: SET_COMPANY_NAME, payload: finalName })
+    dispatch({ type: SET_CURRENT_STEP, payload: 5 })
   }
 
   return (
     <div className="animate-slide-left">
       {!transaction && (
         <div>
-          <p className="normal-text">
+          {/* <p className="normal-text">
             The current deployment cost is approximately. <b>{totalCost} ETH</b>
             .
+          </p> */}
+          <div>Upon activation, your wallet with address </div>
+          <p className="text-primary font-monospace">{account}</p>
+          <div>will be the First Member and Manager of: </div>
+          {jurisdictionSelected === 'us_de' && (
+            <div>
+              <b>{availableName}</b> with registered address at:
+            </div>
+          )}
+          {jurisdictionSelected === 'us_wy' && (
+            <div>
+              <b>{availableName} - Series ##</b> with registered address at:
+            </div>
+          )}
+          <div className="my-3 text-primary">
+            {formatBreakLines(jurisdictionStreet[jurisdictionSelected])}
+          </div>
+          <p>
+            You will be able to download your new entity&apos;s Operating
+            Agreement after activation.
           </p>
-          <p className="normal-text">
-            Click <b>Activate</b> to spin up <b>{availableName}</b> in{' '}
-            <b>{jurisdictionName}</b>.
-          </p>
-          <button className="btn btn-primary mr-4" onClick={clickCancelHandler}>
-            Cancel
-          </button>
-          <button className="btn btn-primary" onClick={clickActivateHandler}>
-            Activate Company
-          </button>
+          <div className="d-flex row-cols-2 pt-4 gap-5 flex-row">
+            <button
+              className="btn btn-primary-outline flex-fill"
+              onClick={clickCancelHandler}
+            >
+              Cancel
+            </button>
+            <button
+              className="btn btn-primary flex-fill"
+              onClick={clickActivateHandler}
+            >
+              Activate Company
+            </button>
+          </div>
         </div>
       )}
       {transaction && (
@@ -135,4 +175,5 @@ export default connect((state: IState) => ({
   availableName: state.spinUp.availableName,
   jurisdictionSelected: state.spinUp.jurisdictionSelected,
   jurisdictionName: state.spinUp.jurisdictionName,
-}))(ActivateCompany)
+  jurisdictionStreet: state.spinUp.jurisdictionStreet,
+}))(StepActivateCompany)

@@ -21,10 +21,12 @@ const Layout: React.FC<Props> = ({ children }: Props) => {
   // })
 
   return (
-    <div className="padded">
-      <Logo />
-      <AccountWidget />
-      {children}
+    <div>
+      <div className="padded">
+        <Logo />
+        <AccountWidget />
+        {children}
+      </div>
       <Footer />
     </div>
   )

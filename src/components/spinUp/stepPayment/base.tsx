@@ -1,10 +1,12 @@
 import React, { Dispatch, FC, useState } from 'react'
 import Web3 from 'web3'
 import BN from 'bn.js'
+import axios from 'axios'
 import { connect } from 'react-redux'
 import { IState } from '../../../state/types'
 import {
   SET_CURRENT_STEP,
+  CLEAR_AVAILABLE_NAME,
   SpinUpActionTypes,
 } from '../../../state/spinUp/types'
 import TransactionMonitor from '../../transactionMonitor/transactionMonitor'
@@ -25,7 +27,7 @@ interface Props {
   dispatch: Dispatch<SpinUpActionTypes>
 }
 
-const Payment: FC<Props> = ({
+const StepPayment: FC<Props> = ({
   account,
   network,
   jurisdictionSelected,
@@ -38,7 +40,9 @@ const Payment: FC<Props> = ({
   const [accountBalance, setBalance] = useState('0')
   const [decimals, setDecimals] = useState(18)
   const [erc20Target, setERC20Target] = useState('')
-  const [feeBN, setFeeBN] = useState('')
+  const [feeBN, setFeeBN] = useState<BN>(new BN(0))
+  const [allowanceBN, setAllowanceBN] = useState<BN>(new BN(0))
+  const [balanceBN, setBalanceBN] = useState<BN>(new BN(0))
 
   const erc20 = {
     symbol: 'DAI',
@@ -67,23 +71,27 @@ const Payment: FC<Props> = ({
       setDecimals(dec)
       const decimalBN = new BN(dec)
       const divisor = new BN(10).pow(decimalBN)
-      const balanceBN = new BN(balance)
-      const allowanceBN = new BN(allowance)
+      const balBN = new BN(balance)
+      const allBN = new BN(allowance)
       const feeBN = new BN(erc20.spinUpFee)
 
-      console.log(allowance, balance)
-
-      setAllowance(allowanceBN.div(divisor).toString())
-      setBalance(balanceBN.div(divisor).toString())
-      setFeeBN(feeBN.mul(divisor).toString())
-
-      if (
-        erc20.spinUpFee <= allowanceBN.div(divisor).toNumber() &&
-        balance >= allowance
+      console.log(
+        allBN.div(divisor).toString(),
+        balBN.div(divisor).toString(),
+        erc20.spinUpFee,
+        allBN.div(divisor).gte(feeBN)
       )
-        dispatch({ type: SET_CURRENT_STEP, payload: 3 })
+
+      setAllowance(allBN.div(divisor).toString())
+      setBalance(balBN.div(divisor).toString())
+      setFeeBN(feeBN)
+      setAllowanceBN(allBN.div(divisor))
+      setBalanceBN(balBN.div(divisor))
+
+      if (feeBN.lte(allBN.div(divisor)) && balBN.gte(allBN))
+        dispatch({ type: SET_CURRENT_STEP, payload: 4 })
     }, 0)
-  }, [account])
+  }, [account, accountBalance])
 
   // https://docs.sendwyre.com/docs/getting-started-wyre-checkout
   // https://docs.sendwyre.com/docs/wallet-order-reservations
@@ -99,9 +107,9 @@ const Payment: FC<Props> = ({
       const decimalBN = new BN(decimals)
       const divisor = new BN(10).pow(decimalBN)
       const balanceBN = new BN(balance)
-      console.log(balance)
+      const feeBN = new BN(erc20.spinUpFee)
       setBalance(balanceBN.div(divisor).toString())
-      if (erc20.spinUpFee <= balanceBN.div(divisor).toNumber()) {
+      if (!feeBN.gt(balanceBN.div(divisor))) {
         window.clearInterval(interval)
       }
     })
@@ -120,6 +128,7 @@ const Payment: FC<Props> = ({
 
     console.log(balanceBN)
     setBalance(balanceBN.div(divisor).toString())
+    console.log(allowanceBN.gte(feeBN), balanceBN.gte(feeBN))
   }
 
   const clickApproveHandler = async () => {
@@ -150,11 +159,7 @@ const Payment: FC<Props> = ({
   }
 
   const nextStepHandler = () => {
-    dispatch({ type: SET_CURRENT_STEP, payload: 3 })
-  }
-
-  const clickBackHandler = () => {
-    dispatch({ type: SET_CURRENT_STEP, payload: 0 })
+    dispatch({ type: SET_CURRENT_STEP, payload: 4 })
   }
 
   return (
@@ -173,7 +178,7 @@ const Payment: FC<Props> = ({
             </p>
           </div>
         )}
-        {!transaction && parseInt(accountBalance) < erc20.spinUpFee && (
+        {!transaction && feeBN.gt(balanceBN) && (
           <NoBalanceForm
             balance={accountBalance}
             fee={erc20.spinUpFee}
@@ -181,21 +186,19 @@ const Payment: FC<Props> = ({
             environment="testwyre"
           ></NoBalanceForm>
         )}
-        {!transaction &&
-          parseInt(accountAllowance) < erc20.spinUpFee &&
-          parseInt(accountBalance) >= erc20.spinUpFee && (
-            <EnoughBalance
-              balance={accountBalance}
-              allowance={accountAllowance}
-              fee={erc20.spinUpFee}
-              currency={erc20.symbol}
-              feeBN={feeBN}
-              mainContractAddress={
-                MainContract.addresses[network + '_' + jurisdictionSelected]
-              }
-              setTransaction={setTransaction}
-            ></EnoughBalance>
-          )}
+        {!transaction && feeBN.gt(allowanceBN) && balanceBN.gte(feeBN) && (
+          <EnoughBalance
+            balance={accountBalance}
+            allowance={accountAllowance}
+            fee={erc20.spinUpFee}
+            currency={erc20.symbol}
+            feeBN={feeBN}
+            mainContractAddress={
+              MainContract.addresses[network + '_' + jurisdictionSelected]
+            }
+            setTransaction={setTransaction}
+          ></EnoughBalance>
+        )}
       </div>
     </div>
   )
@@ -207,4 +210,4 @@ export default connect((state: IState) => ({
   availableName: state.spinUp.availableName,
   jurisdictionSelected: state.spinUp.jurisdictionSelected,
   currentStep: state.spinUp.currentStep,
-}))(Payment)
+}))(StepPayment)

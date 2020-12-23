@@ -49,7 +49,7 @@ const ContactForm: FC<Props> = ({ account, dispatch }: Props) => {
   return (
     <div className="card">
       <div className="card-body">
-        <div className="ui celled table contact-form animate-slide">
+        <div className="ui celled contact-form animate-slide">
           <p>
             Before accessing your dashboard, we ask you to provide us with basic
             contact information. The only required field is your email address.
@@ -67,7 +67,7 @@ const ContactForm: FC<Props> = ({ account, dispatch }: Props) => {
                 onChange={handleChangeEmail}
               />
               <div className="input-group-append">
-                <p className="btn btn-primary disabled">E-mail Address</p>
+                <div className="btn btn-primary disabled">E-mail Address</div>
               </div>
             </div>
           </div>

@@ -4,6 +4,7 @@ import { CSSTransition } from 'react-transition-group'
 import Web3Integrate from '../../services/web3-integrate'
 import { connect } from 'react-redux'
 import { IState } from '../../state/types'
+import { CaretRightFill } from 'react-bootstrap-icons'
 import {
   SET_ACCOUNT,
   SET_NETWORK,
@@ -54,14 +55,20 @@ const AccountWidget: FC<Props> = ({ account, network, dispatch }: Props) => {
     <CSSTransition in={show} timeout={200} classNames="slide-up" unmountOnExit>
       <div className="account-widget">
         {account && (
-          <div className="small disabled" onClick={handleDisconnect}>
-            {account.substring(0, 8)}...{' '}
+          <div
+            className="small disabled font-monospace"
+            onClick={handleDisconnect}
+          >
+            {account.substring(0, 12)}...{' '}
+            <span>
+              <CaretRightFill className="fix-icon-alignment" />
+            </span>
             <span className="network">{network}</span>
           </div>
         )}
         {!account && (
           <div className="account-details">
-            <p>
+            <p className="small">
               <span onClick={handleConnect}>disconnected</span>
             </p>
           </div>

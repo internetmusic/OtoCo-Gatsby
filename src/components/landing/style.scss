@@ -1,0 +1,183 @@
+@import '../../scss/colors.scss';
+
+.content {
+  margin-top: 56px;
+}
+
+h1 {
+  line-height: 1.25 !important;
+  font-weight: 500 !important;
+  // text-align: center;
+}
+
+h2 {
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 40px;
+  letter-spacing: 0em;
+}
+
+h4 {
+  font-size: 1em;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 24px;
+  letter-spacing: 0em;
+  text-align: left;
+  color: $white;
+}
+
+h5 {
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 300;
+  line-height: 16px;
+  letter-spacing: 0.2em;
+}
+
+.quick-links {
+  color: $white;
+  float: right;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  padding: 32px;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 16px;
+  letter-spacing: 0em;
+  a {
+    margin-left: 16px;
+  }
+}
+
+@media (max-width: 640px) {
+  .quick-links {
+    padding: 24px;
+  }
+}
+
+.styled-link {
+  color: $gray-200;
+  display: inline;
+  text-decoration: none;
+  background-image: linear-gradient(transparent, transparent),
+    linear-gradient(transparent, transparent),
+    linear-gradient(to right, $teal, $cyan);
+  background-repeat: no-repeat;
+  background-position: 120%, 122%, 0 130%;
+  padding-bottom: 6px;
+  background-size: 100% 7px;
+  transition: background-size 200ms ease-out;
+  -moz-transition: background-size 200ms ease-out;
+  -ms-transition: background-size 200ms ease-out;
+  -o-transition: background-size 200ms ease-out;
+  -webkit-transition: background-size 200ms ease-out;
+  &:hover {
+    color: $white;
+    text-decoration: none;
+    background-size: 100% 8px;
+  }
+}
+
+.styled-button {
+  border-radius: 100rem;
+  padding: 1rem 2rem;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 22px;
+  letter-spacing: 0em;
+  text-align: center;
+  box-shadow: 0 0 6px 0 rgba(157, 96, 212, 0.5);
+  border: solid 3px transparent;
+  background-image: linear-gradient(
+      rgba(255, 255, 255, 0),
+      rgba(255, 255, 255, 0)
+    ),
+    linear-gradient(101deg, $teal, $cyan);
+  background-origin: border-box;
+  background-clip: content-box, border-box;
+  box-shadow: 2px 1000px 1px $midnight-blue-0 inset;
+  min-width: 287px;
+  transition: box-shadow 0.5s, color 0.7s;
+  transition-timing-function: ease-out;
+  &:hover {
+    box-shadow: none;
+    color: $midnight-blue-0;
+  }
+}
+
+.styled-counter {
+  font-family: IBM Plex Sans;
+  font-size: 144px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 187px;
+  letter-spacing: 0em;
+  /* Warning: no fallback */
+  background: linear-gradient(0deg, $teal 0%, $cyan 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-stroke: 4px transparent;
+  color: $midnight-blue-0;
+}
+
+.features-bg {
+  background: url('../../../static/img/background-stars.svg') bottom center;
+  background-repeat: no-repeat;
+  background-color: $midnight-blue-0;
+}
+
+.feature-icon {
+  position: relative;
+  z-index: 1;
+}
+
+.feature-text {
+  color: $gray-100;
+  position: relative;
+  top: -54px;
+  max-width: 480px;
+  border-radius: 16px;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  padding-bottom: 3rem;
+  padding-top: 60px;
+  text-align: left;
+  background: rgb(11, 22, 45);
+  background: linear-gradient(
+    180deg,
+    $midnight-blue-1 0%,
+    $midnight-blue-0 100%
+  );
+}
+
+.feature-title {
+  font-size: 1.25rem;
+  line-height: 1.5;
+  font-weight: 600;
+  text-align: center;
+  letter-spacing: 0;
+  color: $cyan;
+}
+
+.counter {
+  color: $white;
+}
+
+.counter-spacing {
+  margin: 100px 0px 200px 0px;
+}
+
+.counter-title {
+  font-size: 1.125rem;
+  text-transform: uppercase;
+  color: $cyan-80;
+}
+
+.lead {
+  font-size: 1.5rem;
+}

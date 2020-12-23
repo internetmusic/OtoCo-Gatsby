@@ -1,22 +1,56 @@
-$white: rgba(255, 255, 255, 0.8) !default;
-$gray-100: rgba(255, 255, 255, 0.7) !default;
-$gray-200: rgba(255, 255, 255, 0.6) !default;
-$gray-300: rgba(255, 255, 255, 0.5) !default;
-$gray-400: rgba(255, 255, 255, 0.5) !default;
-$gray-500: rgba(255, 255, 255, 0.5) !default;
-$gray-600: rgba(255, 255, 255, 0.2) !default;
-$gray-700: rgba(255, 255, 255, 0.1) !default;
-$gray-800: rgba(255, 255, 255, 0.0) !default;
-$gray-900: rgba(255, 255, 255, 0.0) !default;
-$black: #0F0F0F !default;
+$white: rgba(255, 255, 255, 1) !default;
+$gray-100: rgba(255, 255, 255, 0.9);
+$gray-200: rgba(255, 255, 255, 0.8);
+$gray-300: rgba(255, 255, 255, 0.7);
+$gray-400: rgba(255, 255, 255, 0.6);
+$gray-500: rgba(255, 255, 255, 0.5);
+$gray-600: rgba(255, 255, 255, 0.4);
+$gray-700: rgba(255, 255, 255, 0.3);
+$gray-800: rgba(255, 255, 255, 0.2);
+$gray-900: rgba(255, 255, 255, 0.1);
+$black: #030b13 !default;
 
 $blue: #03a9f4 !default;
 $indigo: #3f51b5 !default;
-$purple: #673ab7 !default;
 $pink: #e91e63 !default;
-$red: #f44336 !default;
-$orange: #ff5722 !default;
-$yellow: #ffab00 !default;
-$green: #8bc34a !default;
-$teal: #009688 !default;
-$cyan: #2EE8CF !default;
+$red: #f81e40 !default;
+$orange: #fa8657 !default;
+$yellow: #fa8657 !default;
+$green: #25ce95 !default;
+$cornflower: #5e4dfd !default; // Button Left
+$purple: #8e83f0 !default; // Button Right
+$teal: #7479ff !default; //
+$cyan: #0feef1 !default;
+
+// Following the color's names convention on Figma
+
+$cyan-80: rgba(15, 238, 241, 0.8);
+
+$gradient-subtle: linear-gradient(90.44deg, #5e4dfd 41.29%, #8e83f0 97.87%);
+$gradient-medium: linear-gradient(91.33deg, #4635e0 38.48%, #6f60fa 84.88%);
+
+$accent-purple-100: #7479ff;
+$accent-purple-80: rgba(116, 121, 255, 0.8);
+$accent-purple-60: rgba(116, 121, 255, 0.6);
+$accent-purple-40: rgba(116, 121, 255, 0.4);
+$accent-purple-20: rgba(116, 121, 255, 0.2);
+
+$accent-purple-brighter: #8f93ff;
+$accent-purple-brightest: #b3b5ff;
+
+// Background Colors: deeper=darker
+// Start with base lightness value of 12
+$lightness-base: 12;
+$midnight-blue-0: hsla(232, 46, $lightness-base * 1, 1);
+$midnight-blue-1: hsla(232, 46, $lightness-base * 1.5, 1);
+$midnight-blue-2: hsla(232, 46, $lightness-base * 2, 1);
+
+// Elevations / box-shadow style
+// (Not colors but don't see a better place to do it)
+$elevation-0: 0px 1px 2px rgba(0, 0, 0, 0.09), 0px 1px 3px rgba(0, 0, 0, 0.15);
+$elevation-1: 0px 2px 4px rgba(0, 0, 0, 0.09), 0px 4px 6px rgba(0, 0, 0, 0.15);
+$elevation-2: 0px 10px 15px rgba(0, 0, 0, 0.15),
+  0px 4px 6px rgba(0, 0, 0, 0.075);
+$elevation-3: 0px 20px 25px rgba(0, 0, 0, 0.15),
+  0px 10px 10px rgba(0, 0, 0, 0.06);
+$elevation-4: 0px 25px 50px rgba(0, 0, 0, 0.36);

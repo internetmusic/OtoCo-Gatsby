@@ -29,7 +29,13 @@ const Modal: ModalType = {
         // network: "kovan", // optional
         cacheProvider: false, // optional
         providerOptions, // required
-        theme: 'dark',
+        theme: {
+          background: '#0B1326',
+          main: 'rgba(255, 255, 255, 0.8)',
+          secondary: 'rgba(255, 255, 255, 0.8)',
+          border: 'transparent',
+          hover: 'rgba(116, 121, 255, 0.2)',
+        },
       })
     }
 

@@ -1,15 +1,10 @@
 @import '../../scss/colors.scss';
 
-.card {
-    margin: 16px 0px;
-}
-
 .btn-icon {
-    border-radius: 30px;
+  border-radius: 30px;
 }
 
 .jurisdiction {
-    padding: 0px 6px;
-    border: 1px solid $white;
-    border-radius: 30px;
+  letter-spacing: 0.05em;
+  color: $gray-200;
 }

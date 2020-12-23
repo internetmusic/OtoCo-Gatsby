@@ -144,8 +144,8 @@ const Config: FC<Props> = ({ account, network, managing, dispatch }: Props) => {
       {error && <p className="small text-danger">{error}</p>}
       {!transaction && (
         <div className="row">
-          <div className="col-12 col-md-6">
-            <div className="input-group mb-4">
+          <div className="col-12 col-md-8">
+            <div className="input-group mb-2">
               <input
                 type="text"
                 className="form-control right"
@@ -154,13 +154,13 @@ const Config: FC<Props> = ({ account, network, managing, dispatch }: Props) => {
                 onChange={handleChangeName}
               />
               <div className="input-group-append">
-                <p className="btn btn-primary disabled">Token Name</p>
+                <div className="btn btn-primary disabled">Token Name</div>
               </div>
             </div>
           </div>
           <div className="w-100"></div>
-          <div className="col-12 col-md-6">
-            <div className="input-group mb-4">
+          <div className="col-12 col-md-8">
+            <div className="input-group mb-2">
               <input
                 type="text"
                 className="form-control right"
@@ -169,13 +169,13 @@ const Config: FC<Props> = ({ account, network, managing, dispatch }: Props) => {
                 onChange={handleChangeSymbol}
               />
               <div className="input-group-append">
-                <p className="btn btn-primary disabled">Token Symbol</p>
+                <div className="btn btn-primary disabled">Token Symbol</div>
               </div>
             </div>
           </div>
           <div className="w-100"></div>
-          <div className="col-12 col-md-6">
-            <div className="input-group mb-4">
+          <div className="col-12 col-md-8">
+            <div className="input-group mb-2">
               <input
                 type="text"
                 className="form-control right"
@@ -184,12 +184,12 @@ const Config: FC<Props> = ({ account, network, managing, dispatch }: Props) => {
                 onChange={handleChangeShares}
               />
               <div className="input-group-append">
-                <p className="btn btn-primary disabled">Token Quantity</p>
+                <div className="btn btn-primary disabled">Token Quantity</div>
               </div>
             </div>
           </div>
           <div className="w-100"></div>
-          <div className="col-12 col-md-6">
+          <div className="col-12 col-md-8">
             <button className="btn btn-primary" onClick={handleClickDeploy}>
               Deploy Token
             </button>

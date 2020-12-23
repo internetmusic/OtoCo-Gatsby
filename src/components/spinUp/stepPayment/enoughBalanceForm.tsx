@@ -1,11 +1,13 @@
 import React, { Dispatch, FC, useState } from 'react'
 import Web3 from 'web3'
 import BN from 'bn.js'
+import axios from 'axios'
 import { connect } from 'react-redux'
 import { IState } from '../../../state/types'
 import AddressWidget from '../../addressWidget/addressWidget'
 import {
   SET_CURRENT_STEP,
+  CLEAR_AVAILABLE_NAME,
   SpinUpActionTypes,
 } from '../../../state/spinUp/types'
 
@@ -34,6 +36,7 @@ const EnoughBalanceForm: FC<Props> = ({
   mainContractAddress,
   account,
   network,
+  dispatch,
   setTransaction,
 }: Props) => {
   const web3: Web3 = window.web3
@@ -53,7 +56,7 @@ const EnoughBalanceForm: FC<Props> = ({
     console.log(network, requestInfo)
     try {
       ERC20Contract.getContract(network)
-        .methods.approve(mainContractAddress, feeBN)
+        .methods.approve(mainContractAddress, feeBN.toString())
         .send(requestInfo, (error: any, hash: string) => {
           setTransaction(hash)
         })
@@ -63,7 +66,8 @@ const EnoughBalanceForm: FC<Props> = ({
   }
 
   const clickBackHandler = () => {
-    dispatch({ type: SET_CURRENT_STEP, payload: 0 })
+    dispatch({ type: CLEAR_AVAILABLE_NAME })
+    dispatch({ type: SET_CURRENT_STEP, payload: 1 })
   }
 
   return (
@@ -95,12 +99,20 @@ const EnoughBalanceForm: FC<Props> = ({
         To Address:{' '}
         <AddressWidget address={mainContractAddress}></AddressWidget>
       </p>
-      <button className="btn btn-primary mr-4" onClick={clickBackHandler}>
-        Back
-      </button>
-      <button className="btn btn-primary" onClick={clickApproveHandler}>
-        Approve Payment
-      </button>
+      <div className="d-flex row-cols-2 pt-4 gap-5 flex-row">
+        <button
+          className="btn btn-primary-outline flex-fill"
+          onClick={clickBackHandler}
+        >
+          Back
+        </button>
+        <button
+          className="btn btn-primary flex-fill"
+          onClick={clickApproveHandler}
+        >
+          Approve Payment
+        </button>
+      </div>
     </div>
   )
 }

@@ -1,8 +1,9 @@
 import React, { useState, FC } from 'react'
 import Web3 from 'web3'
 import ENS from 'ethereum-ens'
-import Icon from '../icon/icon'
-import { faCopy } from '@fortawesome/free-solid-svg-icons'
+// import Icon from '../icon/icon'
+// import { faCopy } from '@fortawesome/free-solid-svg-icons'
+import { Clipboard } from 'react-bootstrap-icons'
 import { connect } from 'react-redux'
 import { IState } from '../../state/types'
 
@@ -61,7 +62,7 @@ const AddressWidget: FC<Props> = ({ address, network }: Props) => {
   const formattedAddress = (address: string) => {
     try {
       return (
-        displayAddress.substring(0, 6) +
+        displayAddress.substring(0, 12) +
         '...' +
         displayAddress.substring(address.length - 5, address.length - 1)
       )
@@ -73,18 +74,19 @@ const AddressWidget: FC<Props> = ({ address, network }: Props) => {
   return (
     <span style={{ display: 'inline-block' }}>
       {isEns && (
-        <a className="primary" href={linkSearch + address} target="blank">
+        <a className="primary font-monospace" href={linkSearch + address} target="blank">
           {displayAddress}
         </a>
       )}
       {!isEns && (
-        <a className="primary" href={linkSearch + address} target="blank">
+        <a className="primary font-monospace" href={linkSearch + address} target="blank">
           {formattedAddress(displayAddress)}
         </a>
       )}
       &nbsp;
       <a href="#" onClick={clickCopyHandler.bind(undefined, address)}>
-        <Icon icon={faCopy}></Icon>
+        <Clipboard style={{ marginLeft: '0.25em' }} className="fix-icon-alignment"/>
+        {/* <Icon icon={faCopy}></Icon> */}
       </a>
     </span>
   )

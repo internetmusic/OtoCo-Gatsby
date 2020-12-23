@@ -5,6 +5,7 @@ import { IState } from '../../../state/types'
 import AddressWidget from '../../addressWidget/addressWidget'
 import {
   SET_CURRENT_STEP,
+  CLEAR_AVAILABLE_NAME,
   SpinUpActionTypes,
 } from '../../../state/spinUp/types'
 
@@ -29,7 +30,8 @@ const NoBalanceForm: FC<Props> = ({
   dispatch,
 }: Props) => {
   const clickBackHandler = () => {
-    dispatch({ type: SET_CURRENT_STEP, payload: 0 })
+    dispatch({ type: CLEAR_AVAILABLE_NAME })
+    dispatch({ type: SET_CURRENT_STEP, payload: 1 })
   }
 
   // env: 'testwyre',
@@ -122,8 +124,8 @@ const NoBalanceForm: FC<Props> = ({
           using debit-card.
         </div> */}
       </div>
-      <div className="align-right mt-4">
-        <button className="btn btn-primary mr-4" onClick={clickBackHandler}>
+      <div className="d-flex row-cols-2 pt-4 gap-5 flex-row">
+        <button className="btn btn-primary me-4" onClick={clickBackHandler}>
           Back
         </button>
       </div>

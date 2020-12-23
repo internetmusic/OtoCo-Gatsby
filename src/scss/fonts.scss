@@ -1,6 +1,7 @@
 // Font, line-height, and color for body text, headings, and more.
-$font-family-sans-serif: "Montserrat", 'Helvetica Neue', "Arial", "Helvetica", "sans-serif" !default;
-$font-family-monospace: SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace !default;
+$font-family-sans-serif: 'IBM Plex Sans', 'Arial', 'Helvetica', 'sans-serif' !default;
+$font-family-monospace: 'IBM Plex Mono', SFMono-Regular, Menlo, Monaco, Consolas,
+  'Liberation Mono', 'Courier New', monospace !default;
 $font-family-base: $font-family-sans-serif !default;
 
 $font-size-base: 1rem !default; // Assumes the browser default, typically `16px`
@@ -9,7 +10,7 @@ $font-size-sm: 0.875rem !default;
 $font-size-xs: 0.75rem !default;
 
 $font-weight-normal: normal !default;
-$font-weight-bold: bold !default;
+$font-weight-bold: 600 !default;
 
 $font-weight-base: $font-weight-normal !default;
 $line-height-base: 1.5 !default;
@@ -31,3 +32,10 @@ $display1-size: 6rem !default;
 $display2-size: 5.5rem !default;
 $display3-size: 4.5rem !default;
 $display4-size: 3.5rem !default;
+
+// IBM Plex Sans weights
+// 300 = Light
+// 400 = Regular
+// 500 = Medium
+// 600 = Semi-bold
+// 700 = Bold

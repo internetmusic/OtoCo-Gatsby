@@ -9,6 +9,7 @@ import {
   AccountActionTypes,
 } from '../../../state/account/types'
 import {
+  CLEAR_AVAILABLE_NAME,
   SET_CURRENT_STEP,
   SpinUpActionTypes,
 } from '../../../state/spinUp/types'
@@ -19,10 +20,19 @@ interface Props {
   dispatch: Dispatch<AccountActionTypes | SpinUpActionTypes>
 }
 
-const ConnectWallet: FC<Props> = ({ account, network, dispatch }: Props) => {
+const StepConnectWallet: FC<Props> = ({
+  account,
+  network,
+  dispatch,
+}: Props) => {
   React.useEffect(() => {
-    if (account && network) dispatch({ type: SET_CURRENT_STEP, payload: 2 })
+    if (account && network) dispatch({ type: SET_CURRENT_STEP, payload: 3 })
   }, [account, dispatch, network])
+
+  const clickBackHandle = () => {
+    dispatch({ type: CLEAR_AVAILABLE_NAME })
+    dispatch({ type: SET_CURRENT_STEP, payload: 1 })
+  }
 
   const clickConnectHandler = async () => {
     await Web3Integrate.callModal()
@@ -33,24 +43,33 @@ const ConnectWallet: FC<Props> = ({ account, network, dispatch }: Props) => {
       payload: await web3.eth.net.getNetworkType(),
     })
     dispatch({ type: SET_ACCOUNT, payload: accounts[0] })
-    dispatch({ type: SET_CURRENT_STEP, payload: 2 })
+    dispatch({ type: SET_CURRENT_STEP, payload: 3 })
   }
 
   return (
     <div>
       <div>
-        <div className="small">
+        <div className="">
           <p>Connect a wallet that will own your company.</p>
           <p>{account}</p>
           <p>{network}</p>
         </div>
-        <button
-          type="button"
-          className="btn btn-primary"
-          onClick={clickConnectHandler}
-        >
-          Connect Wallet
-        </button>
+        <div className="d-flex row-cols-2 pt-4 gap-5 flex-row">
+          <button
+            type="button"
+            className="btn btn-primary-outline flex-fill"
+            onClick={clickBackHandle}
+          >
+            Back
+          </button>
+          <button
+            type="button"
+            className="btn btn-primary"
+            onClick={clickConnectHandler}
+          >
+            Connect Wallet
+          </button>
+        </div>
       </div>
     </div>
   )
@@ -59,4 +78,4 @@ const ConnectWallet: FC<Props> = ({ account, network, dispatch }: Props) => {
 export default connect((state: IState) => ({
   account: state.account.account,
   network: state.account.network,
-}))(ConnectWallet)
+}))(StepConnectWallet)

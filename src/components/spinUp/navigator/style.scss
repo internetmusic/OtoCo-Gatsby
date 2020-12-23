@@ -1,0 +1,48 @@
+@import 'scss/colors.scss';
+
+.nav {
+  margin-bottom: 80px;
+}
+
+.nav-badge {
+  position: relative;
+  top: 43px;
+  left: 50px;
+  color: $green;
+}
+
+.o-50 {
+  opacity: 0.5;
+}
+
+.nav-icon {
+  position: relative;
+  max-width: 60px;
+  height: 48px;
+  left: -10px;
+  & img {
+    margin: 4px 6px;
+    margin-bottom: 4px;
+  }
+}
+
+.nav-hr {
+  padding: 8px 26px 0px 26px;
+  & hr {
+    border-top: 2px solid $teal;
+  }
+}
+
+@media (max-width: 640px) {
+  .nav-hr {
+    padding: 8px 8px 8px 8px;
+  }
+  .nav-icon {
+    max-width: 43px;
+    font-size: 12px;
+    & img {
+      margin: 4px 6px;
+      margin-bottom: 4px;
+    }
+  }
+}

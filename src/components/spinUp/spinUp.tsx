@@ -1,10 +1,15 @@
 import React, { FC } from 'react'
 import { connect } from 'react-redux'
+import { CSSTransition } from 'react-transition-group'
+
 import { IState } from '../../state/types'
-import CheckName from './stepOneCheckName/base'
-import ConnectWallet from './stepTwoConnectWallet/base'
-import Payment from './stepThreePayment/base'
-import ActivateCompany from './stepFourActivateCompany/base'
+import Introduction from './stepIntroduction/base'
+import CheckName from './stepCheckName/base'
+import ConnectWallet from './stepConnectWallet/base'
+import Payment from './stepPayment/base'
+import ActivateCompany from './stepActivateCompany/base'
+import Confirmation from './stepConfirmation/base'
+import Navigator from './navigator/navigator'
 
 interface Props {
   currentStep: number
@@ -12,36 +17,87 @@ interface Props {
 
 const SpinUp: FC<Props> = ({ currentStep }: Props) => {
   return (
-    <div className="row">
-      <div className="col-4 d-none d-md-block">
-        <ul className="list-group">
-          <li
-            className={`list-group-item ${currentStep === 0 ? 'active' : ''}`}
+    <div className="card">
+      <div className="row">
+        {currentStep > 0 && (
+          <div className="col-12">
+            <Navigator step={currentStep}></Navigator>
+          </div>
+        )}
+        <div className="col-12">
+          <CSSTransition
+            in={currentStep === 0}
+            timeout={{
+              appear: 200,
+              enter: 200,
+              exit: 0,
+            }}
+            classNames="my-node"
+            unmountOnExit
           >
-            Check Name
-          </li>
-          <li
-            className={`list-group-item ${currentStep === 1 ? 'active' : ''}`}
+            <Introduction></Introduction>
+          </CSSTransition>
+          <CSSTransition
+            in={currentStep === 1}
+            timeout={{
+              appear: 200,
+              enter: 200,
+              exit: 0,
+            }}
+            classNames="my-node"
+            unmountOnExit
           >
-            Connect Wallet
-          </li>
-          <li
-            className={`list-group-item ${currentStep === 2 ? 'active' : ''}`}
+            <CheckName></CheckName>
+          </CSSTransition>
+          <CSSTransition
+            in={currentStep === 2}
+            timeout={{
+              appear: 200,
+              enter: 200,
+              exit: 0,
+            }}
+            classNames="my-node"
+            unmountOnExit
           >
-            Approve Payment
-          </li>
-          <li
-            className={`list-group-item ${currentStep === 3 ? 'active' : ''}`}
+            <ConnectWallet></ConnectWallet>
+          </CSSTransition>
+          <CSSTransition
+            in={currentStep === 3}
+            timeout={{
+              appear: 200,
+              enter: 200,
+              exit: 0,
+            }}
+            classNames="my-node"
+            unmountOnExit
           >
-            Activate Company
-          </li>
-        </ul>
-      </div>
-      <div className="col-12 col-md-8">
-        {currentStep === 0 && <CheckName></CheckName>}
-        {currentStep === 1 && <ConnectWallet></ConnectWallet>}
-        {currentStep === 2 && <Payment></Payment>}
-        {currentStep === 3 && <ActivateCompany></ActivateCompany>}
+            <Payment></Payment>
+          </CSSTransition>
+          <CSSTransition
+            in={currentStep === 4}
+            timeout={{
+              appear: 200,
+              enter: 200,
+              exit: 0,
+            }}
+            classNames="my-node"
+            unmountOnExit
+          >
+            <ActivateCompany></ActivateCompany>
+          </CSSTransition>
+          <CSSTransition
+            in={currentStep === 5}
+            timeout={{
+              appear: 200,
+              enter: 200,
+              exit: 0,
+            }}
+            classNames="my-node"
+            unmountOnExit
+          >
+            <Confirmation></Confirmation>
+          </CSSTransition>
+        </div>
       </div>
     </div>
   )

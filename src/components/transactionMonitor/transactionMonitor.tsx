@@ -7,8 +7,9 @@ import Icon from '../icon/icon'
 import {
   faCheck,
   faCheckDouble,
-  faExclamationCircle,
-  faSpinner,
+  faExclamation,
+  faEnvelopeOpen,
+  faEnvelope,
   faClock,
 } from '@fortawesome/free-solid-svg-icons'
 
@@ -92,24 +93,24 @@ const TransactionMonitor: FC<Props> = ({
   })
 
   return (
-    <div className="card transaction-card">
+    <div className="transaction-card">
       <div className="card-body">
-        <h6 className="card-title">{title}</h6>
         <div className="row">
-          <div className="col-4">
-            <i className="file outline massive icon"></i>
-            {error && <Icon icon={faExclamationCircle} size="5x" />}
-            {!exists && !error && (
-              <Icon icon={faSpinner} size="5x" spin={true} />
-            )}
+          <div className="col-4 text-center align-items-center">
+            {/* <i className="file outline massive icon align-self-center"></i> */}
+            {error && <Icon icon={faExclamation} size="3x" />}
+            {!exists && !error && <Icon icon={faEnvelopeOpen} size="3x" />}
             {exists && !confirmations && !error && (
-              <Icon icon={faSpinner} size="5x" spin={true} />
+              <Icon icon={faEnvelope} size="3x" />
             )}
-            {confirmations > 0 && !error && <Icon icon={faCheck} size="5x" />}
+            {confirmations > 0 && !error && <Icon icon={faCheck} size="3x" />}
           </div>
           <div className="col-8">
             <div className="small">
-              Transaction hash:{' '}
+              <b>{title}</b>
+            </div>
+            <div className="small">
+              hash:{' '}
               <a
                 href={`https://${
                   network === 'main' ? '' : network + '.'
@@ -120,28 +121,23 @@ const TransactionMonitor: FC<Props> = ({
                 {hash.substring(0, 8)} ...
               </a>{' '}
             </div>
-            <div className="small">Transaction Block: {blockNumber}</div>
-            <div className="small">Confirmations: {confirmations}</div>
-            <div className="small">Estimated cost: {cost} ETH</div>
             <div className="small" style={{ display: 'inline', float: 'left' }}>
               <Icon icon={faClock} size="1x" spin={true} />
-              &nbsp;{counter} seconds ...
+              &nbsp;{counter} seconds
             </div>
           </div>
-        </div>
-        <div className="card-footer">
-          {error && (
-            <div className="small" style={{ float: 'right' }}>
-              {error}
-            </div>
-          )}
-          {!error && (
-            <div className="small" style={{ float: 'right' }}>
-              {message}&nbsp;&nbsp;
-              {confirmations > 0 && !error && <Icon icon={faCheck} />}
-              {exists && !error && <Icon icon={faCheck} />}
-            </div>
-          )}
+          <div className="col-12 transaction-footer mt-2 text-end align-items-center">
+            {error && (
+              <div className="small text-alert" style={{ float: 'right' }}>
+                {error}
+              </div>
+            )}
+            {!error && (
+              <div className="small text-secondary" style={{ float: 'right' }}>
+                {message}
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>

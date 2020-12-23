@@ -10,7 +10,7 @@ interface Props {
 const DashboardIndex: React.FC<Props> = ({ location }: Props) => {
   return (
     <Layout location={location}>
-      <div className="container-xl content">
+      <div className="container-sm limiter-md content">
         <h1>Admin Tool</h1>
         <h5 className="mb-4">Change taxes and token used.</h5>
         <Admin></Admin>

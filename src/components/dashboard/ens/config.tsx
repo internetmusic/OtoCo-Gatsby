@@ -160,7 +160,7 @@ const Config: FC<Props> = ({
               onChange={handleInputChange}
             />
             <div className="input-group-append">
-              <p className="btn btn-primary disabled">.otoco.eth</p>
+              <div className="btn btn-primary disabled">.otoco.eth</div>
             </div>
           </div>
         </div>

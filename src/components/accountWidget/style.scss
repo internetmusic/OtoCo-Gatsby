@@ -1,19 +1,20 @@
 @import 'scss/colors.scss';
 
 .account-widget {
-  color: $white;
+  color: $accent-purple-100;
   float: right;
   position: fixed;
   top: 25px;
   right: 25px;
   cursor: pointer;
   p {
-      text-align: right;
+    text-align: right;
   }
   .network {
-      background: $teal;
-      border-radius: 2px;
-      padding: 2px 4px;
-      color: black;
+    text-transform: uppercase;
+  }
+
+  &:hover {
+    color: $accent-purple-brightest;
   }
 }

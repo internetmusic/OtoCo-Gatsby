@@ -9,28 +9,33 @@
 @import './colors.scss';
 
 // Reassign color vars to semantic color scheme
-$theme-colors: (
-  primary: $cyan,
-  secondary: $teal,
-  success: $teal,
-  info: $cyan,
-  warning: $yellow,
-  danger: $red,
-  light: $gray-100,
-  dark: $gray-100,
-  background: $black,
-);
+
+$primary: $teal;
+$secondary: $purple;
+$success: $green;
+$info: $cyan;
+$warning: $yellow;
+$danger: $red;
+$light: $gray-100;
+$dark: $gray-100;
+$background: $midnight-blue-0;
+
+$border-radius: 16px;
+$border-color: transparent;
+
+// Our variables
+$border-radius-sm: 8px;
 
 // Options
 //
 // Quickly modify global styling by enabling or disabling optional features.
-$enable-rounded: true ;
-$enable-shadows: true ;
-$enable-gradients: true ;
-$enable-transitions: true ;
-$enable-hover-media-query: false ;
-$enable-grid-classes: true ;
-$enable-print-styles: true ;
+$enable-rounded: true;
+$enable-shadows: true;
+$enable-gradients: true;
+$enable-transitions: true;
+$enable-hover-media-query: false;
+$enable-grid-classes: true;
+$enable-print-styles: true;
 
 // Grid containers
 //
@@ -38,21 +43,34 @@ $enable-print-styles: true ;
 
 $container-max-widths: (
   sm: 540px,
-  md: 640px,
-  lg: 710px,
-  xl: 780px,
-) ;
+  md: 720px,
+  lg: 960px,
+  xl: 1140px,
+  xxl: 1320px,
+);
+
+// @include _assert-ascending($container-max-widths, "$container-max-widths");
+
+.limiter-sm {
+  max-width: map-get($container-max-widths, sm) !important;
+}
+
+.limiter-md {
+  max-width: map-get($container-max-widths, md) !important;
+}
+
+.limiter-lg {
+  max-width: map-get($container-max-widths, lg) !important;
+}
 
 // Body
-//
 // Settings for the `<body>` element.
-$body-bg: $black;
+$body-bg: $midnight-blue-0;
 $body-color: $white;
 $inverse-bg: $white;
-$inverse-color: $black;
+$inverse-color: $midnight-blue-0;
 
 // Fonts
-//
 @import './fonts.scss';
 
 @import 'node_modules/bootstrap/scss/bootstrap.scss';
@@ -63,13 +81,6 @@ body {
   width: 100vw;
   overflow-y: auto;
   overflow-x: hidden;
-  background-color: $black;
-  background-repeat: no-repeat;
-  background-size: 100% 40%;
-  background-position: 0px calc(80vh - 5vw);
-  background-attachment: fixed;
-  background-blend-mode: lighten;
-  background-image: url("../../public/img/bg_small.png");
 }
 
 * {
@@ -77,56 +88,154 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+a {
+  text-decoration: none;
+  color: $accent-purple-brighter;
+  &:hover {
+    color: $accent-purple-brightest;
+  }
+}
 
 // Buttons
-.btn-primary{
-  color: $black;
-  &:hover, &:active, &:visited, &:focus{
-    color: $black;
+.btn-primary {
+  color: $gray-100;
+  font-size: 16px;
+  font-weight: 500; // Medium
+  border-radius: $border-radius;
+  padding: 16px 24px;
+  border: none;
+  background: $gradient-subtle;
+  position: relative;
+  z-index: 1;
+  transition: all 200ms ease-out;
+
+  &:hover {
+    color: $white;
+    background: $gradient-subtle;
+    transform: scale(1.025);
+    &::before {
+      opacity: 1;
+    }
   }
+  // Gradient transition reference:
+  // https://keithjgrant.com/posts/2017/07/transitioning-gradients
+
+  &::before {
+    position: absolute;
+    content: '';
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    border-radius: $border-radius;
+    background-image: $gradient-medium;
+    z-index: -1;
+    transition: opacity 200ms ease-out;
+    opacity: 0;
+  }
+}
+
+// Buttons
+.btn-primary-outline {
+  color: $gray-100;
+  font-size: 16px;
+  font-weight: 500; // Medium
+  border-radius: $border-radius;
+  padding: 16px 24px;
+  border: solid 1px $accent-purple-80;
+  transition: all 200ms ease-out;
+
+  &:hover {
+    color: $white;
+    // background: $gradient-subtle;
+    transform: scale(1.025);
+    border: solid 1px $accent-purple-100;
+  }
+}
+
+.btn-sm {
+  font-size: 12px;
+  font-weight: 400;
+  border-radius: $border-radius-sm;
+  text-transform: uppercase;
+  padding: 8px 14px;
+  letter-spacing: 0.05em;
+}
+
+.dropdown-toggle {
+  border-radius: $border-radius-sm;
+  padding: 12px 24px;
+  &:hover,
+  :active {
+    transform: none;
+    background-color: $midnight-blue-2;
+  }
+
+  &::after {
+    margin-left: 1em;
+    margin-bottom: -0.1em;
+  }
+}
+
+.dropdown-item {
+  transition: background-color 200ms ease-out;
+  color: $white;
+  &:hover,
+  &:active,
+  &:focus {
+    color: $white;
+    background: $accent-purple-20;
+  }
+}
+
+.dropdown-menu {
+  background: $midnight-blue-2;
+  border-radius: $border-radius-sm;
+  // border: 1px solid $accent-purple-20;
+  box-shadow: $elevation-1;
 }
 
 .input-group-append {
   background: transparent;
-  .btn.disabled{
-    background: transparent;
-    color: $white !important;
-    border: 1px solid $gray-400 !important;
-    margin: 0px 1px;  
+  .btn {
+    padding: 12px 24px;
+    border-radius: $border-radius-sm;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+    &:hover {
+      transform: none;
+    }
+    &::before {
+      border-radius: 0 $border-radius-sm $border-radius-sm 0;
+    }
+  }
+  .btn.disabled {
+    background-color: transparent;
+    color: $gray-600 !important;
+    border: 1px solid $gray-800 !important;
     border-left: none;
     border-right: none;
-  }
-  .dropdown-toggle,
-  .dropdown-toggle:focus,
-  .dropdown-toggle:active,
-  .dropdown-toggle:hover{
-    background: transparent;
-    color: $white !important;
-    border: 1px solid $gray-400;
-    border-radius: 4px;
-    border-left: none;
-    border-radius: 0px 6px 6px 0px !important;
-  }
-  .dropdown-item{
-    color: $white;
-  }
-  .dropdown-menu{
-    background: $black;
-    border: 1px solid $gray-400;
-    color: $white !important;
+    &:not(:last-child) {
+      border-top-right-radius: 0px;
+      border-bottom-right-radius: 0px;
+    }
   }
 }
 
 .form-control,
-.input-group input{
+.input-group input {
   background: transparent !important;
   color: $white !important;
+  border-radius: $border-radius-sm;
+  border-color: $gray-800;
+  padding-left: 1em;
+
   &:focus,
   &:focus-visible,
-  &:active{
+  &:active {
     background: transparent !important;
   }
-  &.right{
+  &.right {
     border-right: none;
   }
 }
@@ -147,12 +256,16 @@ img:hover {
 }
 
 .padded {
-  padding: 40px;
+  position: relative;
+  padding: 32px 32px 167px 32px;
+  min-height: 100vh;
+  margin-bottom: -177px;
 }
 
 @media (max-width: 640px) {
   .padded {
-    padding: 16px;
+    padding: 24px 24px 233px 24px;
+    margin-bottom: -200px;
   }
 }
 
@@ -162,45 +275,103 @@ img:hover {
   justify-content: center;
 }
 
-// TERMS
-.terms {
-  .c3 {
-      font-weight: 600;
-      margin: 14pt 0px;
+// To handle large amounts of text (best for reading)
+.large-amount-of-text {
+  p {
+    font-size: 1.25rem;
+    font-weight: 300;
+    line-height: 1.5;
   }
-}
-// PRIVACY
-.privacy {
-  .c23 {
-      font-style: italic;
+  h1 {
+    color: $gray-100;
+    font-size: 2.5rem;
+    font-weight: 500;
+  }
+  h2 {
+    color: $gray-100;
+    font-size: 1.5rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
   }
 
-  .c9, .c6 {
-      font-weight: 800;
+  h3 {
+    color: $gray-100;
+    margin-bottom: 1em;
+    font-weight: 500;
+  }
+  li {
+    margin-bottom: 1em;
+    &::marker {
+      color: $accent-purple-60;
+    }
   }
 
-  .c13 {
-      font-weight: 800;
-      margin: 30pt 0px;
+  table {
+    color: $gray-100;
+    font-size: 1rem !important;
+
+    caption ol li {
+      margin-bottom: 0;
+    }
   }
 }
 
 .card {
-  background: $black;
-  border: 1px solid $gray-300;
-  // border-radius: 0px;
-  // border: none;
-  box-shadow: 0px 0px 10px $gray-600;
-  .card-body {
-    padding: 8px;
-  }
-  
-  .card-header {
-    background: $gray-700
+  padding: 40px;
+  background: $midnight-blue-1;
+  box-shadow: $elevation-2;
+  margin: 24px 0;
+}
+
+@media (max-width: 640px) {
+  .card {
+    padding: 16px;
   }
 }
 
-.table thead th{
+.card-body {
+  padding: 1rem 0 0 0;
+  color: $white;
+}
+
+.card-header {
+  border: none;
+  padding: 0;
+  margin-top: -0.5rem;
+  color: $gray-100;
+  font-size: 1.5rem;
+  font-weight: 700;
+  &:first-child {
+    border-radius: 0;
+  }
+}
+
+.special-bg {
+  background-color: $midnight-blue-2;
+  box-shadow: $elevation-4;
+}
+
+.table {
+  margin-top: 1rem;
+  box-shadow: 0 0 2px 0 $teal inset;
+  background-clip: content-box, border-box;
+  border-radius: $border-radius-sm;
+
+  & th {
+    padding: 1rem;
+    font-weight: 400;
+    font-size: 0.75rem;
+    color: $gray-300;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  & td {
+    padding: 0 1rem 1rem 1rem;
+  }
+}
+
+.table thead th {
   border-bottom: none;
 }
 
@@ -240,4 +411,8 @@ img:hover {
   transform: translate3d(0px, -50px, 0px);
   opacity: 0;
   transition: opacity 200ms, transform 200ms;
+}
+
+.fix-icon-alignment {
+  margin-top: -0.25em !important;
 }

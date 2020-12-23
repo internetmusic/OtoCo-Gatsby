@@ -65,7 +65,7 @@ const ListDomains = ({
           </div>
         )}
       </td>
-      <td>
+      <td className="d-none d-md-block">
         {d.label === 'series' && (
           <button
             className="btn btn-primary btn-sm"
@@ -193,8 +193,10 @@ const Registered: FC<Props> = ({
           <thead>
             <tr>
               <th scope="col">Domain</th>
-              <th scope="col">Address To</th>
-              <th scope="col">Operations</th>
+              <th scope="col">Address</th>
+              <th scope="col" className="d-none d-md-block">
+                Operations
+              </th>
             </tr>
           </thead>
           <tbody>
