@@ -38,7 +38,7 @@ const Footer = () => (
           </div>
           <div className="col-4 d-block">
             <div className="mb-1">
-              <Link to="/spinup/">Spin-up Company</Link>
+              <Link to="/spinup/">Spin up new Company</Link>
             </div>
             <div className="mb-1">
               <Link to="/dashboard/">Dashpanel</Link>

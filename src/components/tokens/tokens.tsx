@@ -156,7 +156,7 @@ const Tokens: FC<Props> = ({
     <div className="container-sm limiter-md content">
       <h1>Token Transfer Tool</h1>
       <h5 className="mb-4">Easily transfer your tokens.</h5>
-      <div className="card card-body">
+      <div className="card card-body px-4">
         {balance && (
           <div>
             <h2>
@@ -180,7 +180,7 @@ const Tokens: FC<Props> = ({
         {balance && !transaction && (
           <div>
             Your Percentage:{' '}
-            <div className="progress mb-4">
+            <div className="progress mb-4 mt-2">
               <div
                 className="progress-bar bg-success"
                 role="progressbar"

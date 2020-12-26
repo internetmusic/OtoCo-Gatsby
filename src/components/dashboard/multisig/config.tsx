@@ -180,7 +180,7 @@ const Config: FC<Props> = ({
               <input
                 type="text"
                 className="form-control right"
-                placeholder="Paste a owner address to insert..."
+                placeholder="Paste an owner address to insert..."
                 aria-label="Text input with button"
                 onChange={handleOwnerInputChange}
               />
@@ -196,7 +196,7 @@ const Config: FC<Props> = ({
               <input
                 type="text"
                 className="form-control right"
-                placeholder="Paste a owner address to insert..."
+                placeholder="Paste an owner address to insert..."
                 aria-label="Text input with button"
                 onChange={handleThresholdChange}
               />

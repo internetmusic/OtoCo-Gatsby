@@ -202,6 +202,9 @@ a {
     border-radius: $border-radius-sm;
     border-top-left-radius: 0px;
     border-bottom-left-radius: 0px;
+    min-width: 200px;
+    max-width: 20vw;
+    word-wrap: unset;
     &:hover {
       transform: none;
     }
