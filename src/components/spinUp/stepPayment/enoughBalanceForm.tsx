@@ -56,7 +56,10 @@ const EnoughBalanceForm: FC<Props> = ({
     console.log(network, requestInfo)
     try {
       ERC20Contract.getContract(network)
-        .methods.approve(mainContractAddress, feeBN.toString())
+        .methods.approve(
+          mainContractAddress,
+          web3.utils.toWei(feeBN.toString(), 'ether')
+        )
         .send(requestInfo, (error: any, hash: string) => {
           setTransaction(hash)
         })
