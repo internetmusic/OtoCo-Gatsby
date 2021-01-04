@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { IState } from '../../../state/types'
 import {
   SET_JURISDICTION,
+  CLEAR_AVAILABLE_NAME,
   SpinUpActionTypes,
   ISpinUpState,
   IJurisdictionOption,
@@ -29,6 +30,7 @@ const JurisdictionSelector: FC<Props> = ({
 
   const selectJurisdictionHandler = (val: IJurisdictionOption) => {
     console.log(val)
+    dispatch({ type: CLEAR_AVAILABLE_NAME })
     dispatch({ type: SET_JURISDICTION, payload: val })
   }
 

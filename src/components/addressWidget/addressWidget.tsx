@@ -64,7 +64,7 @@ const AddressWidget: FC<Props> = ({ address, network }: Props) => {
       return (
         displayAddress.substring(0, 12) +
         '...' +
-        displayAddress.substring(address.length - 5, address.length - 1)
+        displayAddress.substring(address.length - 5, address.length)
       )
     } catch {
       console.log('Cannot show address...', displayAddress)
@@ -74,18 +74,29 @@ const AddressWidget: FC<Props> = ({ address, network }: Props) => {
   return (
     <span style={{ display: 'inline-block' }}>
       {isEns && (
-        <a className="primary font-monospace" href={linkSearch + address} target="blank">
+        <a
+          className="primary font-monospace"
+          href={linkSearch + address}
+          target="blank"
+        >
           {displayAddress}
         </a>
       )}
       {!isEns && (
-        <a className="primary font-monospace" href={linkSearch + address} target="blank">
+        <a
+          className="primary font-monospace"
+          href={linkSearch + address}
+          target="blank"
+        >
           {formattedAddress(displayAddress)}
         </a>
       )}
       &nbsp;
       <a href="#" onClick={clickCopyHandler.bind(undefined, address)}>
-        <Clipboard style={{ marginLeft: '0.25em' }} className="fix-icon-alignment"/>
+        <Clipboard
+          style={{ marginLeft: '0.25em' }}
+          className="fix-icon-alignment"
+        />
         {/* <Icon icon={faCopy}></Icon> */}
       </a>
     </span>

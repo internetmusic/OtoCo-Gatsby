@@ -57,8 +57,8 @@ const StepCheckName: FC<Props> = ({
           dispatch({ type: SET_AVAILABLE_NAME })
         } else {
           setError('taken')
-          setLoading(false)
         }
+        setLoading(false)
       })
       .catch(function (resp) {
         setLoading(false)
@@ -80,6 +80,7 @@ const StepCheckName: FC<Props> = ({
 
   const changeNameHandler = (e: React.FormEvent<HTMLInputElement>) => {
     setError('')
+    dispatch({ type: CLEAR_AVAILABLE_NAME })
     dispatch({ type: SET_COMPANY_NAME, payload: e.currentTarget.value })
   }
 
@@ -145,7 +146,9 @@ const StepCheckName: FC<Props> = ({
         </div>
       </div>
       <div className="col-6 spacer-h">
-        <p className="small">{formatBreakLines(jurisdictionStreet[jurisdictionSelected])}</p>
+        <p className="small">
+          {formatBreakLines(jurisdictionStreet[jurisdictionSelected])}
+        </p>
       </div>
       <div className="col-12">
         {!availableName && (
