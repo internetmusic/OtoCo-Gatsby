@@ -1,6 +1,7 @@
 import React from 'react'
 import { Link } from 'gatsby'
 
+import { Helmet } from 'react-helmet'
 import Layout from '../components/layout/layout'
 
 interface Props {
@@ -16,6 +17,7 @@ const Terms: React.FC<Props> = ({ location }: Props) => {
 
   return (
     <Layout location={location}>
+      <Helmet title="Otoco - Privacy Policy" defer={false} />
       <div className="container-sm limiter-md large-amount-of-text">
         <h1>Privacy Policy</h1>
         <p className="text-muted">Last Updated: June 30, 2019</p>

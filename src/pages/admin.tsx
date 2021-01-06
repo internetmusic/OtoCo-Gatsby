@@ -1,4 +1,5 @@
 import React from 'react'
+import { Helmet } from 'react-helmet'
 import Layout from '../components/layout/layout'
 import Admin from '../components/admin/admin'
 import Dashboard from '../components/dashboard/dashboard'
@@ -10,6 +11,7 @@ interface Props {
 const DashboardIndex: React.FC<Props> = ({ location }: Props) => {
   return (
     <Layout location={location}>
+      <Helmet title="Otoco - Administration" defer={false} />
       <div className="container-sm limiter-md content">
         <h1>Admin Tool</h1>
         <h5 className="mb-4">Change taxes and token used.</h5>
