@@ -62,42 +62,42 @@ module.exports = {
         ],
       },
     },
-    // {
-    //   resolve: `gatsby-plugin-manifest`,
-    //   options: {
-    //     name: 'Otoco',
-    //     short_name: 'Otoco',
-    //     description: 'Instantly spin up your real-world LLC here.',
-    //     homepage_url: 'https://otoco.io',
-    //     start_url: '/',
-    //     iconPath: '/img/android-chrome-192x192.png',
-    //     background_color: '#0F0F0F',
-    //     theme_color: '#fff',
-    //     display: 'standalone',
-    //     providedBy: { name: 'Otoco', url: 'https://otoco.io' },
-    //     crossOrigin: 'use-credentials',
-    //     icons: [
-    //       {
-    //         src: '/img/android-chrome-192x192.png',
-    //         sizes: '192x192',
-    //         type: 'image/png',
-    //       },
-    //       {
-    //         src: '/img/android-chrome-512x512.png',
-    //         sizes: '512x512',
-    //         type: 'image/png',
-    //       },
-    //     ],
-    //   },
-    // },
-    // {
-    //   resolve: 'gatsby-plugin-netlify',
-    //   options: {
-    //     mergeSecurityHeaders: true,
-    //     mergeLinkHeaders: true,
-    //     mergeCachingHeaders: true,
-    //   },
-    // },
+    {
+      resolve: `gatsby-plugin-manifest`,
+      options: {
+        name: 'Otoco',
+        short_name: 'Otoco',
+        description: 'Instantly spin up your real-world LLC here.',
+        homepage_url: 'https://otoco.io',
+        start_url: '/',
+        iconPath: '/img/android-chrome-192x192.png',
+        background_color: '#0F0F0F',
+        theme_color: '#fff',
+        display: 'standalone',
+        providedBy: { name: 'Otoco', url: 'https://otoco.io' },
+        crossOrigin: 'use-credentials',
+        icons: [
+          {
+            src: '/img/android-chrome-192x192.png',
+            sizes: '192x192',
+            type: 'image/png',
+          },
+          {
+            src: '/img/android-chrome-512x512.png',
+            sizes: '512x512',
+            type: 'image/png',
+          },
+        ],
+      },
+    },
+    {
+      resolve: 'gatsby-plugin-netlify',
+      options: {
+        mergeSecurityHeaders: true,
+        mergeLinkHeaders: true,
+        mergeCachingHeaders: true,
+      },
+    },
     // {
     //   resolve: 'gatsby-plugin-netlify-headers',
     //   options: {
