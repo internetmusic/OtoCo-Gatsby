@@ -23,7 +23,7 @@ interface Props {
 }
 
 const Config: FC<Props> = ({ account, network, managing, dispatch }: Props) => {
-  const decimals = 18
+  const decimals = 0
   const [error, setError] = useState<string | null>(null)
   const [shares, setShares] = useState(0)
   const [name, setName] = useState('')
