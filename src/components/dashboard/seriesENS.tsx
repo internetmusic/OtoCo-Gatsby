@@ -14,7 +14,6 @@ import {
   MultisigDeployed,
 } from '../../state/management/types'
 import { IState } from '../../state/types'
-import multisigWidget from '../multisigWidget/multisigWidget'
 
 interface Props {
   account?: string | null

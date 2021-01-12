@@ -1,9 +1,9 @@
 import React, { Dispatch, FC, useState } from 'react'
 import Web3 from 'web3'
-import axios from 'axios'
 import { connect } from 'react-redux'
 import Icon from '../../icon/icon'
 import { faTimes } from '@fortawesome/free-solid-svg-icons'
+import TransactionUtils from '../../../services/transactionUtils'
 import TransactionMonitor from '../../transactionMonitor/transactionMonitor'
 import AddressWidget from '../../addressWidget/addressWidget'
 import GnosisSafe from '../../../smart-contracts/GnosisSafe'
@@ -97,6 +97,7 @@ const Config: FC<Props> = ({
       return
     }
     if (!network) return
+    if (!account) return
     console.log('WILL SEND', owners, threshold)
     dispatch({
       type: SET_MULTISIG_CONFIG,
@@ -105,18 +106,10 @@ const Config: FC<Props> = ({
         threshold: threshold.toString(),
       },
     })
-    const requestInfo = { from: account, gas: 500000, gasPrice: '' }
-    try {
-      const gasFees = await axios.get(
-        `https://ethgasstation.info/api/ethgasAPI.json`
-      )
-      requestInfo.gasPrice = web3.utils.toWei(
-        (gasFees.data.fast * 0.1).toString(),
-        'gwei'
-      )
-    } catch (err) {
-      console.log('Could not fetch gas fee for transaction.')
-    }
+    const requestInfo = await TransactionUtils.getTransactionRequestInfo(
+      account,
+      '500000'
+    )
     try {
       const setupParametersEncoded = web3.eth.abi.encodeFunctionCall(
         GnosisSafe.abi[36], // Abi for Initialize wallet with Owners config

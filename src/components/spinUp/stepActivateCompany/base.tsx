@@ -1,9 +1,9 @@
 import React, { Dispatch, FC, useState } from 'react'
 import Web3, { TransactionReceipt } from 'web3'
-import axios from 'axios'
 import { navigate } from '@reach/router'
 import { connect } from 'react-redux'
 import { IState } from '../../../state/types'
+import TransactionUtils from '../../../services/transactionUtils'
 import TransactionMonitor from '../../transactionMonitor/transactionMonitor'
 import MainContract from '../../../smart-contracts/MainContract'
 import SeriesContract from '../../../smart-contracts/SeriesContract'
@@ -45,29 +45,10 @@ const StepActivateCompany: FC<Props> = ({
   jurisdictionStreet,
   dispatch,
 }: Props) => {
-  const web3: Web3 = window.web3
   const [transaction, setTransaction] = useState('')
   const [fee, setFee] = useState(0)
   const [totalCost, setTotalCost] = useState(0)
   const gasCost = 710000
-
-  /*
-  React.useEffect(() => {
-    // When enter activate page
-    setTimeout(async () => {
-      const gasFees = await axios.get(
-        `https://ethgasstation.info/api/ethgasAPI.json`
-      )
-      const fee = gasFees.data.fast * 0.1
-      let total = web3.utils.toWei((gasCost * fee).toString(), 'gwei')
-      total = web3.utils.fromWei(total, 'ether')
-      total = total.match(/^-?\d+(?:\.\d{0,3})?/)[0]
-      console.log(gasCost, fee, total)
-      setFee(fee)
-      setTotalCost(parseFloat(total))
-    }, 0)
-  }, [account, network])
-  */
 
   const formatBreakLines = (text: string) => {
     return text.split(',').map((elem, idx) => <div key={idx}>{elem}</div>)
@@ -79,19 +60,11 @@ const StepActivateCompany: FC<Props> = ({
   }
 
   const clickActivateHandler = async () => {
-    const requestInfo: Request = { from: account, gas: 800000 }
-    try {
-      const gasFees = await axios.get(
-        `https://ethgasstation.info/api/ethgasAPI.json`
-      )
-      requestInfo.gasPrice = web3.utils.toWei(
-        (gasFees.data.fast * 0.1).toString(),
-        'gwei'
-      )
-    } catch (err) {
-      console.log('Could not fetch gas fee for transaction.')
-    }
-    console.log(network, requestInfo)
+    if (!account) return
+    const requestInfo = await TransactionUtils.getTransactionRequestInfo(
+      account,
+      '800000'
+    )
     MainContract.getContract(network, jurisdictionSelected)
       .methods.createSeries(availableName)
       .send(requestInfo, (error: any, hash: string) => {

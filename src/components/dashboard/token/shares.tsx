@@ -1,11 +1,12 @@
 import React, { Dispatch, FC, useState } from 'react'
-import Web3 from 'web3'
 import BN from 'bn.js'
 import { navigate } from '@reach/router'
 import { connect } from 'react-redux'
 import UTCDate from '../../utcDate/utcDate'
+import TransactionUtils from '../../../services/transactionUtils'
 import AddressWidget from '../../addressWidget/addressWidget'
 import TokenContract from '../../../smart-contracts/OtocoToken'
+import RegistryContract from '../../../smart-contracts/MasterRegistry'
 import {
   SeriesType,
   TokenOwner,
@@ -27,9 +28,7 @@ const ListOwners = ({ owners, totalShares }: ListOwnerProps) => {
       </td>
       <td>{m.balance}</td>
       <td className="d-none d-md-block">
-        <div>
-        {(m.balance / totalShares) * 100}%
-        </div>
+        <div>{(m.balance / totalShares) * 100}%</div>
         {/* <div className="progress">
           <div
             className="progress-bar bg-success"
@@ -58,10 +57,12 @@ interface Props {
 const Shares: FC<Props> = ({
   account,
   network,
+  managing,
   tokenConfig,
   tokenDeployed,
 }: Props) => {
   const [owners, setOwners] = useState<TokenOwner[]>([])
+  const [advanced, setAdvanced] = useState<boolean>(false)
   const getBNDecimals = (decimals: number) => {
     return new BN(10).pow(new BN(decimals))
   }
@@ -117,17 +118,54 @@ const Shares: FC<Props> = ({
   const clickTransferHandler = async () => {
     navigate(`/tokens/${tokenDeployed?.contract}`)
   }
+  const clickDetachToken = async () => {
+    if (!managing) return
+    if (!network) return
+    if (!account) return
+    const requestInfo = await TransactionUtils.getTransactionRequestInfo(
+      account,
+      '40000'
+    )
+    const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
+    RegistryContract.getContract(network)
+      .methods.setRecord(managing.contract, 1, ZERO_ADDRESS)
+      .send(requestInfo, (error, hash: string) => {
+        if (error) return console.log(error)
+        console.log('Detached token', hash)
+      })
+  }
+  const toggleAdvanced = async () => {
+    setAdvanced(!advanced)
+  }
 
   return (
     <div>
-      <div>
+      <p>
         A total of{' '}
         <b>
           {tokenConfig?.shares} {tokenConfig?.name}
         </b>{' '}
         with symbol <b>{tokenConfig?.symbol}</b> were minted on{' '}
         <UTCDate separator="at" date={tokenDeployed?.creation}></UTCDate>.
-      </div>
+      </p>
+      {!advanced && (
+        <p className="mt-2">
+          Click{' '}
+          <a href="" onClick={toggleAdvanced}>
+            here
+          </a>{' '}
+          to see advanced options.
+        </p>
+      )}
+      {advanced && (
+        <p>
+          If you had some problem deploying your token is possible to{' '}
+          <a href="" className="text-danger" onClick={clickDetachToken}>
+            Detach Token
+          </a>
+          , then deploy a new one.
+        </p>
+      )}
       <p className="mt-2">
         {tokenConfig?.symbol} token address:&nbsp;&nbsp;
         <AddressWidget address={tokenDeployed?.contract}></AddressWidget>
@@ -138,7 +176,9 @@ const Shares: FC<Props> = ({
           <tr>
             <th scope="col">Wallet</th>
             <th scope="col">Balance</th>
-            <th scope="col" className="d-none d-md-block">Shares</th>
+            <th scope="col" className="d-none d-md-block">
+              Shares
+            </th>
           </tr>
         </thead>
         <tbody>

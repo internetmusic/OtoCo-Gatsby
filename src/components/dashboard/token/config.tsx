@@ -1,11 +1,11 @@
 import React, { Dispatch, FC, useState } from 'react'
 import Web3 from 'web3'
-import axios from 'axios'
 import BN from 'bn.js'
 import { connect } from 'react-redux'
 import FactoryContract from '../../../smart-contracts/TokenFactory'
 import MasterRegistry from '../../../smart-contracts/MasterRegistry'
 import TokenContract from '../../../smart-contracts/OtocoToken'
+import TransactionUtils from '../../../services/transactionUtils'
 import TransactionMonitor from '../../transactionMonitor/transactionMonitor'
 import {
   SET_TOKEN_CONFIG,
@@ -76,20 +76,15 @@ const Config: FC<Props> = ({ account, network, managing, dispatch }: Props) => {
       setError('Not connected or not account related.')
       return
     }
-    const requestInfo = { from: account, gas: 300000, gasPrice: '0' }
+    const requestInfo = await TransactionUtils.getTransactionRequestInfo(
+      account,
+      '300000'
+    )
     try {
-      const gasFees = await axios.get(
-        `https://ethgasstation.info/api/ethgasAPI.json`
+      console.log(
+        'TOKEN QUANTITY:',
+        new BN(shares).mul(getBNDecimals(decimals)).toString()
       )
-      requestInfo.gasPrice = web3.utils.toWei(
-        (gasFees.data.fast * 0.1).toString(),
-        'gwei'
-      )
-    } catch (err) {
-      console.log('Could not fetch gas fee for transaction.')
-    }
-    console.log(network, requestInfo)
-    try {
       FactoryContract.getContract(network)
         .methods.createERC20(
           new BN(shares).mul(getBNDecimals(decimals)).toString(),

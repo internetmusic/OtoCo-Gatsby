@@ -1,9 +1,9 @@
 import React, { Dispatch, FC, useState } from 'react'
 import ENS from 'ethereum-ens'
 import Web3 from 'web3'
-import axios from 'axios'
 import OtocoRegistrar from '../../../smart-contracts/OtocoRegistrar'
 import { connect } from 'react-redux'
+import TransactionUtils from '../../../services/transactionUtils'
 import TransactionMonitor from '../../transactionMonitor/transactionMonitor'
 import AddressWidget from '../../addressWidget/addressWidget'
 import {
@@ -96,19 +96,11 @@ const Config: FC<Props> = ({
 
   const handleClickClaim = async () => {
     if (!network) return
-    const requestInfo = { from: account, gas: 200000, gasPrice: '' }
-    try {
-      const gasFees = await axios.get(
-        `https://ethgasstation.info/api/ethgasAPI.json`
-      )
-      requestInfo.gasPrice = web3.utils.toWei(
-        (gasFees.data.fast * 0.1).toString(),
-        'gwei'
-      )
-    } catch (err) {
-      console.log('Could not fetch gas fee for transaction.')
-    }
-    console.log(network, requestInfo)
+    if (!account) return
+    const requestInfo = await TransactionUtils.getTransactionRequestInfo(
+      account,
+      '200000'
+    )
     try {
       OtocoRegistrar.getContract(network)
         .methods.registerAndStore(

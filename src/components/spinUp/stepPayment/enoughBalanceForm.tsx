@@ -1,9 +1,8 @@
 import React, { Dispatch, FC, useState } from 'react'
 import Web3 from 'web3'
-import BN from 'bn.js'
-import axios from 'axios'
 import { connect } from 'react-redux'
 import { IState } from '../../../state/types'
+import TransactionUtils from '../../../services/transactionUtils'
 import AddressWidget from '../../addressWidget/addressWidget'
 import {
   SET_CURRENT_STEP,
@@ -42,18 +41,11 @@ const EnoughBalanceForm: FC<Props> = ({
   const web3: Web3 = window.web3
 
   const clickApproveHandler = async () => {
-    const requestInfo = { from: account, gas: 200000, gasPrice: 0 }
-    try {
-      const gasFees = await axios.get(
-        `https://ethgasstation.info/api/ethgasAPI.json`
-      )
-      requestInfo.gasPrice = parseInt(
-        web3.utils.toWei((gasFees.data.fast * 0.1).toString(), 'gwei')
-      )
-    } catch (err) {
-      console.log('Could not fetch gas fee for transaction.')
-    }
-    console.log(network, requestInfo)
+    if (!account) return
+    const requestInfo = await TransactionUtils.getTransactionRequestInfo(
+      account,
+      '200000'
+    )
     try {
       ERC20Contract.getContract(network)
         .methods.approve(

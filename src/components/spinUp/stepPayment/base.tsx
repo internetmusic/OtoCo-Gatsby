@@ -34,7 +34,6 @@ const StepPayment: FC<Props> = ({
   currentStep,
   dispatch,
 }: Props) => {
-  const web3: Web3 = window.web3
   const [transaction, setTransaction] = useState('')
   const [accountAllowance, setAllowance] = useState('0')
   const [accountBalance, setBalance] = useState('0')
@@ -129,33 +128,6 @@ const StepPayment: FC<Props> = ({
     console.log(balanceBN)
     setBalance(balanceBN.div(divisor).toString())
     console.log(allowanceBN.gte(feeBN), balanceBN.gte(feeBN))
-  }
-
-  const clickApproveHandler = async () => {
-    const requestInfo = { from: account, gas: 200000, gasPrice: 0 }
-    try {
-      const gasFees = await axios.get(
-        `https://ethgasstation.info/api/ethgasAPI.json`
-      )
-      requestInfo.gasPrice = parseInt(
-        web3.utils.toWei((gasFees.data.fast * 0.1).toString(), 'gwei')
-      )
-    } catch (err) {
-      console.log('Could not fetch gas fee for transaction.')
-    }
-    console.log(network, requestInfo)
-    try {
-      ERC20Contract.getContract(network)
-        .methods.approve(
-          erc20Target,
-          (erc20.spinUpFee * 10 ** decimals).toString()
-        )
-        .send(requestInfo, (error: any, hash: string) => {
-          setTransaction(hash)
-        })
-    } catch (err) {
-      console.log(err)
-    }
   }
 
   const nextStepHandler = () => {
