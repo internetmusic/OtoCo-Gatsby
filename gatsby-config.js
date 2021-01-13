@@ -115,6 +115,7 @@ module.exports = {
     //   },
     // },
     'gatsby-plugin-catch-links',
+    'gatsby-plugin-offline',
     'gatsby-plugin-react-helmet',
     'gatsby-plugin-sass',
     'gatsby-plugin-sharp',

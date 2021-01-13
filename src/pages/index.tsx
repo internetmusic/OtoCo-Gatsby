@@ -11,7 +11,7 @@ interface Props {
 
 const Index: React.FC<Props> = ({ location }: Props) => {
   React.useEffect(() => {
-    console.log('Current critical updates: 13/01/2020')
+    console.log('Current critical updates: 13/01/2020 12:00')
   }, [])
 
   return (
