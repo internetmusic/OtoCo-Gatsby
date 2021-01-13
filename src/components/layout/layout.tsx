@@ -16,10 +16,6 @@ interface Props {
 }
 
 const Layout: React.FC<Props> = ({ children }: Props) => {
-  // useEffect(() => {
-  //   emergence.init()
-  // })
-
   return (
     <div>
       <div className="padded">
