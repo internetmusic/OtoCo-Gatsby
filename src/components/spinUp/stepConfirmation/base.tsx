@@ -3,7 +3,9 @@ import Web3 from 'web3'
 import { navigate } from '@reach/router'
 import { connect } from 'react-redux'
 import { IState } from '../../../state/types'
-import illustrationConfirmation from '../../../../static/img/illustration-3.png'
+import ConfirmationIllustration from '../../../../static/img/spinup-finished-illustration.svg'
+import ConfirmationAnimationWebM from '../../../../static/img/spinup-finished-animation.webm'
+import ConfirmationAnimationMP4 from '../../../../static/img/spinup-finished-animation.mp4'
 
 interface Props {
   companyName: string
@@ -17,12 +19,17 @@ const StepConfirmation: FC<Props> = ({ companyName }: Props) => {
   return (
     <div className="row">
       <div className="col-12 text-center mb-4 mt-2">
-        <img
-          className="feature-icon"
-          src={illustrationConfirmation}
-          alt="Big Feature Icon"
-          height="192px"
-        />
+        <video
+          width={'264px'}
+          muted
+          autoPlay
+          loop
+          preload={'auto'}
+          poster={ConfirmationIllustration}
+        >
+          <source src={ConfirmationAnimationWebM} type={'video/webm'} />
+          <source src={ConfirmationAnimationMP4} type={'video/mp4'} />
+        </video>
       </div>
       <div className="col-12 mb-4">
         All set! {companyName} is activated. Go to the dashpanel to manage it
