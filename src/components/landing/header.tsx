@@ -3,8 +3,7 @@ import { Link } from 'gatsby'
 import { navigate } from '@reach/router'
 import Logo from '../logo/logo'
 import HeaderIllustration from '../../../static/img/header-illustration.png'
-import HeaderAnimationMPEG from '../../../static/img/header-animation.mp4'
-import HeaderAnimationWebm from '../../../static/img/header-animation.webm'
+import HeaderAnimationWebm from '../../../static/video/header-animation.webm'
 import './style.scss'
 
 const Header: React.FC<unknown> = () => {
@@ -44,7 +43,7 @@ const Header: React.FC<unknown> = () => {
               </button>
             </div>
           </div>
-          <div className="col-12 col-lg-7 justify-content-center">
+          <div className="col-12 col-lg-7 py-4 justify-content-center">
             <video
               width={'100%'}
               muted
@@ -54,7 +53,6 @@ const Header: React.FC<unknown> = () => {
               poster={HeaderIllustration}
             >
               <source src={HeaderAnimationWebm} type={'video/webm'} />
-              <source src={HeaderAnimationMPEG} type={'video/mp4'} />
             </video>
           </div>
           <div className="col-12 d-lg-none d-flex justify-content-center">

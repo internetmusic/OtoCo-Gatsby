@@ -4,8 +4,7 @@ import { navigate } from '@reach/router'
 import { connect } from 'react-redux'
 import { IState } from '../../../state/types'
 import ConfirmationIllustration from '../../../../static/img/spinup-finished-illustration.svg'
-import ConfirmationAnimationWebM from '../../../../static/img/spinup-finished-animation.webm'
-import ConfirmationAnimationMP4 from '../../../../static/img/spinup-finished-animation.mp4'
+import ConfirmationAnimationWebM from '../../../../static/video/spinup-finished-animation.webm'
 
 interface Props {
   companyName: string
@@ -28,7 +27,6 @@ const StepConfirmation: FC<Props> = ({ companyName }: Props) => {
           poster={ConfirmationIllustration}
         >
           <source src={ConfirmationAnimationWebM} type={'video/webm'} />
-          <source src={ConfirmationAnimationMP4} type={'video/mp4'} />
         </video>
       </div>
       <div className="col-12 mb-4">
