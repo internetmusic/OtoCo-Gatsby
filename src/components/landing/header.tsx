@@ -2,7 +2,8 @@ import React from 'react'
 import { Link } from 'gatsby'
 import { navigate } from '@reach/router'
 import Logo from '../logo/logo'
-import assembly from '../../../static/img/illustration-1.png'
+import HeaderIllustration from '../../../static/img/header-illustration.png'
+import HeaderAnimationWebm from '../../../static/video/header-animation.webm'
 import './style.scss'
 
 const Header: React.FC<unknown> = () => {
@@ -42,12 +43,17 @@ const Header: React.FC<unknown> = () => {
               </button>
             </div>
           </div>
-          <div className="col-12 col-lg-7 justify-content-center">
-            <img
-              src={assembly}
-              className="img-fluid mx-auto d-block"
-              alt="Assembly line"
-            />
+          <div className="col-12 col-lg-7 py-4 justify-content-center">
+            <video
+              width={'100%'}
+              muted
+              autoPlay
+              loop
+              preload={'auto'}
+              poster={HeaderIllustration}
+            >
+              <source src={HeaderAnimationWebm} type={'video/webm'} />
+            </video>
           </div>
           <div className="col-12 d-lg-none d-flex justify-content-center">
             <div className="align-self-center">

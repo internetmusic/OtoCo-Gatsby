@@ -32,7 +32,7 @@ const StepIntroduction: FC<Props> = ({ account, network, dispatch }: Props) => {
   return (
     <div>
       <div className="pb-4">
-        <h6 className="card-header">
+        <h6 className="card-header mb-3">
           Spin up your real-world LLC
           <br /> using your Ethereum wallet
         </h6>

@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import Web3 from 'web3'
 import { navigate } from '@reach/router'
-import illustrationOne from '../../../static/img/illustration-2A.png'
-import illustrationTwo from '../../../static/img/illustration-2B.png'
-import illustrationThree from '../../../static/img/illustration-2C.png'
+import illustrationOne from '../../../static/img/features-icon-1.svg'
+import illustrationTwo from '../../../static/img/features-icon-2.svg'
+import illustrationThree from '../../../static/img/features-icon-3.svg'
 import './style.scss'
 
 import MainContract from '../../smart-contracts/MainContract'
