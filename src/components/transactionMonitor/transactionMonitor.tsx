@@ -133,7 +133,10 @@ const TransactionMonitor: FC<Props> = ({
               </div>
             )}
             {!error && (
-              <div className="small text-secondary" style={{ float: 'right' }}>
+              <div
+                className="small text-secondary mx-4"
+                style={{ float: 'right' }}
+              >
                 {message}
               </div>
             )}
