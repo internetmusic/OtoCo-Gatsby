@@ -12,6 +12,7 @@ import database from '../../services/firebase'
 
 import MainContract from '../../smart-contracts/MainContract'
 import SeriesContract from '../../smart-contracts/SeriesContract'
+import SeriesIdentity from './seriesIdentity'
 
 import './style.scss'
 
@@ -214,6 +215,7 @@ const Dashboard: FC<Props> = ({
           </div>
         </div>
       )}
+      <SeriesIdentity></SeriesIdentity>
     </div>
   )
 }
