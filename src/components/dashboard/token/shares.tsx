@@ -46,6 +46,11 @@ const ListOwners = ({ owners, totalShares }: ListOwnerProps) => {
   ))
 }
 
+const numberWithCommas = (value: string | undefined): string => {
+  if (!value) return '0'
+  return value.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+}
+
 interface Props {
   account?: string | null
   network?: string | null
@@ -143,7 +148,7 @@ const Shares: FC<Props> = ({
       <p>
         A total of{' '}
         <b>
-          {tokenConfig?.shares} {tokenConfig?.name}
+          {numberWithCommas(tokenConfig?.shares)} {tokenConfig?.name}
         </b>{' '}
         with symbol <b>{tokenConfig?.symbol}</b> were minted on{' '}
         <UTCDate separator="at" date={tokenDeployed?.creation}></UTCDate>.
@@ -177,7 +182,7 @@ const Shares: FC<Props> = ({
             <th scope="col">Wallet</th>
             <th scope="col">Balance</th>
             <th scope="col" className="d-none d-md-block">
-              Shares
+              Tokens
             </th>
           </tr>
         </thead>
