@@ -7,7 +7,7 @@ const Footer = () => (
   <div className="footer container">
     <div className="row">
       <div className="col-12 col-md-6 d-flex text-left mt-4">
-        ©️ 2020 Otonomos Blockchain Technologies Ltd.
+        ©️ 2021 Otonomos Blockchain Technologies Ltd.
       </div>
       <div className="col-12 col-md-6 d-flex justify-content-right mt-4">
         <div className="row footer-links">
