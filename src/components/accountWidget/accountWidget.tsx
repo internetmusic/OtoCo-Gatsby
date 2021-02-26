@@ -59,10 +59,9 @@ const AccountWidget: FC<Props> = ({ account, network, dispatch }: Props) => {
             className="small disabled font-monospace"
             onClick={handleDisconnect}
           >
-            {account.substring(0, 12)}...{' '}
-            <span>
-              <CaretRightFill className="fix-icon-alignment" />
-            </span>
+            {account.substring(0, 8)}...
+            {account.substring(account.length - 4, account.length)}
+            <span className=""> @ </span>
             <span className="network">{network}</span>
           </div>
         )}

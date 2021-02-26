@@ -1,5 +1,4 @@
 import React, { Dispatch, FC, useState } from 'react'
-import database from '../../services/firebase'
 import { connect } from 'react-redux'
 import { IState } from '../../state/types'
 import {
@@ -7,6 +6,9 @@ import {
   SeriesType,
   ManagementActionTypes,
 } from '../../state/management/types'
+
+import oracle from '../../services/oracle'
+// import database from '../../services/firebase'
 
 interface Props {
   account: string
@@ -37,7 +39,8 @@ const ContactForm: FC<Props> = ({ account, dispatch }: Props) => {
       return
     }
     setError('')
-    database.fillForm(account, email)
+    //database.fillForm(account, email)
+    oracle.saveIdentity(account, email)
     dispatch({ type: SET_CONTACT_FORM, payload: false })
   }
 

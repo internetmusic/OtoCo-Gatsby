@@ -398,23 +398,42 @@ img:hover {
   transition: opacity 500ms, transform 500ms;
 }
 
+.sidebar-enter {
+  width: 0px;
+}
+.sidebar-enter-active {
+  width: 233px;
+  transition: width 200ms;
+}
+.sidebar-exit {
+  width: 233px;
+}
+.sidebar-exit-active {
+  width: 0;
+  transition: width 200ms;
+}
+
 .slide-up-enter {
   transform: translate3d(0px, -50px, 0px);
+  max-height: 0px;
   opacity: 0;
 }
 .slide-up-enter-active {
   transform: translate3d(0px, 0px, 0px);
+  max-height: 100%;
   opacity: 1;
-  transition: opacity 200ms, transform 200ms;
+  transition: opacity 200ms, transform 200ms, max-height 200ms;
 }
 .slide-up-exit {
   transform: translate3d(0px, 0px, 0px);
+  max-height: 100%;
   opacity: 1;
 }
 .slide-up-exit-active {
   transform: translate3d(0px, -50px, 0px);
+  max-height: 0px;
   opacity: 0;
-  transition: opacity 200ms, transform 200ms;
+  transition: opacity 200ms, transform 200ms, max-height 200ms;
 }
 
 .fix-icon-alignment {

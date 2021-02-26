@@ -25,6 +25,7 @@ const keyInfo: KeyInfo = {
   key: process.env.GATSBY_TEXTILE_UNSAFE_KEY,
   secret: process.env.GATSBY_TEXTILE_UNSAFE_SECRET,
 }
+const oraclePublicKey = process.env.GATSBY_ORACLE_KEY
 
 const messageDecoder = async (
   message: UserMessage,
@@ -175,7 +176,6 @@ const Textile: TextileInterface = {
   },
 
   // MAILBOX
-
   listInboxMessages: async function (): Promise<DecryptedInbox[]> {
     await this.refreshAuthorization()
     console.log('MESSAGES', this.user, this.privateKey)

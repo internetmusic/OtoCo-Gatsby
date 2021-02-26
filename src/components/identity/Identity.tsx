@@ -5,6 +5,7 @@ import { IState } from '../../state/types'
 import Textile, { DecryptedInbox } from '../../services/textile'
 import { PrivateKey } from '@textile/hub'
 import KeyWidget from '../keyWidget/keyWidget'
+import ContactForm from '../dashboard/contactForm'
 
 interface Props {
   account: string | undefined
@@ -71,69 +72,74 @@ const SeriesIdentity: FC<Props> = ({
       'Test message asd as asd sad asd sad asdsadsaad asd as '
     )
   }
-  const handleDeleteMessage = async (id: string) => {
+  const handleDelete = async (id: string) => {
     if (!identity) return
     await Textile.deleteMessage(id)
   }
 
   return (
-    <div className="card">
-      <h6 className="card-header">Identity</h6>
-      <div className="card-body">
+    <div className="container-sm limiter-md content">
+      <h1>Decentralized Identity</h1>
+      <h5 className="mb-4">
+        Local stored identity. With end-to-end encryption to send/receive
+        messages, create verified certifications and store encrypted files on
+        IPFS.
+      </h5>
+      {!identity && <ContactForm></ContactForm>}
+      {identity && (
         <div>
-          Create an identity related to your account, this would be useful to
-          receive messages and share documents.
-        </div>
-        {identity && (
-          <div>
-            Your Public Key:{' '}
-            <KeyWidget publickey={identity.public.toString()}></KeyWidget>
-          </div>
-        )}
-        <div className="mt-2">
-          {!identity && (
-            <button
-              className="btn btn-small btn-primary"
-              onClick={handleClickCreate}
-            >
-              Create identity
-            </button>
-          )}
-          {identity && (
-            <div>
-              <button
-                className="btn btn-small btn-primary"
-                onClick={handleClickFetchMessages}
-              >
-                Fetch Inbox
-              </button>
-              <button
-                className="btn btn-small btn-primary mx-2"
-                onClick={handleClickSendMessage}
-              >
-                Send Message
-              </button>
+          <div className="card">
+            <div className="card-body">
+              Your Public Key:{' '}
+              <KeyWidget publickey={identity.public.toString()}></KeyWidget>
             </div>
-          )}
-          <table className="table table-hover mb-5">
-            <thead>
-              <tr>
-                <th scope="col">From</th>
-                <th scope="col">Message</th>
-                <th scope="col" className="d-none d-md-block">
-                  Action
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <ListMessages
-                messages={messages}
-                handleDelete={handleDeleteMessage}
-              ></ListMessages>
-            </tbody>
-          </table>
+          </div>
+          <div className="card">
+            <div className="card-body">
+              <h4>INBOX</h4>
+              <table className="table table-hover mb-5">
+                <thead>
+                  <tr>
+                    <th scope="col">From</th>
+                    <th scope="col">Message</th>
+                    <th scope="col" className="d-none d-md-block">
+                      Action
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <ListMessages
+                    messages={messages}
+                    handleDelete={handleDelete}
+                  ></ListMessages>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div className="card">
+            <div className="card-body">
+              <h4>OUTBOX</h4>
+              <table className="table table-hover mb-5">
+                <thead>
+                  <tr>
+                    <th scope="col">To</th>
+                    <th scope="col">Message</th>
+                    <th scope="col" className="d-none d-md-block">
+                      Action
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <ListMessages
+                    messages={messages}
+                    handleDelete={handleDelete}
+                  ></ListMessages>
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   )
 }

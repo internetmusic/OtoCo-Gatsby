@@ -62,7 +62,7 @@ const AddressWidget: FC<Props> = ({ address, network }: Props) => {
   const formattedAddress = (address: string) => {
     try {
       return (
-        displayAddress.substring(0, 12) +
+        displayAddress.substring(0, 6) +
         '...' +
         displayAddress.substring(address.length - 5, address.length)
       )

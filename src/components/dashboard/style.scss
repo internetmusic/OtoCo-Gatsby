@@ -4,7 +4,18 @@
   border-radius: 30px;
 }
 
+.btn-back {
+  position: absolute;
+  top: 26px;
+  left: 24px;
+}
+
 .jurisdiction {
   letter-spacing: 0.05em;
   color: $gray-200;
 }
+
+// .squared {
+//   width: 60vh;
+//   height: 60vh;
+// }

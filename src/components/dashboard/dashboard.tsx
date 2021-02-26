@@ -5,14 +5,13 @@ import { CSSTransition } from 'react-transition-group'
 import { IState } from '../../state/types'
 import Web3Integrate from '../../services/web3-integrate'
 import SeriesListing from './seriesListing'
-import SeriesManagement from './seriesManagement'
 import ContactForm from './contactForm'
 
-import database from '../../services/firebase'
+// import database from '../../services/firebase'
+import oracle from '../../services/oracle'
 
 import MainContract from '../../smart-contracts/MainContract'
 import SeriesContract from '../../smart-contracts/SeriesContract'
-import SeriesIdentity from './seriesIdentity'
 
 import './style.scss'
 
@@ -24,6 +23,7 @@ import {
 
 import {
   SeriesType,
+  CLEAR_MANAGE_SERIES,
   SET_OWN_SERIES,
   SET_CONTACT_FORM,
   ManagementActionTypes,
@@ -46,13 +46,13 @@ interface Props {
 const Dashboard: FC<Props> = ({
   account,
   network,
-  managing,
   series,
   jurisdictionOptions,
   contactForm,
   dispatch,
 }: Props) => {
   const [error, setError] = useState<string | null>(null)
+  const [loading, setLoading] = useState<boolean>(false)
   const contactFormLastRequest = async () => {
     const now = new Date()
     now.setDate(now.getDate() - 10)
@@ -67,10 +67,11 @@ const Dashboard: FC<Props> = ({
   }
 
   React.useEffect(() => {
+    dispatch({ type: CLEAR_MANAGE_SERIES })
     setTimeout(async () => {
       // IF NOT CONNECTED YET
+      setLoading(true)
       setError(null)
-      dispatch({ type: SET_OWN_SERIES, payload: [] })
       if (!account) {
         try {
           await Web3Integrate.callModal()
@@ -99,7 +100,9 @@ const Dashboard: FC<Props> = ({
         return
       }
       setError(null)
-      if (!(await database.getFilling(account))) contactFormLastRequest()
+      //if (!(await database.getFilling(account))) contactFormLastRequest()
+      console.log('EXIST ID?', account, await oracle.existIdentity(account))
+      if (!(await oracle.existIdentity(account))) contactFormLastRequest()
       for (const j of jurisdictionOptions) {
         const seriesAddresses = await MainContract.getContract(network, j.value)
           .methods.mySeries()
@@ -134,12 +137,34 @@ const Dashboard: FC<Props> = ({
           setError('You own no companies at the moment.')
         else setError(null)
       }
+      setLoading(false)
     }, 0)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [account])
 
   return (
-    <div style={{ position: 'relative' }}>
+    <div className="container-sm limiter-md content">
+      <h1 className="display-5 fw-light">Dashpanel</h1>
+      <h5 className="mb-3 text-uppercase">Manage your on-chain companies</h5>
+      <CSSTransition
+        in={loading}
+        timeout={{
+          appear: 200,
+          enter: 200,
+          exit: 200,
+        }}
+        classNames="slide-up"
+        unmountOnExit
+      >
+        <div className="d-flex justify-content-center">
+          <div className="row">
+            <div className="col-12 text-center">Loading Companies</div>
+            <div className="col-12 text-center">
+              <div className="spinner-border" role="status"></div>
+            </div>
+          </div>
+        </div>
+      </CSSTransition>
       <CSSTransition
         in={contactForm}
         timeout={{
@@ -153,19 +178,7 @@ const Dashboard: FC<Props> = ({
         <ContactForm></ContactForm>
       </CSSTransition>
       <CSSTransition
-        in={!contactForm && managing !== undefined && account !== undefined}
-        timeout={{
-          appear: 200,
-          enter: 200,
-          exit: 0,
-        }}
-        classNames="my-node"
-        unmountOnExit
-      >
-        <SeriesManagement></SeriesManagement>
-      </CSSTransition>
-      <CSSTransition
-        in={!contactForm && series.length > 0 && !managing}
+        in={series.length > 0}
         timeout={{
           appear: 200,
           enter: 200,
@@ -175,27 +188,6 @@ const Dashboard: FC<Props> = ({
         unmountOnExit
       >
         <SeriesListing></SeriesListing>
-      </CSSTransition>
-      <CSSTransition
-        in={
-          !contactForm && series.length == 0 && account !== undefined && !error
-        }
-        timeout={{
-          appear: 200,
-          enter: 200,
-          exit: 0,
-        }}
-        classNames="my-node"
-        unmountOnExit
-      >
-        <div className="d-flex justify-content-center">
-          <div className="row">
-            <div className="col-12 text-center">Loading Companies</div>
-            <div className="col-12 text-center">
-              <div className="spinner-border" role="status"></div>
-            </div>
-          </div>
-        </div>
       </CSSTransition>
       {error && (
         <div className="d-flex justify-content-center">
@@ -215,7 +207,6 @@ const Dashboard: FC<Props> = ({
           </div>
         </div>
       )}
-      <SeriesIdentity></SeriesIdentity>
     </div>
   )
 }
@@ -224,7 +215,6 @@ export default connect((state: IState) => ({
   account: state.account.account,
   network: state.account.network,
   jurisdictionOptions: state.spinUp.jurisdictionOptions,
-  managing: state.management.managing,
   series: state.management.series,
   contactForm: state.management.contactForm,
 }))(Dashboard)

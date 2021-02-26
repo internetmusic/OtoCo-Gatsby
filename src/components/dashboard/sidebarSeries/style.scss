@@ -1,0 +1,16 @@
+@import '../../../scss/colors.scss';
+
+#sidebar {
+  overflow-x: hidden;
+  width: 233px;
+  background: $midnight-blue-2;
+  &.collapsed {
+    width: 0px;
+  }
+  transition: width 200ms;
+}
+
+#sidebar-content {
+  width: 233px;
+  padding: 32px;
+}

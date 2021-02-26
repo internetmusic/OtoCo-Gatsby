@@ -14,6 +14,7 @@ import {
   TokenDeployed,
 } from '../../../state/management/types'
 import { IState } from '../../../state/types'
+import { Link } from 'gatsby'
 
 interface ListOwnerProps {
   owners: TokenOwner[]
@@ -193,9 +194,12 @@ const Shares: FC<Props> = ({
           ></ListOwners>
         </tbody>
       </table>
-      <button className="btn btn-primary" onClick={clickTransferHandler}>
+      <Link
+        className="btn btn-primary"
+        to={`/dashpanel/token/${tokenDeployed?.contract}`}
+      >
         Transfer Tokens
-      </button>
+      </Link>
     </div>
   )
 }

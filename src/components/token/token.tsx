@@ -14,6 +14,8 @@ import TransactionMonitor from '../transactionMonitor/transactionMonitor'
 
 import TokenContract from '../../smart-contracts/OtocoToken'
 
+import '../dashboard/style.scss'
+
 import {
   SET_ACCOUNT,
   SET_NETWORK,
@@ -27,20 +29,23 @@ import {
   TokenDeployed,
   ManagementActionTypes,
 } from '../../state/management/types'
+import { Link } from 'gatsby'
 
 interface Props {
   id: string
   account?: string
   network?: string
+  managing?: string
   tokenConfig: TokenConfig
   tokenDeployed: TokenDeployed
   dispatch: Dispatch<AccountActionTypes | ManagementActionTypes>
 }
 
-const Tokens: FC<Props> = ({
+const Token: FC<Props> = ({
   id,
   account,
   network,
+  managing,
   tokenConfig,
   tokenDeployed,
   dispatch,
@@ -148,10 +153,6 @@ const Tokens: FC<Props> = ({
     setTo(event.target.value)
   }
 
-  const clickDashboardHandler = async (e) => {
-    navigate('/dashboard')
-  }
-
   return (
     <div className="container-sm limiter-md content">
       <h1>Token Transfer Tool</h1>
@@ -251,14 +252,24 @@ const Tokens: FC<Props> = ({
           ></TransactionMonitor>
         )}
       </div>
-      <button
-        className="btn btn-primary-outline"
-        onClick={clickDashboardHandler}
-        style={{ marginTop: '10px' }}
-      >
-        <Icon icon={faChevronLeft} />
-        <span style={{ paddingLeft: '10px' }}>Back to Dashboard</span>
-      </button>
+      {managing && (
+        <Link
+          className="btn btn-back btn-primary-outline btn-sm"
+          to={`/dashpanel/company/${managing?.contract}`}
+        >
+          <Icon icon={faChevronLeft} />
+          <span style={{ paddingLeft: '10px' }}>Back to Dashboard</span>
+        </Link>
+      )}
+      {!managing && (
+        <Link
+          className="btn btn-back btn-primary-outline btn-sm"
+          to={`/dashpanel/`}
+        >
+          <Icon icon={faChevronLeft} />
+          <span style={{ paddingLeft: '10px' }}>Back to Dashboard</span>
+        </Link>
+      )}
     </div>
   )
 }
@@ -266,6 +277,7 @@ const Tokens: FC<Props> = ({
 export default connect((state: IState) => ({
   account: state.account.account,
   network: state.account.network,
+  managing: state.management.managing,
   tokenConfig: state.management.tokenConfig,
   tokenDeployed: state.management.tokenDeployed,
-}))(Tokens)
+}))(Token)

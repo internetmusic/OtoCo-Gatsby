@@ -88,6 +88,8 @@ To use the app on a local network just change properties for the "private" varia
 
 [Library to Create Verifiable Credentials](https://github.com/decentralized-identity/did-jwt-vc)
 
+[Library to create JWT with DID](https://github.com/decentralized-identity/did-jwt)
+
 #### Payment Widget
 
 - Add test to price oracles calls
