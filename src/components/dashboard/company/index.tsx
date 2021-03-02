@@ -1,43 +1,36 @@
 import React, { Dispatch, FC, useState } from 'react'
 import Web3 from 'web3'
 import { connect } from 'react-redux'
-import { navigate } from '@reach/router'
-import { ChevronLeft, ExclamationCircle } from 'react-bootstrap-icons'
-import Address from '../addressWidget/addressWidget'
-import UTCDate from '../utcDate/utcDate'
-import Web3Integrate from '../../services/web3-integrate'
+import { ChevronLeft } from 'react-bootstrap-icons'
+import Web3Integrate from '../../../services/web3-integrate'
 
+import { SET_ACCOUNT, SET_NETWORK } from '../../../state/account/types'
 import {
-  SET_ACCOUNT,
-  SET_NETWORK,
-  AccountActionTypes,
-} from '../../state/account/types'
-import {
-  SET_OWN_SERIES,
-  SET_CONTACT_FORM,
-  CLEAR_MANAGE_SERIES,
   SeriesType,
+  ManageSection,
   SET_MANAGE_SERIES,
   ManagementActionTypes,
-} from '../../state/management/types'
-import { IState } from '../../state/types'
-import { IJurisdictionOption } from '../../state/spinUp/types'
+} from '../../../state/management/types'
+import { IState } from '../../../state/types'
+import { IJurisdictionOption } from '../../../state/spinUp/types'
 
-import MainContract from '../../smart-contracts/MainContract'
-import SeriesContract from '../../smart-contracts/SeriesContract'
+import MainContract from '../../../smart-contracts/MainContract'
+import SeriesContract from '../../../smart-contracts/SeriesContract'
 
-import SeriesDocuments from './seriesDocuments'
-import SeriesENS from './seriesENS'
-import SeriesToken from './seriesToken'
-import SeriesMultisig from './seriesMultisig'
+import SeriesDocuments from '../legal'
+import SeriesENS from '../ens'
+import SeriesToken from '../token'
+import SeriesMultisig from '../multisig'
+import SeriesOverview from '../overview'
 import { Link } from 'gatsby'
 import { CSSTransition } from 'react-transition-group'
 
 interface Props {
   id: string
-  account?: string | null
-  network?: string | null
+  account?: string
+  network?: string
   managing?: SeriesType
+  section?: ManageSection
   jurisdictionOptions: IJurisdictionOption[]
   dispatch: Dispatch<ManagementActionTypes>
 }
@@ -47,6 +40,7 @@ const SeriesManagement: FC<Props> = ({
   account,
   network,
   managing,
+  section,
   jurisdictionOptions,
   dispatch,
 }: Props) => {
@@ -113,7 +107,7 @@ const SeriesManagement: FC<Props> = ({
         to={`/dashpanel/`}
       >
         <ChevronLeft className="fix-icon-alignment" />
-        <span style={{ paddingLeft: '0.5em' }}>Back to Series</span>
+        <span style={{ paddingLeft: '0.5em' }}>Back to Dashpanel</span>
       </Link>
       <CSSTransition
         in={loading}
@@ -134,37 +128,66 @@ const SeriesManagement: FC<Props> = ({
           </div>
         </div>
       </CSSTransition>
-      {managing !== undefined && (
-        <div className="my-4">
-          <div className="card d-grid gap-1 mb-5 special-bg">
-            <h3 className="m-0">
-              {managing?.name} ({managing?.jurisdiction})
-            </h3>
-            <div className="">
-              Manager: <Address address={managing.owner}></Address>
-            </div>
-            <div className="">
-              Address: <Address address={managing.contract}></Address>
-            </div>
-            <div className="">
-              Creation: <UTCDate date={managing.created} separator=""></UTCDate>
-            </div>
-            <div className="small text-warning mt-2">
-              <span style={{ marginRight: '0.5em' }}>
-                <ExclamationCircle className="fix-icon-alignment" />
-              </span>
-              Your company address is not a wallet. Please do never send{' '}
-              ether/tokens to this address.
-            </div>
-          </div>
-          <div>
-            <SeriesDocuments></SeriesDocuments>
-            <SeriesToken></SeriesToken>
-            <SeriesMultisig></SeriesMultisig>
-            <SeriesENS></SeriesENS>
-          </div>
-        </div>
-      )}
+      <CSSTransition
+        in={!section && !loading}
+        timeout={{
+          appear: 200,
+          enter: 200,
+          exit: 200,
+        }}
+        classNames="slide-up"
+        unmountOnExit
+      >
+        <SeriesOverview></SeriesOverview>
+      </CSSTransition>
+      <CSSTransition
+        in={section == ManageSection.LEGAL}
+        timeout={{
+          appear: 200,
+          enter: 200,
+          exit: 200,
+        }}
+        classNames="slide-up"
+        unmountOnExit
+      >
+        <SeriesDocuments></SeriesDocuments>
+      </CSSTransition>
+      <CSSTransition
+        in={section == ManageSection.TOKEN}
+        timeout={{
+          appear: 200,
+          enter: 200,
+          exit: 200,
+        }}
+        classNames="slide-up"
+        unmountOnExit
+      >
+        <SeriesToken></SeriesToken>
+      </CSSTransition>
+      <CSSTransition
+        in={section == ManageSection.MULTISIG}
+        timeout={{
+          appear: 200,
+          enter: 200,
+          exit: 200,
+        }}
+        classNames="slide-up"
+        unmountOnExit
+      >
+        <SeriesMultisig></SeriesMultisig>
+      </CSSTransition>
+      <CSSTransition
+        in={section == ManageSection.ENS}
+        timeout={{
+          appear: 200,
+          enter: 200,
+          exit: 200,
+        }}
+        classNames="slide-up"
+        unmountOnExit
+      >
+        <SeriesENS></SeriesENS>
+      </CSSTransition>
     </div>
   )
 }
@@ -173,5 +196,6 @@ export default connect((state: IState) => ({
   account: state.account.account,
   network: state.account.network,
   managing: state.management.managing,
+  section: state.management.section,
   jurisdictionOptions: state.spinUp.jurisdictionOptions,
 }))(SeriesManagement)

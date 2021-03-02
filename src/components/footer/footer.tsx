@@ -41,7 +41,7 @@ const Footer = () => (
               <Link to="/spinup/">Spin up new Company</Link>
             </div>
             <div className="mb-1">
-              <Link to="/dashboard/">Dashpanel</Link>
+              <Link to="/dashpanel/">Dashpanel</Link>
             </div>
           </div>
         </div>

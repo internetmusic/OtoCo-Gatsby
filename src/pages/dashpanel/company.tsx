@@ -3,7 +3,7 @@ import { withPrefix } from 'gatsby'
 import { Helmet } from 'react-helmet'
 import { Router } from '@reach/router'
 import Layout from '../../components/dashboard/layout/layout'
-import Management from '../../components/dashboard/seriesManagement'
+import Company from '../../components/dashboard/company'
 
 interface Props {
   location: Location
@@ -14,7 +14,7 @@ const CompanyIndex: React.FC<Props> = ({ location }: Props) => {
     <Layout location={location}>
       <Helmet title="Otoco - Company" defer={false} />
       <Router basepath={withPrefix('/dashpanel')}>
-        <Management path="/company/:id" />
+        <Company path="/company/:id" />
       </Router>
     </Layout>
   )

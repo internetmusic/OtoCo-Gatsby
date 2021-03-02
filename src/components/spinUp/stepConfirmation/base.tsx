@@ -11,8 +11,8 @@ interface Props {
 }
 
 const StepConfirmation: FC<Props> = ({ companyName }: Props) => {
-  const clickToDashboard = async () => {
-    navigate('/dashboard')
+  const clickToDashpanel = async () => {
+    navigate('/dashpanel')
   }
 
   return (
@@ -37,7 +37,7 @@ const StepConfirmation: FC<Props> = ({ companyName }: Props) => {
         <button
           type="button"
           className="btn btn-primary flex-fill"
-          onClick={clickToDashboard}
+          onClick={clickToDashpanel}
         >
           Go To Dashpanel
         </button>

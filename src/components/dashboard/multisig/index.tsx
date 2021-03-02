@@ -1,22 +1,20 @@
 import React, { Dispatch, FC, useState } from 'react'
 import { connect } from 'react-redux'
-import MasterRegistry from '../../smart-contracts/MasterRegistry'
-import GnosisSafe from '../../smart-contracts/GnosisSafe'
+import MasterRegistry from '../../../smart-contracts/MasterRegistry'
+import GnosisSafe from '../../../smart-contracts/GnosisSafe'
 
-import Config from './multisig/config'
-import Wallet from './multisig/wallet'
+import Config from './config'
+import Wallet from './wallet'
 
+import { SeriesType } from '../../../state/management/types'
 import {
   SET_MULTISIG_CONFIG,
   SET_MULTISIG_DEPLOYED,
-  UPDATE_MULTISIG_BALANCE,
-  SeriesType,
-  ManagementActionTypes,
-  MultisigBalance,
   MultisigConfig,
   MultisigDeployed,
-} from '../../state/management/types'
-import { IState } from '../../state/types'
+  MultisigActionTypes,
+} from '../../../state/management/multisig/types'
+import { IState } from '../../../state/types'
 
 interface Props {
   account?: string | null
@@ -24,7 +22,7 @@ interface Props {
   managing?: SeriesType
   multisigConfig?: MultisigConfig
   multisigDeployed?: MultisigDeployed
-  dispatch: Dispatch<ManagementActionTypes>
+  dispatch: Dispatch<MultisigActionTypes>
 }
 
 const SeriesMultisig: FC<Props> = ({
@@ -102,6 +100,6 @@ export default connect((state: IState) => ({
   account: state.account.account,
   network: state.account.network,
   managing: state.management.managing,
-  multisigConfig: state.management.multisigConfig,
-  multisigDeployed: state.management.multisigDeployed,
+  multisigConfig: state.multisig.multisigConfig,
+  multisigDeployed: state.multisig.multisigDeployed,
 }))(SeriesMultisig)

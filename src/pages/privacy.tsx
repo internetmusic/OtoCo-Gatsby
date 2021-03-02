@@ -784,7 +784,7 @@ const Terms: React.FC<Props> = ({ location }: Props) => {
               <td>2 years</td>
             </tr>
             <tr>
-              <td>Dashboard welcome cookie</td>
+              <td>Dashpanel welcome cookie</td>
               <td>Website function</td>
               <td>1st - OtoCo</td>
               <td>Persistent</td>

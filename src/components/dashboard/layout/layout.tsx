@@ -3,7 +3,7 @@ import React, { useEffect } from 'react'
 import Footer from '../../footer/footer'
 import Logo from '../../logo/logo'
 import AccountWidget from '../../accountWidget/accountWidget'
-import SidebarSeries from '../sidebarSeries/sidebarSeries'
+import Sidebar from '../sidebar/index'
 
 import './style.scss'
 
@@ -14,10 +14,12 @@ interface Props {
 const Layout: React.FC<Props> = ({ children }: Props) => {
   return (
     <div className="wrapper">
-      <SidebarSeries></SidebarSeries>
-      <div className="padded-dashpanel">
-        <AccountWidget />
-        {children}
+      <Sidebar></Sidebar>
+      <div className="dashpanel">
+        <div className="dashpanel-content">
+          <AccountWidget />
+          {children}
+        </div>
         <Footer />
       </div>
     </div>

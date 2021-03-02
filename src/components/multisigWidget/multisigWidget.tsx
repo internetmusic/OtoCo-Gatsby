@@ -174,5 +174,5 @@ export default connect((state: IState) => ({
   account: state.account.account,
   network: state.account.network,
   managing: state.management.managing,
-  multisigDeployed: state.management.multisigDeployed,
+  multisigDeployed: state.multisig.multisigDeployed,
 }))(MultisigWidget)

@@ -6,14 +6,14 @@ import OtocoRegistrar from '../../../smart-contracts/OtocoRegistrar'
 import TransactionUtils from '../../../services/transactionUtils'
 import TransactionMonitor from '../../transactionMonitor/transactionMonitor'
 import { connect } from 'react-redux'
+import { SeriesType } from '../../../state/management/types'
 import {
   SET_ENS_DOMAINS,
-  SeriesType,
-  ManagementActionTypes,
   ENSDomains,
   ENSDomain,
-  MultisigDeployed,
-} from '../../../state/management/types'
+  ENSActionTypes,
+} from '../../../state/management/ens/types'
+import { MultisigDeployed } from '../../../state/management/multisig/types'
 import { sendMultisigTransaction } from '../../../services/safe/safeTxSender'
 import { IState } from '../../../state/types'
 
@@ -23,7 +23,7 @@ interface Props {
   managing?: SeriesType
   ensDomains?: ENSDomains
   multisigDeployed?: MultisigDeployed
-  dispatch: Dispatch<ManagementActionTypes>
+  dispatch: Dispatch<ENSActionTypes>
 }
 
 type ENSDomainsLabeled = {
@@ -220,6 +220,6 @@ export default connect((state: IState) => ({
   account: state.account.account,
   network: state.account.network,
   managing: state.management.managing,
-  ensDomains: state.management.ensDomains,
-  multisigDeployed: state.management.multisigDeployed,
+  ensDomains: state.ens.ensDomains,
+  multisigDeployed: state.multisig.multisigDeployed,
 }))(Registered)

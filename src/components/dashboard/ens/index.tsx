@@ -2,18 +2,18 @@ import React, { Dispatch, FC, useState } from 'react'
 import { connect } from 'react-redux'
 import Web3 from 'web3'
 import ENS from 'ethereum-ens'
-import Config from './ens/config'
-import Registered from './ens/registered'
-import OtocoRegistrar from '../../smart-contracts/OtocoRegistrar'
+import Config from './config'
+import Registered from './registered'
+import OtocoRegistrar from '../../../smart-contracts/OtocoRegistrar'
+import { SeriesType } from '../../../state/management/types'
 import {
   SET_ENS_DOMAINS,
   ENSDomain,
   ENSDomains,
-  SeriesType,
-  ManagementActionTypes,
-  MultisigDeployed,
-} from '../../state/management/types'
-import { IState } from '../../state/types'
+  ENSActionTypes,
+} from '../../../state/management/ens/types'
+import { MultisigDeployed } from '../../../state/management/multisig/types'
+import { IState } from '../../../state/types'
 
 interface Props {
   account?: string | null
@@ -21,7 +21,7 @@ interface Props {
   managing?: SeriesType
   ensDomains?: ENSDomains
   multisigDeployed?: MultisigDeployed
-  dispatch: Dispatch<ManagementActionTypes>
+  dispatch: Dispatch<ENSActionTypes>
 }
 
 const SeriesENS: FC<Props> = ({
@@ -100,6 +100,6 @@ export default connect((state: IState) => ({
   account: state.account.account,
   network: state.account.network,
   managing: state.management.managing,
-  ensDomains: state.management.ensDomains,
-  multisigDeployed: state.management.multisigDeployed,
+  ensDomains: state.ens.ensDomains,
+  multisigDeployed: state.multisig.multisigDeployed,
 }))(SeriesENS)

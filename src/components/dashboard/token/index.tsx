@@ -2,26 +2,26 @@ import React, { Dispatch, FC, useState } from 'react'
 import Web3 from 'web3'
 import BN from 'bn.js'
 import { connect } from 'react-redux'
-import Config from './token/config'
-import Shares from './token/shares'
-import FactoryContract from '../../smart-contracts/TokenFactory'
-import MasterRegistry from '../../smart-contracts/MasterRegistry'
-import TokenContract from '../../smart-contracts/OtocoToken'
+import Config from './config'
+import Shares from './shares'
+import FactoryContract from '../../../smart-contracts/TokenFactory'
+import MasterRegistry from '../../../smart-contracts/MasterRegistry'
+import TokenContract from '../../../smart-contracts/OtocoToken'
+import { SeriesType } from '../../../state/management/types'
 import {
   SET_TOKEN_CONFIG,
   SET_TOKEN_DEPLOYED,
-  SeriesType,
+  TokenActionTypes,
   TokenDeployed,
-  ManagementActionTypes,
-} from '../../state/management/types'
-import { IState } from '../../state/types'
+} from '../../../state/management/token/types'
+import { IState } from '../../../state/types'
 
 interface Props {
   account?: string | null
   network?: string | null
   managing?: SeriesType
   tokenDeployed?: TokenDeployed
-  dispatch: Dispatch<ManagementActionTypes>
+  dispatch: Dispatch<TokenActionTypes>
 }
 
 const SeriesToken: FC<Props> = ({
@@ -41,7 +41,6 @@ const SeriesToken: FC<Props> = ({
   React.useEffect(() => {
     setTimeout(async () => {
       if (!account || !network || !managing) return
-
       const contract = await MasterRegistry.getContract(network)
         .methods.getRecord(managing.contract, 1)
         .call({ from: account })
@@ -85,7 +84,7 @@ const SeriesToken: FC<Props> = ({
       })
       setLoading(false)
     }, 0)
-  })
+  }, [])
 
   return (
     <div className="card">
@@ -112,5 +111,5 @@ export default connect((state: IState) => ({
   account: state.account.account,
   network: state.account.network,
   managing: state.management.managing,
-  tokenDeployed: state.management.tokenDeployed,
+  tokenDeployed: state.token.tokenDeployed,
 }))(SeriesToken)

@@ -208,6 +208,6 @@ export default connect((state: IState) => ({
   account: state.account.account,
   network: state.account.network,
   managing: state.management.managing,
-  tokenConfig: state.management.tokenConfig,
-  tokenDeployed: state.management.tokenDeployed,
+  tokenConfig: state.token.tokenConfig,
+  tokenDeployed: state.token.tokenDeployed,
 }))(Shares)

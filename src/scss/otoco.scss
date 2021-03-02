@@ -428,6 +428,7 @@ img:hover {
   transform: translate3d(0px, 0px, 0px);
   max-height: 100%;
   opacity: 1;
+  position: absolute;
 }
 .slide-up-exit-active {
   transform: translate3d(0px, -50px, 0px);

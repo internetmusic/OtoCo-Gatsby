@@ -1,11 +1,17 @@
 import React, { Dispatch, FC, useState } from 'react'
 import { connect } from 'react-redux'
-import { SeriesType, ManagementActionTypes } from '../../state/management/types'
-import { IState } from '../../state/types'
-import Textile, { DecryptedInbox } from '../../services/textile'
+import {
+  SeriesType,
+  ManagementActionTypes,
+} from '../../../state/management/types'
+import { IState } from '../../../state/types'
+import Textile, { DecryptedInbox } from '../../../services/textile'
 import { PrivateKey } from '@textile/hub'
-import KeyWidget from '../keyWidget/keyWidget'
-import ContactForm from '../dashboard/contactForm'
+import KeyWidget from '../../keyWidget/keyWidget'
+import ContactForm from '../contactForm'
+import { Link } from 'gatsby'
+import { faChevronLeft } from '@fortawesome/free-solid-svg-icons'
+import Icon from '../../icon/icon'
 
 interface Props {
   account: string | undefined
@@ -79,6 +85,13 @@ const SeriesIdentity: FC<Props> = ({
 
   return (
     <div className="container-sm limiter-md content">
+      <Link
+        className="btn btn-back btn-primary-outline btn-sm"
+        to={`/dashpanel/`}
+      >
+        <Icon icon={faChevronLeft} />
+        <span style={{ paddingLeft: '10px' }}>Back to Dashpanel</span>
+      </Link>
       <h1>Decentralized Identity</h1>
       <h5 className="mb-4">
         Local stored identity. With end-to-end encryption to send/receive

@@ -9,13 +9,13 @@ import AddressWidget from '../../addressWidget/addressWidget'
 import GnosisSafe from '../../../smart-contracts/GnosisSafe'
 import MultisigFactory from '../../../smart-contracts/MultisigFactory'
 import MasterRegistry from '../../../smart-contracts/MasterRegistry'
+import { SeriesType } from '../../../state/management/types'
 import {
   SET_MULTISIG_CONFIG,
   SET_MULTISIG_DEPLOYED,
-  SeriesType,
-  ManagementActionTypes,
   MultisigConfig,
-} from '../../../state/management/types'
+  MultisigActionTypes,
+} from '../../../state/management/multisig/types'
 import { IState } from '../../../state/types'
 
 interface Props {
@@ -23,7 +23,7 @@ interface Props {
   network?: string | null
   managing: SeriesType
   multisigConfig: MultisigConfig
-  dispatch: Dispatch<ManagementActionTypes>
+  dispatch: Dispatch<MultisigActionTypes>
 }
 
 const Config: FC<Props> = ({
@@ -222,5 +222,5 @@ export default connect((state: IState) => ({
   account: state.account.account,
   network: state.account.network,
   managing: state.management.managing,
-  multisigConfig: state.management.multisigConfig,
+  multisigConfig: state.multisig.multisigConfig,
 }))(Config)

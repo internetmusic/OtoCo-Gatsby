@@ -15,7 +15,7 @@ const Header: React.FC<unknown> = () => {
     <div>
       <Logo></Logo>
       <div className="quick-links">
-        <Link className="styled-link" to="/dashboard/">
+        <Link className="styled-link" to="/dashpanel/">
           Dashpanel
         </Link>
       </div>

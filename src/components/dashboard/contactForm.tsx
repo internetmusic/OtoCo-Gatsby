@@ -8,7 +8,6 @@ import {
 } from '../../state/management/types'
 
 import oracle from '../../services/oracle'
-// import database from '../../services/firebase'
 
 interface Props {
   account: string

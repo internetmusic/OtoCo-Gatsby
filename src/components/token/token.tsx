@@ -21,14 +21,12 @@ import {
   SET_NETWORK,
   AccountActionTypes,
 } from '../../state/account/types'
-
 import {
   SET_TOKEN_CONFIG,
-  SET_TOKEN_DEPLOYED,
   TokenConfig,
   TokenDeployed,
-  ManagementActionTypes,
-} from '../../state/management/types'
+  TokenActionTypes,
+} from '../../state/management/token/types'
 import { Link } from 'gatsby'
 
 interface Props {
@@ -38,7 +36,7 @@ interface Props {
   managing?: string
   tokenConfig: TokenConfig
   tokenDeployed: TokenDeployed
-  dispatch: Dispatch<AccountActionTypes | ManagementActionTypes>
+  dispatch: Dispatch<AccountActionTypes | TokenActionTypes>
 }
 
 const Token: FC<Props> = ({
@@ -258,7 +256,7 @@ const Token: FC<Props> = ({
           to={`/dashpanel/company/${managing?.contract}`}
         >
           <Icon icon={faChevronLeft} />
-          <span style={{ paddingLeft: '10px' }}>Back to Dashboard</span>
+          <span style={{ paddingLeft: '10px' }}>Back to Entity</span>
         </Link>
       )}
       {!managing && (
@@ -267,7 +265,7 @@ const Token: FC<Props> = ({
           to={`/dashpanel/`}
         >
           <Icon icon={faChevronLeft} />
-          <span style={{ paddingLeft: '10px' }}>Back to Dashboard</span>
+          <span style={{ paddingLeft: '10px' }}>Back to Dashpanel</span>
         </Link>
       )}
     </div>
@@ -278,6 +276,6 @@ export default connect((state: IState) => ({
   account: state.account.account,
   network: state.account.network,
   managing: state.management.managing,
-  tokenConfig: state.management.tokenConfig,
-  tokenDeployed: state.management.tokenDeployed,
+  tokenConfig: state.token.tokenConfig,
+  tokenDeployed: state.token.tokenDeployed,
 }))(Token)

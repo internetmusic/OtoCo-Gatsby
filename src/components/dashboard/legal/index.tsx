@@ -2,11 +2,14 @@ import React, { Dispatch, FC, useState } from 'react'
 import { connect } from 'react-redux'
 import { PDFAssembler } from 'pdfassembler'
 import fileSaver from 'file-saver'
-import { SeriesType, ManagementActionTypes } from '../../state/management/types'
+import {
+  SeriesType,
+  ManagementActionTypes,
+} from '../../../state/management/types'
 // import Icon from '../icon/icon'
 // import { faDownload } from '@fortawesome/free-solid-svg-icons'
 import { FileEarmarkText } from 'react-bootstrap-icons'
-import { IState } from '../../state/types'
+import { IState } from '../../../state/types'
 
 interface Props {
   managing?: SeriesType
@@ -15,16 +18,16 @@ interface Props {
 
 const pdfs = {
   de: {
-    agreement: require('../../../static/pdfs/DOA_de.pdf'),
-    page1: require('../../../static/pdfs/page1_de.pdf'),
-    page21: require('../../../static/pdfs/page21_de.pdf'),
-    page22: require('../../../static/pdfs/page22_de.pdf'),
+    agreement: require('../../../../static/pdfs/DOA_de.pdf'),
+    page1: require('../../../../static/pdfs/page1_de.pdf'),
+    page21: require('../../../../static/pdfs/page21_de.pdf'),
+    page22: require('../../../../static/pdfs/page22_de.pdf'),
   },
   wy: {
-    agreement: require('../../../static/pdfs/DOA_wy.pdf'),
-    page1: require('../../../static/pdfs/page1_wy.pdf'),
-    page21: require('../../../static/pdfs/page21_wy.pdf'),
-    page22: require('../../../static/pdfs/page22_wy.pdf'),
+    agreement: require('../../../../static/pdfs/DOA_wy.pdf'),
+    page1: require('../../../../static/pdfs/page1_wy.pdf'),
+    page21: require('../../../../static/pdfs/page21_wy.pdf'),
+    page22: require('../../../../static/pdfs/page22_wy.pdf'),
   },
 }
 
@@ -132,8 +135,10 @@ const SeriesDocuments: FC<Props> = ({
         <div className="mt-2">
           <a href="#" className="card-link" onClick={exportPDF}>
             {/* <Icon icon={faDownload}></Icon> */}
-            <FileEarmarkText className="fix-icon-alignment"/>
-            <span style={{ marginLeft: '0.5em' }}>Series Operating Agreement</span>
+            <FileEarmarkText className="fix-icon-alignment" />
+            <span style={{ marginLeft: '0.5em' }}>
+              Series Operating Agreement
+            </span>
           </a>
         </div>
       </div>

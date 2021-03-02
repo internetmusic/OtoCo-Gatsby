@@ -2,7 +2,7 @@ import React from 'react'
 import { Helmet } from 'react-helmet'
 import { Router } from '@reach/router'
 import Layout from '../../components/dashboard/layout/layout'
-import Identity from '../../components/identity/Identity'
+import Identity from '../../components/dashboard/identity/Identity'
 
 interface Props {
   location: Location
