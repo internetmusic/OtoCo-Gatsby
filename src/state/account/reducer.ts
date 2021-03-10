@@ -1,14 +1,19 @@
 import {
   SET_ACCOUNT,
   SET_NETWORK,
+  SET_ALIAS,
+  SET_PRIVATEKEY,
   DISCONNECT,
   AccountActionTypes,
   IAccountState,
 } from './types'
 
 export const initialState = {
-  account: null,
-  network: null,
+  account: undefined,
+  network: undefined,
+  identity: undefined,
+  alias: undefined,
+  privatekey: undefined,
 }
 
 const reducer = (
@@ -26,11 +31,23 @@ const reducer = (
         ...state,
         network: action.payload,
       }
+    case SET_ALIAS:
+      return {
+        ...state,
+        alias: action.payload,
+      }
+    case SET_PRIVATEKEY:
+      return {
+        ...state,
+        privatekey: action.payload,
+      }
     case DISCONNECT:
       return {
         ...state,
-        network: null,
-        account: null,
+        network: undefined,
+        account: undefined,
+        alias: undefined,
+        privatekey: undefined,
       }
     default:
       return state

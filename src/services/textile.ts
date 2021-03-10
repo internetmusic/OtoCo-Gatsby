@@ -6,20 +6,12 @@ import {
   PublicKey,
   KeyInfo,
   UserMessage,
+  UserAuth,
+  Identity,
 } from '@textile/hub'
 import aes256 from 'aes256'
-
-/**
- * A simple type to hold inbox messages after they have been
- * decrypted with the PrivateKey
- */
-interface DecryptedInbox {
-  id: string
-  body: string
-  from: string
-  sent: number
-  readAt?: number
-}
+import Oracle from './oracle'
+import { CachedWallet, DecryptedInbox } from '../state/account/types'
 
 const keyInfo: KeyInfo = {
   key: process.env.GATSBY_TEXTILE_UNSAFE_KEY,
@@ -43,7 +35,7 @@ const messageDecoder = async (
 interface TextileInterface {
   user: Users | null
   client: Client | null
-  privateKey: PrivateKey | null
+  privateKey?: PrivateKey
   authorized: string | null
   lastAuthorization: number | null
   generateMessageForEntropy: (
@@ -53,7 +45,11 @@ interface TextileInterface {
   ) => string
   generateIdentity: (address: string) => Promise<PrivateKey | null>
   storePrivateKey: (address: string, secret: string) => Promise<PrivateKey>
-  fetchIdentity: (address: string, secret: string) => Promise<PrivateKey | null>
+  fetchIdentity: (
+    address: string,
+    secret: string
+  ) => Promise<CachedWallet | null>
+  loginWithChallenge: (identity: Identity) => Promise<UserAuth>
   authorize: () => Promise<Client | null>
   refreshAuthorization: () => Promise<Client | null>
   listInboxMessages: () => Promise<DecryptedInbox[]>
@@ -64,7 +60,7 @@ interface TextileInterface {
 const Textile: TextileInterface = {
   user: null,
   client: null,
-  privateKey: null,
+  privateKey: undefined,
   authorized: null, // Authorized Address
   lastAuthorization: null,
 
@@ -104,10 +100,7 @@ const Textile: TextileInterface = {
   ): Promise<PrivateKey | null> {
     const web3: Web3 = window.web3
     // avoid sending the raw secret by hashing it first
-    // const secret: string = hashSync('very secret', 10)
-    const secret = 'very secret'
-    const secretHashed = web3.utils.sha3(secret)
-    console.log('SECRET:', secret)
+    const secretHashed = web3.utils.sha3(process.env.GATSBY_PASSWORD)
     if (!secretHashed) return null
     const message = this.generateMessageForEntropy(
       address,
@@ -130,9 +123,18 @@ const Textile: TextileInterface = {
     }
     this.privateKey = PrivateKey.fromRawEd25519Seed(Uint8Array.from(sigArray))
     console.log(this.privateKey.toString())
-    // console.log('SECRET:', secret)
-    const encrypted = aes256.encrypt(secret, this.privateKey.toString())
-    localStorage.setItem(`did:eth:${address.substr(2)}`, encrypted)
+    const encrypted = aes256.encrypt(
+      process.env.GATSBY_PASSWORD,
+      this.privateKey.toString()
+    )
+    localStorage.setItem(
+      `did:eth:${address.substr(2)}`,
+      JSON.stringify({
+        alias: '',
+        password: false,
+        key: encrypted,
+      })
+    )
     // Your app can now use this identity for generating a user Mailbox, Threads, Buckets, etc
     return this.privateKey
   },
@@ -140,27 +142,85 @@ const Textile: TextileInterface = {
   fetchIdentity: async function (
     address: string,
     secret: string
-  ): Promise<PrivateKey | null> {
+  ): Promise<CachedWallet | null> {
     /** Restore any cached user identity first */
-    const cached = localStorage.getItem(`did:eth:${address.substr(2)}`)
-    if (!cached) return null
+    const cachedString = localStorage.getItem(`did:eth:${address.substr(2)}`)
+    if (!cachedString) return null
     // console.log('CACHED', cached)
-    const decrypted = aes256.decrypt(secret, cached).toString('utf8')
+    const cached: CachedWallet = JSON.parse(cachedString)
+    const decrypted = aes256.decrypt(secret, cached.key).toString('utf8')
     // console.log('DECRYPTED', decrypted)
     this.privateKey = PrivateKey.fromString(decrypted)
-    return this.privateKey
+    cached.key = this.privateKey.toString()
+    return cached
+  },
+
+  loginWithChallenge: async (identity: Identity): Promise<UserAuth> => {
+    return new Promise((resolve, reject) => {
+      /**
+       * Configured for our development server
+       *
+       * Note: this should be upgraded to wss for production environments.
+       */
+      const socketUrl = `ws://localhost:3000/`
+
+      /** Initialize our websocket connection */
+      const socket = new WebSocket(socketUrl)
+
+      /** Wait for our socket to open successfully */
+      socket.onopen = () => {
+        /** Get public key string */
+        const publicKey = identity.public.toString()
+
+        /** Send a new token request */
+        socket.send(
+          JSON.stringify({
+            pubkey: publicKey,
+            type: 'token',
+          })
+        )
+
+        /** Listen for messages from the server */
+        socket.onmessage = async (event) => {
+          const data = JSON.parse(event.data)
+          switch (data.type) {
+            /** Error never happen :) */
+            case 'error': {
+              reject(data.value)
+              break
+            }
+            /** The server issued a new challenge */
+            case 'challenge': {
+              /** Convert the challenge json to a Buffer */
+              const buf = Buffer.from(data.value)
+              /** User our identity to sign the challenge */
+              const signed = await identity.sign(buf)
+              /** Send the signed challenge back to the server */
+              socket.send(
+                JSON.stringify({
+                  type: 'challenge',
+                  sig: Buffer.from(signed).toJSON(),
+                })
+              )
+              break
+            }
+            /** New token generated */
+            case 'token': {
+              resolve(data.value)
+              break
+            }
+          }
+        }
+      }
+    })
   },
 
   authorize: async function () {
     if (!this.privateKey) return null
-    this.user = await Users.withKeyInfo(keyInfo)
-    this.client = await Client.withKeyInfo(keyInfo)
-    await this.client.getToken(this.privateKey)
-    await this.user.getToken(this.privateKey)
+    const auth: UserAuth = await this.loginWithChallenge(this.privateKey)
+    this.user = await Users.withUserAuth(auth)
+    this.client = await Client.withUserAuth(auth)
     await this.user.setupMailbox()
-    // window.user = this.user
-    // window.client = this.client
-    // window.identity = this.privateKey
     const now = new Date()
     this.lastAuthorization = now.getTime()
     console.log('AUTHORIZED')
@@ -178,7 +238,7 @@ const Textile: TextileInterface = {
   // MAILBOX
   listInboxMessages: async function (): Promise<DecryptedInbox[]> {
     await this.refreshAuthorization()
-    console.log('MESSAGES', this.user, this.privateKey)
+    // console.log('MESSAGES', this.user, this.privateKey)
     if (!this.user) return []
     if (!this.privateKey) return []
     const messages = await this.user.listInboxMessages()

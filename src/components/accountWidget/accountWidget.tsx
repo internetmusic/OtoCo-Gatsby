@@ -17,18 +17,30 @@ import {
   SET_NETWORK,
   AccountActionTypes,
   DISCONNECT,
+  SET_ALIAS,
+  SET_PRIVATEKEY,
 } from '../../state/account/types'
 
 import './style.scss'
 import { Link } from 'gatsby'
+import Textile from '../../services/textile'
+import { PrivateKey } from '@textile/hub'
 
 interface Props {
-  account: string | null
-  network: string | null
+  account?: string
+  alias?: string
+  privatekey?: string
+  network?: string
   dispatch: Dispatch<AccountActionTypes>
 }
 
-const AccountWidget: FC<Props> = ({ account, network, dispatch }: Props) => {
+const AccountWidget: FC<Props> = ({
+  account,
+  alias,
+  privatekey,
+  network,
+  dispatch,
+}: Props) => {
   const [show, setShow] = useState(true)
   const [collapsed, setCollapse] = useState(true)
 
@@ -57,6 +69,28 @@ const AccountWidget: FC<Props> = ({ account, network, dispatch }: Props) => {
     setCollapse(true)
   }, [account, show])
 
+  React.useEffect(() => {
+    setTimeout(async () => {
+      if (!account) return
+      const cached = await Textile.fetchIdentity(
+        account,
+        process.env.GATSBY_PASSWORD
+      )
+      if (cached) {
+        if (cached.alias.length > 0)
+          dispatch({ type: SET_ALIAS, payload: cached.alias })
+        dispatch({
+          type: SET_PRIVATEKEY,
+          payload: PrivateKey.fromString(cached.key),
+        })
+        console.log(cached.key)
+      } else {
+        dispatch({ type: SET_PRIVATEKEY, payload: null })
+        dispatch({ type: SET_ALIAS, payload: null })
+      }
+    }, 0)
+  }, [account])
+
   const handleDisconnect = () => {
     Web3Integrate.disconnect()
     dispatch({ type: DISCONNECT })
@@ -73,24 +107,29 @@ const AccountWidget: FC<Props> = ({ account, network, dispatch }: Props) => {
           <div className="vert">
             <div className="p-3 shine-on-hover" onClick={handleDropdown}>
               <XDiamond className="me-3" />
-              {account.substring(0, 8)}...
-              {account.substring(account.length - 4, account.length)}
+              {alias && <span>{alias}</span>}
+              {!alias && (
+                <span>
+                  {account.substring(0, 8)}...
+                  {account.substring(account.length - 4, account.length)}
+                </span>
+              )}
               <Bell className="mx-3" />
               <ChevronDown className={collapsed ? 'icon' : 'icon rotated'} />
             </div>
-            {!collapsed && (
+            {!collapsed && privatekey != undefined && (
               <div className="pt-3 pb-2 px-3 with-divider shine-on-hover">
                 <Clipboard className="me-3" />
-                Copy Public Key
+                Copy Mailbox Public Key
               </div>
             )}
-            {!collapsed && (
+            {!collapsed && privatekey != undefined && (
               <Link
                 className="pb-3 pt-2 px-3 shine-on-hover"
                 to="/dashpanel/identity"
               >
                 <PencilSquare className="me-3" />
-                Edit Wallet Identity
+                Access Wallet Mailbox
               </Link>
             )}
             {!collapsed && (
@@ -116,5 +155,7 @@ const AccountWidget: FC<Props> = ({ account, network, dispatch }: Props) => {
 
 export default connect((state: IState) => ({
   account: state.account.account,
+  alias: state.account.alias,
+  privatekey: state.account.privatekey,
   network: state.account.network,
 }))(AccountWidget)

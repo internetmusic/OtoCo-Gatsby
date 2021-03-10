@@ -5,7 +5,7 @@ import { CSSTransition } from 'react-transition-group'
 import { IState } from '../../state/types'
 import Web3Integrate from '../../services/web3-integrate'
 import SeriesListing from './seriesListing'
-import ContactForm from './contactForm'
+import NotificationForm from './identity/notificationForm'
 
 // import database from '../../services/firebase'
 import oracle from '../../services/oracle'
@@ -30,10 +30,12 @@ import {
 } from '../../state/management/types'
 
 import { IJurisdictionOption } from '../../state/spinUp/types'
+import { PrivateKey } from '@textile/hub'
 
 interface Props {
   account?: string
   network?: string
+  privatekey?: PrivateKey
   series: SeriesType[]
   managing?: SeriesType
   jurisdictionOptions: IJurisdictionOption[]
@@ -47,24 +49,13 @@ const Dashboard: FC<Props> = ({
   account,
   network,
   series,
+  privatekey,
   jurisdictionOptions,
   contactForm,
   dispatch,
 }: Props) => {
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState<boolean>(false)
-  const contactFormLastRequest = async () => {
-    const now = new Date()
-    now.setDate(now.getDate() - 10)
-    try {
-      const lastRequest = new Date(
-        window.localStorage.getItem('contactFormLastRequest')
-      )
-      if (lastRequest < now) throw 'Must show form'
-    } catch (err) {
-      dispatch({ type: SET_CONTACT_FORM, payload: true })
-    }
-  }
 
   React.useEffect(() => {
     dispatch({ type: CLEAR_MANAGE_SERIES })
@@ -100,9 +91,6 @@ const Dashboard: FC<Props> = ({
         return
       }
       setError(null)
-      //if (!(await database.getFilling(account))) contactFormLastRequest()
-      console.log('EXIST ID?', account, await oracle.existIdentity(account))
-      if (!(await oracle.existIdentity(account))) contactFormLastRequest()
       for (const j of jurisdictionOptions) {
         const seriesAddresses = await MainContract.getContract(network, j.value)
           .methods.mySeries()
@@ -143,9 +131,10 @@ const Dashboard: FC<Props> = ({
   }, [account])
 
   return (
-    <div className="container-sm limiter-md content">
-      <h1 className="display-5 fw-light">Dashpanel</h1>
-      <h5 className="mb-3 text-uppercase">Manage your on-chain companies</h5>
+    <div className="container-sm limiter-lg content">
+      <h5>mailbox</h5>
+      <NotificationForm></NotificationForm>
+      <h5>companies</h5>
       <CSSTransition
         in={loading}
         timeout={{
@@ -164,18 +153,6 @@ const Dashboard: FC<Props> = ({
             </div>
           </div>
         </div>
-      </CSSTransition>
-      <CSSTransition
-        in={contactForm}
-        timeout={{
-          appear: 200,
-          enter: 200,
-          exit: 0,
-        }}
-        classNames="my-node"
-        unmountOnExit
-      >
-        <ContactForm></ContactForm>
       </CSSTransition>
       <CSSTransition
         in={series.length > 0}
@@ -214,6 +191,7 @@ const Dashboard: FC<Props> = ({
 export default connect((state: IState) => ({
   account: state.account.account,
   network: state.account.network,
+  privatekey: state.account.privatekey,
   jurisdictionOptions: state.spinUp.jurisdictionOptions,
   series: state.management.series,
   contactForm: state.management.contactForm,

@@ -1,5 +1,5 @@
 import axios, { AxiosError, AxiosResponse } from 'axios'
-import { PublicKey } from '@textile/hub'
+import { PublicKey, UserAuth } from '@textile/hub'
 
 const oraclePath: string = process.env.GATSBY_ORACLE_URL
 const oraclePublicKey: PublicKey = PublicKey.fromString(
@@ -10,7 +10,7 @@ const oraclePublicKey: PublicKey = PublicKey.fromString(
 type OracleRequest = {
   method: string
   signature?: string // Sender signature
-  message: string // Sender message
+  message: any // Sender message
 }
 
 type OracleResult = {
@@ -20,32 +20,34 @@ type OracleResult = {
 
 const postRequest = async (data: OracleRequest): Promise<any> => {
   const encoded = new TextEncoder().encode(data.message)
-  data.message = (await oraclePublicKey.encrypt(encoded)).toString()
+  data.message = Buffer.from(await oraclePublicKey.encrypt(encoded)).toJSON()
   const res: AxiosResponse = await axios.post(oraclePath, data)
   if (res.data.method == 'error') throw res.data
   return res.data
 }
 
 interface OracleInterface {
-  saveIdentity: (
+  saveWallet: (
     wallet: string,
-    email: string,
-    publicKey?: string
+    email?: string,
+    keys?: string[]
   ) => Promise<boolean>
-  existIdentity: (wallet: string) => Promise<boolean>
+  existWallet: (wallet: string) => Promise<{ address: boolean; email: boolean }>
 }
 
 const Oracle: OracleInterface = {
-  saveIdentity: async function (
+  saveWallet: async function (
     wallet: string,
-    email: string
+    email?: string,
+    keys?: string[]
   ): Promise<boolean> {
     try {
       const data: OracleRequest = {
-        method: 'saveIdentity',
+        method: 'saveWallet',
         message: JSON.stringify({
           wallet,
           email,
+          keys,
         }),
       }
       return await postRequest(data)
@@ -54,11 +56,12 @@ const Oracle: OracleInterface = {
       return false
     }
   },
-
-  existIdentity: async function (wallet: string): Promise<boolean> {
+  existWallet: async function (
+    wallet: string
+  ): Promise<{ address: boolean; email: boolean }> {
     try {
       const data: OracleRequest = {
-        method: 'existIdentity',
+        method: 'existWallet',
         message: JSON.stringify({
           wallet,
         }),
@@ -66,7 +69,7 @@ const Oracle: OracleInterface = {
       return await postRequest(data)
     } catch (err) {
       console.error(err)
-      return false
+      return { address: false, email: false }
     }
   },
 }
