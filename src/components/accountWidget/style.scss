@@ -51,3 +51,23 @@
     transform: rotate(180deg);
   }
 }
+
+.bell-animation {
+  animation: bellshake 1s infinite cubic-bezier(.36,.07,.19,.97) both;
+  transform-origin: top;
+  :hover {
+    color:$white
+  }
+}
+
+@keyframes bellshake {
+0% { transform: rotate(0); }
+15% { transform: rotate(10deg); }
+30% { transform: rotate(-10deg); }
+45% { transform: rotate(6deg); }
+60% { transform: rotate(-6deg); }
+75% { transform: rotate(3deg); }
+85% { transform: rotate(-3deg); }
+92% { transform: rotate(1deg); }
+100% { transform: rotate(0); }
+}

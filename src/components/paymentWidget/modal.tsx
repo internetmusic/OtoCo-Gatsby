@@ -6,24 +6,19 @@ import { connect } from 'react-redux'
 import { IState } from '../../state/types'
 import {
   Bell,
-  BellFill,
-  XDiamond,
-  Clipboard,
   ChevronDown,
+  XDiamond,
   PencilSquare,
+  Clipboard,
   BoxArrowRight,
 } from 'react-bootstrap-icons'
 import {
   SET_ACCOUNT,
   SET_NETWORK,
+  AccountActionTypes,
   DISCONNECT,
   SET_ALIAS,
   SET_PRIVATEKEY,
-  SET_INBOX_MESSAGES,
-  ADD_INBOX_MESSAGES,
-  SET_OUTBOX_MESSAGES,
-  DecryptedMailbox,
-  AccountActionTypes,
 } from '../../state/account/types'
 
 import './style.scss'
@@ -36,7 +31,6 @@ interface Props {
   alias?: string
   privatekey?: string
   network?: string
-  inboxMessages: DecryptedMailbox[]
   dispatch: Dispatch<AccountActionTypes>
 }
 
@@ -45,7 +39,6 @@ const AccountWidget: FC<Props> = ({
   alias,
   privatekey,
   network,
-  inboxMessages,
   dispatch,
 }: Props) => {
   const [show, setShow] = useState(true)
@@ -90,28 +83,13 @@ const AccountWidget: FC<Props> = ({
           type: SET_PRIVATEKEY,
           payload: PrivateKey.fromString(cached.key),
         })
-        // Textile.setCallbackInbox(callbackInboxNewMessage)
-        // console.log(cached.key)
+        console.log(cached.key)
       } else {
         dispatch({ type: SET_PRIVATEKEY, payload: null })
         dispatch({ type: SET_ALIAS, payload: null })
       }
     }, 0)
   }, [account])
-
-  React.useEffect(() => {
-    const interval = setInterval(async () => {
-      dispatch({
-        type: SET_INBOX_MESSAGES,
-        payload: await Textile.listInboxMessages(),
-      })
-      dispatch({
-        type: SET_OUTBOX_MESSAGES,
-        payload: await Textile.listOutboxMessages(),
-      })
-    }, 20000)
-    return () => clearInterval(interval)
-  }, [privatekey])
 
   const handleDisconnect = () => {
     Web3Integrate.disconnect()
@@ -120,14 +98,6 @@ const AccountWidget: FC<Props> = ({
 
   const handleDropdown = () => {
     setCollapse(!collapsed)
-  }
-
-  const callbackInboxNewMessage = (message: DecryptedMailbox) => {
-    console.log('PASSOU NO CALLBACK', message)
-    dispatch({
-      type: ADD_INBOX_MESSAGES,
-      payload: message,
-    })
   }
 
   return (
@@ -144,12 +114,7 @@ const AccountWidget: FC<Props> = ({
                   {account.substring(account.length - 4, account.length)}
                 </span>
               )}
-              <Link to="/dashpanel/identity">
-                {inboxMessages.length > 0 && (
-                  <BellFill className="mx-3 text-warning bell-animation" />
-                )}
-                {inboxMessages.length == 0 && <Bell className="mx-3" />}
-              </Link>
+              <Bell className="mx-3" />
               <ChevronDown className={collapsed ? 'icon' : 'icon rotated'} />
             </div>
             {!collapsed && privatekey != undefined && (
@@ -193,5 +158,4 @@ export default connect((state: IState) => ({
   alias: state.account.alias,
   privatekey: state.account.privatekey,
   network: state.account.network,
-  inboxMessages: state.account.inboxMessages,
 }))(AccountWidget)

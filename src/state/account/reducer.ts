@@ -3,6 +3,10 @@ import {
   SET_NETWORK,
   SET_ALIAS,
   SET_PRIVATEKEY,
+  SET_INBOX_MESSAGES,
+  ADD_INBOX_MESSAGES,
+  SET_OUTBOX_MESSAGES,
+  ADD_OUTBOX_MESSAGES,
   DISCONNECT,
   AccountActionTypes,
   IAccountState,
@@ -14,6 +18,8 @@ export const initialState = {
   identity: undefined,
   alias: undefined,
   privatekey: undefined,
+  inboxMessages: [],
+  outboxMessages: [],
 }
 
 const reducer = (
@@ -41,6 +47,26 @@ const reducer = (
         ...state,
         privatekey: action.payload,
       }
+    case SET_INBOX_MESSAGES:
+      return {
+        ...state,
+        inboxMessages: action.payload,
+      }
+    case ADD_INBOX_MESSAGES:
+      return {
+        ...state,
+        inboxMessages: state.inboxMessages.concat([action.payload]),
+      }
+    case SET_OUTBOX_MESSAGES:
+      return {
+        ...state,
+        outboxMessages: action.payload,
+      }
+    case ADD_OUTBOX_MESSAGES:
+      return {
+        ...state,
+        outboxMessages: state.outboxMessages.concat([action.payload]),
+      }
     case DISCONNECT:
       return {
         ...state,
@@ -48,6 +74,8 @@ const reducer = (
         account: undefined,
         alias: undefined,
         privatekey: undefined,
+        inboxMessages: [],
+        outboxMessages: [],
       }
     default:
       return state

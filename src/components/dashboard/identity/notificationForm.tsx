@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 import { IState } from '../../../state/types'
 
 import BotImage from '../../../../static/img/bot.svg'
-import oracle from '../../../services/oracle'
 import Textile from '../../../services/textile'
 
 import {
@@ -14,26 +13,32 @@ import {
 import {
   SET_PRIVATEKEY,
   AccountActionTypes,
+  DecryptedMailbox,
 } from '../../../state/account/types'
 import { PrivateKey } from '@textile/hub'
+import { Link } from 'gatsby'
+import { Mailbox } from 'react-bootstrap-icons'
 
 interface Props {
   account: string
   privatekey?: PrivateKey
   managing?: SeriesType
+  inboxMessages: DecryptedMailbox[]
   dispatch: Dispatch<AccountActionTypes | ManagementActionTypes>
 }
 
-const MailboxForm: FC<Props> = ({ account, privatekey, dispatch }: Props) => {
+const MailboxForm: FC<Props> = ({
+  account,
+  privatekey,
+  inboxMessages,
+  dispatch,
+}: Props) => {
   const [loading, setLoading] = useState<boolean>(true)
-  const [count, setCount] = useState<number>(0)
 
   React.useEffect(() => {
     setTimeout(async () => {
       setLoading(true)
       if (!privatekey) return setLoading(false)
-      const inbox = await Textile.listInboxMessages()
-      setCount(inbox.length)
       setLoading(false)
     }, 0)
   }, [privatekey])
@@ -42,7 +47,19 @@ const MailboxForm: FC<Props> = ({ account, privatekey, dispatch }: Props) => {
     try {
       const pk = await Textile.generateIdentity(account)
       if (!pk) return
-      await oracle.saveWallet(account, undefined, [pk.public.toString()])
+      const signature = await Textile.generatePublicKeyValidation(
+        account,
+        pk.public.toString()
+      )
+      if (!signature) return
+      const message = {
+        _id: account,
+        signature: signature,
+      }
+      await Textile.sendMessage(process.env.GATSBY_ORACLE_KEY, {
+        method: 'wallet',
+        message,
+      })
       dispatch({ type: SET_PRIVATEKEY, payload: pk })
       dispatch({ type: SET_CONTACT_FORM, payload: false })
     } catch (err) {
@@ -85,8 +102,19 @@ const MailboxForm: FC<Props> = ({ account, privatekey, dispatch }: Props) => {
           {!loading && privatekey != undefined && (
             <div className="row">
               <div className="col-6 col-lg-8">
-                {count == 0 && <p>No new messages.</p>}
-                {count > 0 && <p>You have {count} new messages.</p>}
+                {inboxMessages.length == 0 && <p>No new messages.</p>}
+                {inboxMessages.length > 0 && (
+                  <div>
+                    <p>You have {inboxMessages.length} new messages.</p>
+                    <Link
+                      className="btn btn-primary-outline"
+                      to={`/dashpanel/identity/`}
+                    >
+                      <Mailbox className="me-2" />
+                      Go to Mailbox
+                    </Link>
+                  </div>
+                )}
               </div>
             </div>
           )}
@@ -108,4 +136,5 @@ export default connect((state: IState) => ({
   account: state.account.account,
   privatekey: state.account.privatekey,
   managing: state.management.managing,
+  inboxMessages: state.account.inboxMessages,
 }))(MailboxForm)

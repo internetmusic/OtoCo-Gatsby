@@ -153,8 +153,8 @@ const Admin: FC<Props> = ({
     <div>
       {!error && (
         <div className="row">
-          <div className="col-12 col-md-6">
-            <div className="col-12 card card-body">
+          <div className="col-12">
+            <div className="col-12 card">
               <div className="input-group mb-4">
                 <input
                   type="text"
@@ -181,8 +181,8 @@ const Admin: FC<Props> = ({
               </button>
             </div>
           </div>
-          <div className="col-12 col-md-6">
-            <div className="col-12 card card-body">
+          <div className="col-12">
+            <div className="col-12 card">
               <div className="input-group mb-4">
                 <input
                   type="text"
@@ -209,9 +209,13 @@ const Admin: FC<Props> = ({
               </button>
             </div>
           </div>
-          <div className="col-12 col-md-6">
-            <div className="col-12 card card-body">
-              <h3>Withdraw Tokens</h3>
+          <div className="col-12">
+            <div className="col-12 card">
+              <h4>Withdraw Tokens</h4>
+              <h5>
+                As Master contract owner, click on withdraw to transfer contract
+                tokens to your wallet.
+              </h5>
               <button
                 className="btn btn-primary mb-2"
                 onClick={sendWithdraw.bind(undefined, 'us_de')}

@@ -1,4 +1,5 @@
 import React, { Dispatch, FC, useState } from 'react'
+import axios, { AxiosError, AxiosResponse } from 'axios'
 import { Link } from 'gatsby'
 import { connect } from 'react-redux'
 import { IState } from '../../../state/types'
@@ -9,6 +10,8 @@ import NotificationForm from './notificationForm'
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons'
 import Icon from '../../icon/icon'
 import oracle from '../../../services/oracle'
+import Web3Modal from '../../../services/web3-integrate'
+import { requestPaymentWyre, WyreEnv } from '../../../services/wyre'
 
 import {
   SeriesType,
@@ -17,10 +20,14 @@ import {
 import {
   AccountActionTypes,
   SET_ALIAS,
-  DecryptedInbox,
+  DecryptedMailbox,
   CachedWallet,
   SET_PRIVATEKEY,
+  PaymentMessage,
+  SET_INBOX_MESSAGES,
+  SET_OUTBOX_MESSAGES,
 } from '../../../state/account/types'
+import ReactJson from 'react-json-view'
 
 interface Props {
   account?: string
@@ -28,19 +35,38 @@ interface Props {
   managing?: SeriesType
   alias?: string
   privatekey?: PrivateKey
+  inboxMessages: DecryptedMailbox[]
+  outboxMessages: DecryptedMailbox[]
   dispatch: Dispatch<ManagementActionTypes | AccountActionTypes>
 }
 
 interface ListMessagesProps {
-  messages: DecryptedInbox[]
+  messages: DecryptedMailbox[]
   handleDelete: (id: string) => Promise<void>
 }
 
 const ListMessages = ({ messages, handleDelete }: ListMessagesProps) => {
   return messages.map((m) => (
     <tr key={m.id}>
-      <td>{m.from.substring(0, 5)} ...</td>
-      <td>{m.body}</td>
+      {/* <td>{m.from.substring(0, 5)} ...</td> */}
+      <td>
+        {m.from.substring(0, 5)}...
+        {m.from.substring(m.from.length - 5, m.from.length)}
+      </td>
+      <td>
+        <ReactJson
+          src={m.body}
+          theme="monokai"
+          collapseStringsAfterLength={8}
+          displayDataTypes={false}
+          displayObjectSize={false}
+          collapsed={true}
+          enableClipboard={false}
+          style={{
+            background: 'transparent',
+          }}
+        />
+      </td>
       <td className="d-none d-md-block">
         <button
           className="btn btn-primary btn-sm"
@@ -59,23 +85,30 @@ const SeriesIdentity: FC<Props> = ({
   managing,
   alias,
   privatekey,
+  inboxMessages,
+  outboxMessages,
   dispatch,
 }: Props) => {
   const [loading, setLoading] = useState<boolean>(false)
   const [hasEmail, setHasEmail] = useState<boolean>(false)
   const [email, setEmail] = useState('')
   const [aliasTemp, setAlias] = useState<string | undefined>(undefined)
-  const [messages, setMessages] = useState<DecryptedInbox[]>([])
+  // const [messagesIn, setInMessages] = useState<DecryptedMailbox[]>([])
+  // const [messagesOut, setOutMessages] = useState<DecryptedMailbox[]>([])
 
-  const handleClickCreate = async () => {
-    if (!account) return
-    dispatch({
-      type: SET_PRIVATEKEY,
-      payload: PrivateKey.fromString(
-        await Textile.generateIdentity(account).toString()
-      ),
-    })
-  }
+  React.useEffect(() => {
+    setTimeout(async () => {
+      dispatch({
+        type: SET_INBOX_MESSAGES,
+        payload: await Textile.listInboxMessages(),
+      })
+      dispatch({
+        type: SET_OUTBOX_MESSAGES,
+        payload: await Textile.listOutboxMessages(),
+      })
+    }, 0)
+  }, [account])
+
   const validateEmail = (email) => {
     const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
     return re.test(String(email).toLowerCase())
@@ -90,34 +123,44 @@ const SeriesIdentity: FC<Props> = ({
     }
     try {
       if (email.length == 0) return
-      await oracle.saveWallet(account, email, [])
+      // await oracle.saveWallet(account, email, [])
+      await Textile.sendMessage(process.env.GATSBY_ORACLE_KEY, {
+        method: 'wallet',
+        message: {
+          _id: account,
+          email,
+        },
+      })
       setHasEmail(true)
     } catch (err) {
       // setError('Some error occurred creating mailbox.')
       console.error(err)
     }
   }
-  const handleClickFetchMessages = async () => {
-    setMessages(await Textile.listInboxMessages())
-  }
   const handleClickSendMessage = async () => {
-    await Textile.sendMessage(
-      'bbaareicl5xlgj3ebo6txtbhugsnx6idu4rnvw6w55zr4ejlapb2az2yusm',
-      JSON.stringify({
-        _id: 'SOME HASH OR URL',
-        plugin: 'EIN',
-        currency: 'DAI',
-        amount: 5,
-        body: {
-          field1: 'aaaa',
-          field2: 'bbbb',
-        },
-      })
-    )
+    // ASSINAR COM TEXTILE IDENTITY
+    const web3 = await Web3Modal.getWeb3()
+    if (!web3 || !privatekey) return
+    // await requestPaymentWyre(WyreEnv.TEST, 5)
+    const message: PaymentMessage = {
+      _id: 'SOME HASH OR URL',
+      plugin: 'EIN',
+      currency: 'DAI',
+      amount: 5,
+      body: {
+        field1: 'aaaa',
+        field2: 'bbbb',
+      },
+    }
+    await Textile.sendMessage(privatekey.public.toString(), {
+      method: 'payment',
+      message,
+    })
   }
   const handleDelete = async (id: string) => {
     if (!privatekey) return
     await Textile.deleteMessage(id)
+    console.log('DELETED', id)
   }
   const handleChangeAliasTemp = (event) => {
     setAlias(event.target.value)
@@ -165,7 +208,7 @@ const SeriesIdentity: FC<Props> = ({
                 </thead>
                 <tbody>
                   <ListMessages
-                    messages={messages}
+                    messages={inboxMessages}
                     handleDelete={handleDelete}
                   ></ListMessages>
                 </tbody>
@@ -187,7 +230,7 @@ const SeriesIdentity: FC<Props> = ({
                 </thead>
                 <tbody>
                   <ListMessages
-                    messages={messages}
+                    messages={outboxMessages}
                     handleDelete={handleDelete}
                   ></ListMessages>
                 </tbody>
@@ -280,12 +323,6 @@ const SeriesIdentity: FC<Props> = ({
             </div>
           </div>
           <button
-            className="btn btn-primary"
-            onClick={handleClickFetchMessages}
-          >
-            Refresh Messages
-          </button>
-          <button
             className="btn btn-primary mx-2"
             onClick={handleClickSendMessage}
           >
@@ -301,6 +338,8 @@ export default connect((state: IState) => ({
   account: state.account.account,
   network: state.account.network,
   alias: state.account.alias,
+  inboxMessages: state.account.inboxMessages,
+  outboxMessages: state.account.outboxMessages,
   privatekey: state.account.privatekey,
   managing: state.management.managing,
 }))(SeriesIdentity)

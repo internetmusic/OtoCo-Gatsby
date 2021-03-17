@@ -13,8 +13,7 @@ const DashboardIndex: React.FC<Props> = ({ location }: Props) => {
     <Layout location={location}>
       <Helmet title="Otoco - Administration" defer={false} />
       <div className="container-sm limiter-md content">
-        <h1>Admin Tool</h1>
-        <h5 className="mb-4">Change taxes and token used.</h5>
+        <h1>Admin Section</h1>
         <Admin></Admin>
       </div>
     </Layout>

@@ -8,10 +8,15 @@ import {
   UserMessage,
   UserAuth,
   Identity,
+  MailboxEvent,
+  MailboxEventType,
 } from '@textile/hub'
 import aes256 from 'aes256'
-import Oracle from './oracle'
-import { CachedWallet, DecryptedInbox } from '../state/account/types'
+import {
+  CachedWallet,
+  DecryptedMailbox,
+  MessageSchema,
+} from '../state/account/types'
 
 const keyInfo: KeyInfo = {
   key: process.env.GATSBY_TEXTILE_UNSAFE_KEY,
@@ -22,9 +27,15 @@ const oraclePublicKey = process.env.GATSBY_ORACLE_KEY
 const messageDecoder = async (
   message: UserMessage,
   privateKey: PrivateKey
-): Promise<DecryptedInbox> => {
+): Promise<DecryptedMailbox> => {
   const bytes = await privateKey.decrypt(message.body)
-  const body = new TextDecoder().decode(bytes)
+  const bodyString = new TextDecoder().decode(bytes)
+  let body: any
+  try {
+    body = JSON.parse(bodyString)
+  } catch (err) {
+    body = bodyString
+  }
   const { from } = message
   const { readAt } = message
   const { createdAt } = message
@@ -38,12 +49,18 @@ interface TextileInterface {
   privateKey?: PrivateKey
   authorized: string | null
   lastAuthorization: number | null
+  callbackInbox: (message: DecryptedMailbox) => void | null
   generateMessageForEntropy: (
     address: string,
     application_name: string,
     secret: string
   ) => string
+  generateMessageForPublicKeyValidation: (publickey: string) => string
   generateIdentity: (address: string) => Promise<PrivateKey | null>
+  generatePublicKeyValidation: (
+    address: string,
+    publickey: string
+  ) => Promise<string | null>
   storePrivateKey: (address: string, secret: string) => Promise<PrivateKey>
   fetchIdentity: (
     address: string,
@@ -51,9 +68,18 @@ interface TextileInterface {
   ) => Promise<CachedWallet | null>
   loginWithChallenge: (identity: Identity) => Promise<UserAuth>
   authorize: () => Promise<Client | null>
+  watchInbox: (
+    reply?: MailboxEvent | undefined,
+    err?: Error | undefined
+  ) => void
+  setCallbackInbox: (callback: (message: DecryptedMailbox) => void) => void
   refreshAuthorization: () => Promise<Client | null>
-  listInboxMessages: () => Promise<DecryptedInbox[]>
-  sendMessage: (to: string, message: string) => Promise<UserMessage | null>
+  listInboxMessages: () => Promise<DecryptedMailbox[]>
+  listOutboxMessages: () => Promise<DecryptedMailbox[]>
+  sendMessage: (
+    to: string,
+    message: MessageSchema
+  ) => Promise<UserMessage | null>
   deleteMessage: (id: string) => Promise<void>
 }
 
@@ -63,6 +89,7 @@ const Textile: TextileInterface = {
   privateKey: undefined,
   authorized: null, // Authorized Address
   lastAuthorization: null,
+  callbackInbox: null,
 
   generateMessageForEntropy(
     address: string,
@@ -92,6 +119,15 @@ const Textile: TextileInterface = {
       'ASSOCIATED WITH THE ABOVE ADDRESS AND APPLICATION. ' +
       'AGAIN, DO NOT SHARE THIS SIGNED MESSAGE WITH ANYONE OR THEY WILL HAVE READ AND ' +
       'WRITE ACCESS TO THIS APPLICATION. \n'
+    )
+  },
+
+  generateMessageForPublicKeyValidation(publickey: string): string {
+    return (
+      'THIS SIGNATURE SERVE TO THE PURPOSE OF \n' +
+      'VALIDATE THE OWNERSHIP OF YOUR PUBLIC KEY \n' +
+      'BY YOUR WALLET ADDRESS: \n' +
+      publickey
     )
   },
 
@@ -137,6 +173,21 @@ const Textile: TextileInterface = {
     )
     // Your app can now use this identity for generating a user Mailbox, Threads, Buckets, etc
     return this.privateKey
+  },
+
+  generatePublicKeyValidation: async function (
+    address: string,
+    publickey: string
+  ): Promise<string | null> {
+    try {
+      const web3: Web3 = window.web3
+      const message = this.generateMessageForPublicKeyValidation(publickey)
+      const signature = await web3.eth.personal.sign(message, address)
+      return signature
+    } catch (err) {
+      console.error('Signature Rejected.')
+    }
+    return null
   },
 
   fetchIdentity: async function (
@@ -223,8 +274,34 @@ const Textile: TextileInterface = {
     await this.user.setupMailbox()
     const now = new Date()
     this.lastAuthorization = now.getTime()
+    // await this.user.watchInbox(await this.user.getMailboxID(), this.watchInbox)
     console.log('AUTHORIZED')
     return this.client
+  },
+
+  watchInbox: async function (
+    reply?: MailboxEvent | undefined,
+    err?: Error | undefined
+  ) {
+    if (!reply || !reply.message) return console.log('no message')
+    // if (reply.type !== MailboxEventType.CREATE) {
+    //   console.log('REPLY TYPE', reply.type)
+    //   return
+    // }
+    if (!Textile.privateKey) return
+    const messageDecoded = await messageDecoder(
+      reply.message,
+      Textile.privateKey
+    )
+    console.log('Mailbox Callback', messageDecoded)
+    Textile.callbackInbox(messageDecoded)
+  },
+
+  setCallbackInbox: async function (
+    callback: (message: DecryptedMailbox) => void
+  ) {
+    console.log('CALLBACK SET')
+    this.callbackInbox = callback
   },
 
   refreshAuthorization: async function (): Promise<Client | null> {
@@ -236,13 +313,13 @@ const Textile: TextileInterface = {
   },
 
   // MAILBOX
-  listInboxMessages: async function (): Promise<DecryptedInbox[]> {
+  listInboxMessages: async function (): Promise<DecryptedMailbox[]> {
     await this.refreshAuthorization()
     // console.log('MESSAGES', this.user, this.privateKey)
     if (!this.user) return []
     if (!this.privateKey) return []
     const messages = await this.user.listInboxMessages()
-    console.log('MESSAGES', messages)
+    // console.log('MESSAGES', messages)
     const privateKey = PrivateKey.fromString(this.privateKey.toString())
     const messageList = Promise.all(
       messages.map(async function (m) {
@@ -252,12 +329,28 @@ const Textile: TextileInterface = {
     return messageList
   },
 
-  sendMessage: async function (to: string, message: string) {
+  listOutboxMessages: async function (): Promise<DecryptedMailbox[]> {
+    await this.refreshAuthorization()
+    // console.log('MESSAGES', this.user, this.privateKey)
+    if (!this.user) return []
+    if (!this.privateKey) return []
+    const messages = await this.user.listSentboxMessages()
+    // console.log('MESSAGES OUT', messages)
+    const privateKey = PrivateKey.fromString(this.privateKey.toString())
+    const messageList = Promise.all(
+      messages.map(async function (m) {
+        return await messageDecoder(m, privateKey)
+      })
+    )
+    return messageList
+  },
+
+  sendMessage: async function (to: string, message: MessageSchema) {
     await this.refreshAuthorization()
     if (!this.user) return null
     if (!this.privateKey) return null
     const toPublicKey: PublicKey = PublicKey.fromString(to)
-    const encoded = new TextEncoder().encode(message)
+    const encoded = new TextEncoder().encode(JSON.stringify(message))
     // const encryptedEncoded = await toPublicKey.encrypt(encoded)
     // const decoded = new TextDecoder().decode(encryptedEncoded).toString()
     return await this.user.sendMessage(this.privateKey, toPublicKey, encoded)
@@ -266,7 +359,9 @@ const Textile: TextileInterface = {
   deleteMessage: async function (id: string) {
     await this.refreshAuthorization()
     if (!this.user) return
-    return await this.user.deleteInboxMessage(id)
+    // Delete from both cause it only exist in one
+    await this.user.deleteSentboxMessage(id)
+    await this.user.deleteInboxMessage(id)
   },
 
   // SHARABLE BUCKETS
