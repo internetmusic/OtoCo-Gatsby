@@ -1,8 +1,8 @@
 import React from 'react'
 import { Router } from '@reach/router'
 import { Helmet } from 'react-helmet'
-import Token from '../../components/token/token'
-import Layout from '../../components/dashboard/layout/layout'
+import Token from '../components/token/token'
+import Layout from '../components/dashboard/layout/layout'
 
 interface Props {
   location: Location
@@ -13,7 +13,7 @@ const TokenIndex: React.FC<Props> = ({ location }: Props) => {
     <Layout location={location}>
       <Helmet title="Otoco - Token Transfer Tool" defer={false} />
       <Router>
-        <Token path="/dashpanel/token/:id" />
+        <Token path="/token/:id" />
       </Router>
     </Layout>
   )

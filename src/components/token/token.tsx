@@ -253,7 +253,7 @@ const Token: FC<Props> = ({
       {managing && (
         <Link
           className="btn btn-back btn-primary-outline btn-sm"
-          to={`/dashpanel/company/${managing?.contract}`}
+          to={`/dashpanel/${managing?.contract}`}
         >
           <Icon icon={faChevronLeft} />
           <span style={{ paddingLeft: '10px' }}>Back to Entity</span>
@@ -262,7 +262,7 @@ const Token: FC<Props> = ({
       {!managing && (
         <Link
           className="btn btn-back btn-primary-outline btn-sm"
-          to={`/dashpanel/`}
+          to={`/account/`}
         >
           <Icon icon={faChevronLeft} />
           <span style={{ paddingLeft: '10px' }}>Back to Dashpanel</span>

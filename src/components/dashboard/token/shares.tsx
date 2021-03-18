@@ -196,7 +196,7 @@ const Shares: FC<Props> = ({
       </table>
       <Link
         className="btn btn-primary"
-        to={`/dashpanel/token/${tokenDeployed?.contract}`}
+        to={`/token/${tokenDeployed?.contract}`}
       >
         Transfer Tokens
       </Link>

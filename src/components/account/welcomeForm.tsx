@@ -1,20 +1,20 @@
 import React, { Dispatch, FC, useState } from 'react'
 import { connect } from 'react-redux'
-import { IState } from '../../../state/types'
+import { IState } from '../../state/types'
 
-import BotImage from '../../../../static/img/bot.svg'
-import Textile from '../../../services/textile'
+import BotImage from '../../../static/img/bot.svg'
+import Textile from '../../services/textile'
 
 import {
   SET_CONTACT_FORM,
   SeriesType,
   ManagementActionTypes,
-} from '../../../state/management/types'
+} from '../../state/management/types'
 import {
   SET_PRIVATEKEY,
   AccountActionTypes,
   DecryptedMailbox,
-} from '../../../state/account/types'
+} from '../../state/account/types'
 import { PrivateKey } from '@textile/hub'
 import { Link } from 'gatsby'
 import { Mailbox } from 'react-bootstrap-icons'
@@ -108,7 +108,7 @@ const MailboxForm: FC<Props> = ({
                     <p>You have {inboxMessages.length} new messages.</p>
                     <Link
                       className="btn btn-primary-outline"
-                      to={`/dashpanel/identity/`}
+                      to={`/account/details/`}
                     >
                       <Mailbox className="me-2" />
                       Go to Mailbox

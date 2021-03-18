@@ -126,7 +126,7 @@ const AccountWidget: FC<Props> = ({
             {!collapsed && privatekey != undefined && (
               <Link
                 className="pb-3 pt-2 px-3 shine-on-hover"
-                to="/dashpanel/identity"
+                to="/account/messages/"
               >
                 <PencilSquare className="me-3" />
                 Access Wallet Mailbox

@@ -6,10 +6,9 @@ import { IState } from '../../../state/types'
 import Textile from '../../../services/textile'
 import { PrivateKey } from '@textile/hub'
 import KeyWidget from '../../keyWidget/keyWidget'
-import NotificationForm from './notificationForm'
+import NotificationForm from '../welcomeForm'
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons'
 import Icon from '../../icon/icon'
-import oracle from '../../../services/oracle'
 import Web3Modal from '../../../services/web3-integrate'
 import { requestPaymentWyre, WyreEnv } from '../../../services/wyre'
 
@@ -28,6 +27,8 @@ import {
   SET_OUTBOX_MESSAGES,
 } from '../../../state/account/types'
 import ReactJson from 'react-json-view'
+
+import '../style.scss'
 
 interface Props {
   account?: string
@@ -137,31 +138,6 @@ const SeriesIdentity: FC<Props> = ({
       console.error(err)
     }
   }
-  const handleClickSendMessage = async () => {
-    // ASSINAR COM TEXTILE IDENTITY
-    const web3 = await Web3Modal.getWeb3()
-    if (!web3 || !privatekey) return
-    // await requestPaymentWyre(WyreEnv.TEST, 5)
-    const message: PaymentMessage = {
-      _id: 'SOME HASH OR URL',
-      plugin: 'EIN',
-      currency: 'DAI',
-      amount: 5,
-      body: {
-        field1: 'aaaa',
-        field2: 'bbbb',
-      },
-    }
-    await Textile.sendMessage(privatekey.public.toString(), {
-      method: 'payment',
-      message,
-    })
-  }
-  const handleDelete = async (id: string) => {
-    if (!privatekey) return
-    await Textile.deleteMessage(id)
-    console.log('DELETED', id)
-  }
   const handleChangeAliasTemp = (event) => {
     setAlias(event.target.value)
   }
@@ -179,67 +155,36 @@ const SeriesIdentity: FC<Props> = ({
     <div className="container-sm limiter-md content">
       <Link
         className="btn btn-back btn-primary-outline btn-sm"
-        to={`/dashpanel/`}
+        to={`/account/`}
       >
         <Icon icon={faChevronLeft} />
-        <span style={{ paddingLeft: '10px' }}>Back to Dashpanel</span>
+        <span style={{ paddingLeft: '10px' }}>Back to Account</span>
       </Link>
-      <h1>Wallet Mailbox</h1>
-      <h5 className="mb-4">
-        Local stored mailbox. With end-to-end encryption to send/receive
-        messages, create verified certifications and store encrypted documents
-        on IPFS.
-      </h5>
       {!privatekey && <NotificationForm></NotificationForm>}
       {privatekey && (
         <div>
           <div className="card">
             <div className="card-body">
-              <h5>inbox</h5>
-              <table className="table table-hover mb-5">
-                <thead>
-                  <tr>
-                    <th scope="col">From</th>
-                    <th scope="col">Message</th>
-                    <th scope="col" className="d-none d-md-block">
-                      Action
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <ListMessages
-                    messages={inboxMessages}
-                    handleDelete={handleDelete}
-                  ></ListMessages>
-                </tbody>
-              </table>
-            </div>
-          </div>
-          <div className="card">
-            <div className="card-body">
-              <h5>sent</h5>
-              <table className="table table-hover mb-5">
-                <thead>
-                  <tr>
-                    <th scope="col">To</th>
-                    <th scope="col">Message</th>
-                    <th scope="col" className="d-none d-md-block">
-                      Action
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <ListMessages
-                    messages={outboxMessages}
-                    handleDelete={handleDelete}
-                  ></ListMessages>
-                </tbody>
-              </table>
-            </div>
-          </div>
-          <h1>Wallet Settings</h1>
-          <div className="card">
-            <div className="card-body">
+              <ul className="nav justify-content-left">
+                <li className="nav-item">
+                  <Link
+                    className="nav-link"
+                    aria-current="page"
+                    to="/account/messages"
+                  >
+                    Messages
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <Link
+                    className="nav-link active"
+                    aria-current="page"
+                    to="/account/settings"
+                  >
+                    Settings
+                  </Link>
+                </li>
+              </ul>
               Your Public Key:{' '}
               <KeyWidget publickey={privatekey.public.toString()}></KeyWidget>
               {!hasEmail && (
@@ -322,12 +267,6 @@ const SeriesIdentity: FC<Props> = ({
               </div>
             </div>
           </div>
-          <button
-            className="btn btn-primary mx-2"
-            onClick={handleClickSendMessage}
-          >
-            Send Payment Message
-          </button>
         </div>
       )}
     </div>

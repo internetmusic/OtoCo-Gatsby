@@ -11,7 +11,7 @@ module.exports = {
   plugins: [
     {
       resolve: `gatsby-plugin-create-client-paths`,
-      options: { prefixes: [`/dashpanel/token/*`, `/dashpanel/company/*`] },
+      options: { prefixes: [`/token/*`, `/dashpanel/*`] },
     },
     {
       resolve: 'gatsby-plugin-firebase',

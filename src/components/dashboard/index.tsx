@@ -2,26 +2,26 @@ import React, { Dispatch, FC, useState } from 'react'
 import Web3 from 'web3'
 import { connect } from 'react-redux'
 import { ChevronLeft } from 'react-bootstrap-icons'
-import Web3Integrate from '../../../services/web3-integrate'
+import Web3Integrate from '../../services/web3-integrate'
 
-import { SET_ACCOUNT, SET_NETWORK } from '../../../state/account/types'
+import { SET_ACCOUNT, SET_NETWORK } from '../../state/account/types'
 import {
   SeriesType,
   ManageSection,
   SET_MANAGE_SERIES,
   ManagementActionTypes,
-} from '../../../state/management/types'
-import { IState } from '../../../state/types'
-import { IJurisdictionOption } from '../../../state/spinUp/types'
+} from '../../state/management/types'
+import { IState } from '../../state/types'
+import { IJurisdictionOption } from '../../state/spinUp/types'
 
-import MainContract from '../../../smart-contracts/MainContract'
-import SeriesContract from '../../../smart-contracts/SeriesContract'
+import MainContract from '../../smart-contracts/MainContract'
+import SeriesContract from '../../smart-contracts/SeriesContract'
 
-import SeriesDocuments from '../legal'
-import SeriesENS from '../ens'
-import SeriesToken from '../token'
-import SeriesMultisig from '../multisig'
-import SeriesOverview from '../overview'
+import SeriesDocuments from './legal'
+import SeriesENS from './ens'
+import SeriesToken from './token'
+import SeriesMultisig from './multisig'
+import SeriesOverview from './overview'
 import { Link } from 'gatsby'
 import { CSSTransition } from 'react-transition-group'
 
@@ -104,10 +104,10 @@ const SeriesManagement: FC<Props> = ({
     <div className="container-sm limiter-md content">
       <Link
         className="btn btn-back btn-primary-outline btn-sm"
-        to={`/dashpanel/`}
+        to={`/account/`}
       >
         <ChevronLeft className="fix-icon-alignment" />
-        <span style={{ paddingLeft: '0.5em' }}>Back to Dashpanel</span>
+        <span style={{ paddingLeft: '0.5em' }}>Back to Account</span>
       </Link>
       <CSSTransition
         in={loading}

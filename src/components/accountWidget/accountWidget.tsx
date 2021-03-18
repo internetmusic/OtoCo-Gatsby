@@ -144,7 +144,7 @@ const AccountWidget: FC<Props> = ({
                   {account.substring(account.length - 4, account.length)}
                 </span>
               )}
-              <Link to="/dashpanel/identity">
+              <Link to="/account/messages/">
                 {inboxMessages.length > 0 && (
                   <BellFill className="mx-3 text-warning bell-animation" />
                 )}
@@ -155,16 +155,16 @@ const AccountWidget: FC<Props> = ({
             {!collapsed && privatekey != undefined && (
               <div className="pt-3 pb-2 px-3 with-divider shine-on-hover">
                 <Clipboard className="me-3" />
-                Copy Mailbox Public Key
+                Copy Account Public Key
               </div>
             )}
             {!collapsed && privatekey != undefined && (
               <Link
                 className="pb-3 pt-2 px-3 shine-on-hover"
-                to="/dashpanel/identity"
+                to="/account/settings"
               >
                 <PencilSquare className="me-3" />
-                Access Wallet Mailbox
+                My Account settings
               </Link>
             )}
             {!collapsed && (

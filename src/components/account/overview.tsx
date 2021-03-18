@@ -5,10 +5,7 @@ import { CSSTransition } from 'react-transition-group'
 import { IState } from '../../state/types'
 import Web3Integrate from '../../services/web3-integrate'
 import SeriesListing from './seriesListing'
-import NotificationForm from './identity/notificationForm'
-
-// import database from '../../services/firebase'
-import oracle from '../../services/oracle'
+import WelcomeForm from './welcomeForm'
 
 import MainContract from '../../smart-contracts/MainContract'
 import SeriesContract from '../../smart-contracts/SeriesContract'
@@ -45,7 +42,7 @@ interface Props {
   >
 }
 
-const Dashboard: FC<Props> = ({
+const Overview: FC<Props> = ({
   account,
   network,
   series,
@@ -132,8 +129,8 @@ const Dashboard: FC<Props> = ({
 
   return (
     <div className="container-sm limiter-lg content">
-      <h5>mailbox</h5>
-      <NotificationForm></NotificationForm>
+      <h5>account</h5>
+      <WelcomeForm></WelcomeForm>
       <h5>companies</h5>
       <CSSTransition
         in={loading}
@@ -195,4 +192,4 @@ export default connect((state: IState) => ({
   jurisdictionOptions: state.spinUp.jurisdictionOptions,
   series: state.management.series,
   contactForm: state.management.contactForm,
-}))(Dashboard)
+}))(Overview)
