@@ -18,6 +18,18 @@ export interface PaymentMessage {
   body: unknown
 }
 
+export interface BroadcastFilter {
+  jurisdiction?: string
+}
+
+export interface BroadcastMessage {
+  title?: string
+  message?: string
+  link?: string
+  icon?: string
+  filter?: BroadcastFilter
+}
+
 export interface WalletMessage {
   _id: string
   email: string
@@ -27,12 +39,12 @@ export interface WalletMessage {
 
 export interface MessageSchema {
   method: string
-  message: PaymentMessage
+  message: PaymentMessage | WalletMessage | BroadcastMessage
 }
 
 export interface DecryptedMailbox {
   id: string
-  body: unknown
+  body: any
   from: string
   sent: number
   readAt?: number

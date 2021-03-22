@@ -2,44 +2,27 @@ import React, { FC, Dispatch, useState } from 'react'
 import Web3 from 'web3'
 import BN from 'bn.js'
 import { connect } from 'react-redux'
-import { IState } from '../../state/types'
-import Web3Integrate from '../../services/web3-integrate'
-import MainContract from '../../smart-contracts/MainContract'
-import ERC20 from '../../smart-contracts/ERC20'
+import { IState } from '../../../state/types'
+import MainContract from '../../../smart-contracts/MainContract'
+import ERC20 from '../../../smart-contracts/ERC20'
 
 import {
   SET_ACCOUNT,
   SET_NETWORK,
   AccountActionTypes,
-} from '../../state/account/types'
+} from '../../../state/account/types'
 
-import {
-  SeriesType,
-  SET_OWN_SERIES,
-  ManagementActionTypes,
-} from '../../state/management/types'
-
-import { IJurisdictionOption } from '../../state/spinUp/types'
+import { ManagementActionTypes } from '../../../state/management/types'
 
 interface Props {
   account?: string
   network?: string
-  series: SeriesType[]
-  managing?: SeriesType
-  jurisdictionOptions: IJurisdictionOption[]
   dispatch: Dispatch<
     AccountActionTypes | ManagementActionTypes | AccountActionTypes
   >
 }
 
-const Admin: FC<Props> = ({
-  account,
-  network,
-  managing,
-  series,
-  jurisdictionOptions,
-  dispatch,
-}: Props) => {
+const Master: FC<Props> = ({ account, network, dispatch }: Props) => {
   const [error, setError] = useState<string | null>(null)
   const [tokenAddress, setTokenAddress] = useState('')
   const [amountTax, setAmount] = useState('')
@@ -53,17 +36,7 @@ const Admin: FC<Props> = ({
 
   React.useEffect(() => {
     setTimeout(async () => {
-      if (!account) {
-        await Web3Integrate.callModal()
-        const web3: Web3 = window.web3
-        const accounts = await web3.eth.getAccounts()
-        dispatch({
-          type: SET_NETWORK,
-          payload: await web3.eth.net.getNetworkType(),
-        })
-        dispatch({ type: SET_ACCOUNT, payload: accounts[0] })
-        return
-      }
+      if (!account) return
       const web3: Web3 = window.web3
       const accounts = await web3.eth.getAccounts()
       console.log(network)
@@ -240,7 +213,4 @@ const Admin: FC<Props> = ({
 export default connect((state: IState) => ({
   account: state.account.account,
   network: state.account.network,
-  jurisdictionOptions: state.spinUp.jurisdictionOptions,
-  managing: state.management.managing,
-  series: state.management.series,
-}))(Admin)
+}))(Master)

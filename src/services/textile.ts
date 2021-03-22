@@ -213,10 +213,9 @@ const Textile: TextileInterface = {
        *
        * Note: this should be upgraded to wss for production environments.
        */
-      const socketUrl = `ws://localhost:3000/`
 
       /** Initialize our websocket connection */
-      const socket = new WebSocket(socketUrl)
+      const socket = new WebSocket(process.env.GATSBY_ORACLE_URL)
 
       /** Wait for our socket to open successfully */
       socket.onopen = () => {

@@ -5,84 +5,32 @@ import { connect } from 'react-redux'
 import { IState } from '../../../state/types'
 import Textile from '../../../services/textile'
 import { PrivateKey } from '@textile/hub'
-import KeyWidget from '../../keyWidget/keyWidget'
 import NotificationForm from '../welcomeForm'
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons'
 import Icon from '../../icon/icon'
 import Web3Modal from '../../../services/web3-integrate'
 import { requestPaymentWyre, WyreEnv } from '../../../services/wyre'
+import { ListInboxMessages } from './listInboxMessages'
+import { ListOutboxMessages } from './listOutboxMessages'
 
-import {
-  SeriesType,
-  ManagementActionTypes,
-} from '../../../state/management/types'
+import { ManagementActionTypes } from '../../../state/management/types'
 import {
   AccountActionTypes,
-  SET_ALIAS,
   DecryptedMailbox,
-  CachedWallet,
-  SET_PRIVATEKEY,
   PaymentMessage,
   SET_INBOX_MESSAGES,
   SET_OUTBOX_MESSAGES,
 } from '../../../state/account/types'
-import ReactJson from 'react-json-view'
 
 interface Props {
   account?: string
-  network?: string
-  managing?: SeriesType
-  alias?: string
   privatekey?: PrivateKey
   inboxMessages: DecryptedMailbox[]
   outboxMessages: DecryptedMailbox[]
   dispatch: Dispatch<ManagementActionTypes | AccountActionTypes>
 }
 
-interface ListMessagesProps {
-  messages: DecryptedMailbox[]
-  handleDelete: (id: string) => Promise<void>
-}
-
-const ListMessages = ({ messages, handleDelete }: ListMessagesProps) => {
-  return messages.map((m) => (
-    <tr key={m.id}>
-      {/* <td>{m.from.substring(0, 5)} ...</td> */}
-      <td>
-        {m.from.substring(0, 5)}...
-        {m.from.substring(m.from.length - 5, m.from.length)}
-      </td>
-      <td>
-        <ReactJson
-          src={m.body}
-          theme="monokai"
-          collapseStringsAfterLength={8}
-          displayDataTypes={false}
-          displayObjectSize={false}
-          collapsed={true}
-          enableClipboard={false}
-          style={{
-            background: 'transparent',
-          }}
-        />
-      </td>
-      <td className="d-none d-md-block">
-        <button
-          className="btn btn-primary btn-sm"
-          onClick={handleDelete.bind(undefined, m.id)}
-        >
-          erase
-        </button>
-      </td>
-    </tr>
-  ))
-}
-
 const SeriesIdentity: FC<Props> = ({
-  account,
-  network,
-  managing,
-  alias,
   privatekey,
   inboxMessages,
   outboxMessages,
@@ -99,7 +47,7 @@ const SeriesIdentity: FC<Props> = ({
         payload: await Textile.listOutboxMessages(),
       })
     }, 0)
-  }, [account])
+  }, [privatekey])
 
   const handleClickSendMessage = async () => {
     // ASSINAR COM TEXTILE IDENTITY
@@ -121,6 +69,7 @@ const SeriesIdentity: FC<Props> = ({
       message,
     })
   }
+
   const handleDelete = async (id: string) => {
     if (!privatekey) return
     await Textile.deleteMessage(id)
@@ -173,17 +122,17 @@ const SeriesIdentity: FC<Props> = ({
                   </tr>
                 </thead>
                 <tbody>
-                  <ListMessages
+                  <ListInboxMessages
+                    publicKey={privatekey.public.toString()}
                     messages={inboxMessages}
                     handleDelete={handleDelete}
-                  ></ListMessages>
+                  ></ListInboxMessages>
                 </tbody>
               </table>
               <h5>sent</h5>
               <table className="table table-hover mb-5">
                 <thead>
                   <tr>
-                    <th scope="col">To</th>
                     <th scope="col">Message</th>
                     <th scope="col" className="d-none d-md-block">
                       Action
@@ -191,10 +140,11 @@ const SeriesIdentity: FC<Props> = ({
                   </tr>
                 </thead>
                 <tbody>
-                  <ListMessages
+                  <ListOutboxMessages
+                    publicKey={privatekey.public.toString()}
                     messages={outboxMessages}
                     handleDelete={handleDelete}
-                  ></ListMessages>
+                  ></ListOutboxMessages>
                 </tbody>
               </table>
             </div>
@@ -213,10 +163,7 @@ const SeriesIdentity: FC<Props> = ({
 
 export default connect((state: IState) => ({
   account: state.account.account,
-  network: state.account.network,
-  alias: state.account.alias,
   inboxMessages: state.account.inboxMessages,
   outboxMessages: state.account.outboxMessages,
   privatekey: state.account.privatekey,
-  managing: state.management.managing,
 }))(SeriesIdentity)

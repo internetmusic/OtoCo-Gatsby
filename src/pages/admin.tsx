@@ -1,7 +1,7 @@
 import React from 'react'
 import { Helmet } from 'react-helmet'
 import Layout from '../components/layout/layout'
-import Admin from '../components/admin/admin'
+import Admin from '../components/admin'
 
 interface Props {
   location: Location
