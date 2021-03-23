@@ -2,7 +2,9 @@ import React from 'react'
 import { Router } from '@reach/router'
 import { Helmet } from 'react-helmet'
 import Token from '../components/token/token'
-import Layout from '../components/dashboard/layout/layout'
+import loadable from '@loadable/component'
+const Layout = loadable(() => import('../components/dashboard/layout/layout'))
+// import Layout from '../components/dashboard/layout/layout'
 
 interface Props {
   location: Location

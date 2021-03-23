@@ -1,9 +1,12 @@
 import React from 'react'
+import loadable from '@loadable/component'
 import { withPrefix } from 'gatsby'
 import { Helmet } from 'react-helmet'
 import { Router } from '@reach/router'
-import Layout from '../components/dashboard/layout/layout'
-import Company from '../components/dashboard'
+const Layout = loadable(() => import('../components/dashboard/layout/layout'))
+// import Layout from '../components/dashboard/layout/layout'
+const Company = loadable(() => import('../components/dashboard'))
+// import Company from '../components/dashboard'
 
 interface Props {
   location: Location

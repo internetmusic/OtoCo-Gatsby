@@ -1,7 +1,12 @@
 import React from 'react'
+import loadable from '@loadable/component'
 import { Helmet } from 'react-helmet'
-import Layout from '../../components/dashboard/layout/layout'
-import Messages from '../../components/account/messages'
+const Layout = loadable(
+  () => import('../../components/dashboard/layout/layout')
+)
+// import Layout from '../../components/dashboard/layout/layout'
+const Messages = loadable(() => import('../../components/account/messages'))
+// import Messages from '../../components/account/messages'
 
 interface Props {
   location: Location

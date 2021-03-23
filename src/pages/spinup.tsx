@@ -2,8 +2,9 @@ import React from 'react'
 import { Link } from 'gatsby'
 
 import { Helmet } from 'react-helmet'
-
-import Layout from '../components/layout/layout'
+import loadable from '@loadable/component'
+const Layout = loadable(() => import('../components/layout/layout'))
+// import Layout from '../components/layout/layout'
 import Icon from '../components/icon/icon'
 import SpinUp from '../components/spinUp/spinUp'
 import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons'

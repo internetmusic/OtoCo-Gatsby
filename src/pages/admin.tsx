@@ -1,7 +1,10 @@
+import loadable from '@loadable/component'
 import React from 'react'
 import { Helmet } from 'react-helmet'
-import Layout from '../components/layout/layout'
-import Admin from '../components/admin'
+const Layout = loadable(() => import('../components/layout/layout'))
+// import Layout from '../components/layout/layout'
+const Admin = loadable(() => import('../components/admin'))
+// import Admin from '../components/admin'
 
 interface Props {
   location: Location

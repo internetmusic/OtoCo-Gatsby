@@ -1,5 +1,7 @@
 import React from 'react'
-import Layout from '../components/layout/layout'
+import loadable from '@loadable/component'
+const Layout = loadable(() => import('../components/layout/layout'))
+// import Layout from '../components/layout/layout'
 
 const NotFoundPage: React.VoidFunctionComponent = () => {
   return (
