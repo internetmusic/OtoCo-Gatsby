@@ -41,6 +41,7 @@ const Broadcast: FC<Props> = ({ privatekey }: Props) => {
 
   const handleBroadcastMessage = async (val) => {
     if (!privatekey) return
+    if (!process.env.GATSBY_ORACLE_KEY) return
     console.log('BROADCAST', title, link, description, jurisdiction)
 
     const message: BroadcastMessage = {
@@ -48,6 +49,12 @@ const Broadcast: FC<Props> = ({ privatekey }: Props) => {
       message: description,
       link,
       icon: '',
+    }
+
+    if (jurisdiction) {
+      message.filter = {
+        jurisdiction,
+      }
     }
 
     await Textile.sendMessage(process.env.GATSBY_ORACLE_KEY, {

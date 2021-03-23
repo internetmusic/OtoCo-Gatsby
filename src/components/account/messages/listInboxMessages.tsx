@@ -3,6 +3,7 @@ import ReactJson from 'react-json-view'
 import { DecryptedMailbox } from '../../../state/account/types'
 import { BroadcastMessage } from './broadcastMessage'
 import { WalletMessage } from './walletMessage'
+import { Trash } from 'react-bootstrap-icons'
 
 interface ListMessagesProps {
   publicKey: string
@@ -20,8 +21,16 @@ export const ListInboxMessages = ({
 }: ListMessagesProps) => {
   return messages.map((m) => (
     <tr key={m.id}>
-      {publicKey == m.from && <span>me</span>}
-      {oraclePublicKey == m.from && <span>oracle</span>}
+      {publicKey == m.from && (
+        <td>
+          <span>me</span>
+        </td>
+      )}
+      {oraclePublicKey == m.from && (
+        <td>
+          <span>otoco</span>
+        </td>
+      )}
       {oraclePublicKey != m.from && publicKey != m.from && (
         <td>
           {m.from.substring(0, 5)} ...
@@ -50,7 +59,7 @@ export const ListInboxMessages = ({
           <BroadcastMessage message={m}></BroadcastMessage>
         )}
       </td>
-      <td className="d-none d-md-block">
+      <td className="d-none d-md-block" style={{ textAlign: 'right' }}>
         {m.body.method == 'broadcast' && (
           <a className="btn btn-primary btn-sm me-2" href={m.body.message.link}>
             visit
@@ -60,7 +69,7 @@ export const ListInboxMessages = ({
           className="btn btn-primary btn-sm me-2"
           onClick={handleDelete.bind(undefined, m.id)}
         >
-          erase
+          <Trash />
         </button>
       </td>
     </tr>

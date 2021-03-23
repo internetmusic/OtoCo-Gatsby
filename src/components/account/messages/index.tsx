@@ -116,7 +116,11 @@ const SeriesIdentity: FC<Props> = ({
                   <tr>
                     <th scope="col">From</th>
                     <th scope="col">Message</th>
-                    <th scope="col" className="d-none d-md-block">
+                    <th
+                      scope="col"
+                      className="d-none d-md-block"
+                      style={{ textAlign: 'right' }}
+                    >
                       Action
                     </th>
                   </tr>
@@ -134,7 +138,11 @@ const SeriesIdentity: FC<Props> = ({
                 <thead>
                   <tr>
                     <th scope="col">Message</th>
-                    <th scope="col" className="d-none d-md-block">
+                    <th
+                      scope="col"
+                      className="d-none d-md-block"
+                      style={{ textAlign: 'right' }}
+                    >
                       Action
                     </th>
                   </tr>

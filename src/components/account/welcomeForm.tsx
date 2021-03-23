@@ -108,7 +108,7 @@ const MailboxForm: FC<Props> = ({
                     <p>You have {inboxMessages.length} new messages.</p>
                     <Link
                       className="btn btn-primary-outline"
-                      to={`/account/details/`}
+                      to={`/account/messages/`}
                     >
                       <Mailbox className="me-2" />
                       Go to Mailbox

@@ -3,14 +3,13 @@ import ReactJson from 'react-json-view'
 import { DecryptedMailbox } from '../../../state/account/types'
 import { BroadcastMessage } from './broadcastMessage'
 import { WalletMessage } from './walletMessage'
+import { Trash } from 'react-bootstrap-icons'
 
 interface ListMessagesProps {
   publicKey: string
   messages: DecryptedMailbox[]
   handleDelete: (id: string) => Promise<void>
 }
-
-const oraclePublicKey = process.env.GATSBY_ORACLE_KEY
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const ListOutboxMessages = ({
@@ -42,12 +41,12 @@ export const ListOutboxMessages = ({
           <BroadcastMessage message={m}></BroadcastMessage>
         )}
       </td>
-      <td className="d-none d-md-block">
+      <td className="d-none d-md-block" style={{ textAlign: 'right' }}>
         <button
           className="btn btn-primary btn-sm"
           onClick={handleDelete.bind(undefined, m.id)}
         >
-          erase
+          <Trash></Trash>
         </button>
       </td>
     </tr>
