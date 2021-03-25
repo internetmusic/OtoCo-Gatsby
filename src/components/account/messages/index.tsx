@@ -46,6 +46,7 @@ const SeriesIdentity: FC<Props> = ({
         type: SET_OUTBOX_MESSAGES,
         payload: await Textile.listOutboxMessages(),
       })
+      console.log(inboxMessages)
     }, 0)
   }, [privatekey])
 
