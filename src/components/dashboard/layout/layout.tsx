@@ -1,9 +1,11 @@
 import React, { useEffect } from 'react'
-
-import Footer from '../../footer/footer'
-import Logo from '../../logo/logo'
-import AccountWidget from '../../accountWidget/accountWidget'
 import Sidebar from '../sidebar/index'
+import Footer from '../../footer/footer'
+// const AccountWidget from '../../accountWidget/accountWidget'
+import loadable from '@loadable/component'
+const AccountWidget = loadable(
+  () => import('../../accountWidget/accountWidget')
+)
 
 import './style.scss'
 

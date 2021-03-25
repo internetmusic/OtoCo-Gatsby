@@ -3,8 +3,8 @@ import loadable from '@loadable/component'
 import { withPrefix } from 'gatsby'
 import { Helmet } from 'react-helmet'
 import { Router } from '@reach/router'
-const Layout = loadable(() => import('../components/dashboard/layout/layout'))
-// import Layout from '../components/dashboard/layout/layout'
+// const Layout = loadable(() => import('../components/dashboard/layout/layout'))
+import Layout from '../components/dashboard/layout/layout'
 const Overview = loadable(() => import('../components/account/overview'))
 // import Overview from '../components/account/overview'
 

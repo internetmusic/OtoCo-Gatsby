@@ -1,8 +1,8 @@
-import loadable from '@loadable/component'
 import React from 'react'
+import loadable from '@loadable/component'
 import { Helmet } from 'react-helmet'
-const Layout = loadable(() => import('../components/layout/layout'))
-// import Layout from '../components/layout/layout'
+// const Layout = loadable(() => import('../components/layout/layout'))
+import Layout from '../components/layout/layout'
 const Admin = loadable(() => import('../components/admin'))
 // import Admin from '../components/admin'
 
