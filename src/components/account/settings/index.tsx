@@ -132,6 +132,15 @@ const SeriesIdentity: FC<Props> = ({
           email,
         },
       })
+      if (!account) return
+      const cachedString = localStorage.getItem(`did:eth:${account.substr(2)}`)
+      if (!cachedString) return null
+      const cached: CachedWallet = JSON.parse(cachedString)
+      cached.password = true
+      localStorage.setItem(
+        `did:eth:${account.substr(2)}`,
+        JSON.stringify(cached)
+      )
       setHasEmail(true)
     } catch (err) {
       // setError('Some error occurred creating mailbox.')
@@ -210,45 +219,43 @@ const SeriesIdentity: FC<Props> = ({
                   </div>
                 </div>
               )}
-              {!hasEmail && (
-                <div>
-                  <h5 className="mt-4">
-                    Use following form to encrypt your private-key locally:
-                  </h5>
-                  <div className="input-group my-2 col-12 col-md-8">
-                    <input
-                      type="text"
-                      className="form-control right"
-                      placeholder="choose a password"
-                      onChange={handleChangeEmail}
-                    />
-                    <div className="input-group-append">
-                      <div
-                        onClick={handleUpdateEmail}
-                        className="btn btn-primary disabled"
-                      >
-                        create password
-                      </div>
-                    </div>
-                  </div>
-                  <div className="input-group my-2 col-12 col-md-8">
-                    <input
-                      type="text"
-                      className="form-control right"
-                      placeholder="repeat password"
-                      onChange={handleChangeEmail}
-                    />
-                    <div className="input-group-append">
-                      <div
-                        onClick={handleUpdateEmail}
-                        className="btn btn-primary"
-                      >
-                        encrypt keys
-                      </div>
+              {/* <div>
+                <h5 className="mt-4">
+                  Use following form to encrypt your private-key locally:
+                </h5>
+                <div className="input-group my-2 col-12 col-md-8">
+                  <input
+                    type="text"
+                    className="form-control right"
+                    placeholder="choose a password"
+                    onChange={handleChangeEmail}
+                  />
+                  <div className="input-group-append">
+                    <div
+                      onClick={handleUpdateEmail}
+                      className="btn btn-primary disabled"
+                    >
+                      create password
                     </div>
                   </div>
                 </div>
-              )}
+                <div className="input-group my-2 col-12 col-md-8">
+                  <input
+                    type="text"
+                    className="form-control right"
+                    placeholder="repeat password"
+                    onChange={handleChangeEmail}
+                  />
+                  <div className="input-group-append">
+                    <div
+                      onClick={handleUpdateEmail}
+                      className="btn btn-primary"
+                    >
+                      encrypt keys
+                    </div>
+                  </div>
+                </div>
+              </div> */}
             </div>
             <div>
               <h5 className="mt-4">Create an alias to your wallet:</h5>

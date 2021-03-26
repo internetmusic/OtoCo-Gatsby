@@ -12,12 +12,17 @@ export enum ManageSection {
   PLUGINS = 'plugins',
 }
 
+export enum Badges {
+  FIRST = 'First Member',
+  MANAGEMENT = 'Manager',
+}
+
 export type SeriesType = {
   contract: string
-  owner: string
   name: string
   jurisdiction: string
   created: Date
+  badges: Badges[]
 }
 
 interface SetOwnSeries {

@@ -7,13 +7,14 @@ import { connect } from 'react-redux'
 // import { faCog } from '@fortawesome/free-solid-svg-icons'
 import { Gear } from 'react-bootstrap-icons'
 import AddressWidget from '../addressWidget/addressWidget'
-
+import { ShieldLock } from 'react-bootstrap-icons'
 import { IState } from '../../state/types'
 import Web3Integrate from '../../services/web3-integrate'
 import {
   SET_MANAGE_SERIES,
   ManagementActionTypes,
   SeriesType,
+  Badges,
 } from '../../state/management/types'
 import UTCDate from '../utcDate/utcDate'
 
@@ -23,6 +24,19 @@ import { Link } from 'gatsby'
 interface PropsSeries {
   series: SeriesType[]
   dispatch: Dispatch<ManagementActionTypes>
+}
+
+interface PropsBadges {
+  badges: Badges[]
+}
+
+const ListBadges = (props: PropsBadges) => {
+  return props.badges.map((badge, idx) => (
+    <span key={idx} className="owner-badge">
+      <ShieldLock className="me-1" />
+      {badge}
+    </span>
+  ))
 }
 
 const SeriesListing: React.FC<PropsSeries> = ({
@@ -42,8 +56,11 @@ const SeriesListing: React.FC<PropsSeries> = ({
           {/* <div className="card-text">
             Manager: <AddressWidget address={s.owner}></AddressWidget>
           </div> */}
-          <div className="card-text small">
+          {/* <div className="card-text small">
             Address: <AddressWidget address={s.contract}></AddressWidget>
+          </div> */}
+          <div>
+            <ListBadges badges={s.badges} />
           </div>
           <div className="card-text small">
             Creation: <UTCDate date={s.created} separator="-"></UTCDate>

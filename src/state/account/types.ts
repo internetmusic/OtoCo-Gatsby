@@ -52,7 +52,7 @@ export interface DecryptedMailbox {
 
 export interface CachedWallet {
   alias: string
-  password: string
+  password: boolean
   key: string
 }
 

@@ -10,6 +10,12 @@
   left: 24px;
 }
 
+.owner-badge {
+  float: left;
+  margin-right: 8px;
+  color: $cyan;
+}
+
 .jurisdiction {
   letter-spacing: 0.05em;
   color: $gray-200;
@@ -20,6 +26,17 @@
   position: absolute;
   height: 341px;
   top: -34px;
+}
+.bot-icon-small {
+  float: right;
+  position: absolute;
+  height: 182px;
+  top: -16px;
+  right: 40px;
+}
+
+.welcome {
+  background: $gradient-medium;
 }
 
 .nav {

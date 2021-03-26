@@ -2,7 +2,8 @@ import React, { Dispatch, FC, useState } from 'react'
 import { connect } from 'react-redux'
 import { IState } from '../../state/types'
 
-import BotImage from '../../../static/img/bot.svg'
+import BotImage from '../../../static/img/small-bot2.png'
+import BotSmallImage from '../../../static/img/small-bot.png'
 import Textile from '../../services/textile'
 
 import {
@@ -34,6 +35,10 @@ const MailboxForm: FC<Props> = ({
   dispatch,
 }: Props) => {
   const [loading, setLoading] = useState<boolean>(true)
+  const [creation, setCreation] = useState<{
+    step: number
+    message: string
+  } | null>(null)
 
   React.useEffect(() => {
     setTimeout(async () => {
@@ -43,15 +48,40 @@ const MailboxForm: FC<Props> = ({
     }, 0)
   }, [privatekey])
 
+  const setWaitTimer = () => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(true)
+      }, 1000)
+    })
+  }
+
   const handleClickCreate = async () => {
     try {
+      setCreation({
+        step: 1,
+        message: 'First we ask to sign a message to create a key pair.',
+      })
+      await setWaitTimer()
       const pk = await Textile.generateIdentity(account)
-      if (!pk) return
+      if (!pk) {
+        setCreation(null)
+        return
+      }
+      setCreation({
+        step: 2,
+        message:
+          'Now we ask you to sign a message to proof link between publickey and your wallet account.',
+      })
+      await setWaitTimer()
       const signature = await Textile.generatePublicKeyValidation(
         account,
         pk.public.toString()
       )
-      if (!signature) return
+      if (!signature) {
+        setCreation(null)
+        return
+      }
       const message = {
         _id: account,
         signature: signature,
@@ -68,65 +98,98 @@ const MailboxForm: FC<Props> = ({
   }
 
   return (
-    <div className="card">
-      <div className="card-body">
-        <div className="ui celled contact-form animate-slide">
-          {!loading && privatekey == undefined && (
-            <div className="row">
+    <div className="card welcome">
+      <div className="ui celled contact-form animate-slide">
+        {!loading && privatekey == undefined && (
+          <div className="row">
+            {!creation && (
               <div className="col-6 col-lg-8">
-                {/* <h3>Welcome to your Dashboard</h3> */}
+                <h4>Access everything in one place</h4>
                 <p className="small">
-                  Create an local mailbox to stabilish a communication gateway.
-                  This mailbox will store your data encrypted end-by-end with
-                  ECDSA key-pairs. For this, you only have to sign a message.
+                  Sign with your connected wallet to send and receive encrypted
+                  messages related to your entities, get file storage on IPFS,
+                  and authenticate your role in each company you're involved
+                  with.
                 </p>
                 <p>
                   <button
                     className="btn btn-primary"
                     onClick={handleClickCreate}
                   >
-                    Create Mailbox
+                    Activate
                   </button>
                 </p>
               </div>
-              <div className="d-none d-md-block col-6 col-lg-4">
+            )}
+            {creation && (
+              <div className="col-6 col-lg-8">
+                <h4>{creation.step == 1 ? 'First' : 'Last'} step</h4>
+                <p className="small">{creation.message}</p>
+                <p>
+                  <button
+                    className="btn btn-primary disabled"
+                    onClick={handleClickCreate}
+                  >
+                    activate
+                  </button>
+                </p>
+              </div>
+            )}
+            <div className="d-none d-md-block col-6 col-lg-4">
+              <img className="bot-icon" src={BotImage} />
+            </div>
+          </div>
+        )}
+        {!loading && privatekey != undefined && (
+          <div>
+            <div className="row">
+              <div className="col-8">
+                {inboxMessages.length == 0 && (
+                  <div>
+                    <h4>Encrypted messaging and file storage activated!</h4>
+                    <p className="small">No new messages.</p>
+                    <Link
+                      className="btn btn-primary-outline btn-sm"
+                      to={`/account/settings/`}
+                    >
+                      Go to Account Settings
+                    </Link>
+                  </div>
+                )}
+                {inboxMessages.length > 0 && (
+                  <div>
+                    <h4>Encrypted messaging and file storage activated!</h4>
+                    <p className="small">
+                      You have {inboxMessages.length} new messages.
+                    </p>
+                    <Link
+                      className="btn btn-primary-outline btn-sm"
+                      to={`/account/messages/`}
+                    >
+                      Go to Messages
+                    </Link>
+                  </div>
+                )}
+              </div>
+              <div className="d-none d-sm-block col-4 col-lg-4">
                 <img
-                  className="bot-icon"
-                  src={BotImage}
+                  className="bot-icon-small"
+                  src={BotSmallImage}
                   alt="Big Feature Icon"
                   height="128px"
                 />
               </div>
             </div>
-          )}
-          {!loading && privatekey != undefined && (
-            <div className="row">
-              <div className="col-6 col-lg-8">
-                {inboxMessages.length == 0 && <p>No new messages.</p>}
-                {inboxMessages.length > 0 && (
-                  <div>
-                    <p>You have {inboxMessages.length} new messages.</p>
-                    <Link
-                      className="btn btn-primary-outline"
-                      to={`/account/messages/`}
-                    >
-                      <Mailbox className="me-2" />
-                      Go to Mailbox
-                    </Link>
-                  </div>
-                )}
-              </div>
+          </div>
+        )}
+        {loading && (
+          <div className="row">
+            <div className="col-12 text-center">Loading</div>
+            <div className="col-12 text-center">
+              <div className="spinner-border" role="status"></div>
             </div>
-          )}
-          {loading && (
-            <div className="row">
-              <div className="col-12 text-center">Loading</div>
-              <div className="col-12 text-center">
-                <div className="spinner-border" role="status"></div>
-              </div>
-            </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   )

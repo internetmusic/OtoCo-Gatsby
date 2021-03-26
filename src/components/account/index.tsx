@@ -1,4 +1,5 @@
 import React, { FC, Dispatch, useState } from 'react'
+import Axios, { AxiosResponse } from 'axios'
 import Web3 from 'web3'
 import { connect } from 'react-redux'
 import { CSSTransition } from 'react-transition-group'
@@ -24,6 +25,7 @@ import {
   SET_OWN_SERIES,
   SET_CONTACT_FORM,
   ManagementActionTypes,
+  Badges,
 } from '../../state/management/types'
 
 import { IJurisdictionOption } from '../../state/spinUp/types'
@@ -42,15 +44,7 @@ interface Props {
   >
 }
 
-const Overview: FC<Props> = ({
-  account,
-  network,
-  series,
-  privatekey,
-  jurisdictionOptions,
-  contactForm,
-  dispatch,
-}: Props) => {
+const Overview: FC<Props> = ({ account, network, series, dispatch }: Props) => {
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState<boolean>(false)
 
@@ -77,7 +71,7 @@ const Overview: FC<Props> = ({
       }
       // ALREADY CONNECTED
       const web3: Web3 = window.web3
-      const ownSeries: SeriesType[] = []
+      const ownSeries: any = {}
 
       if (!web3) {
         setError('Failed to connect wallet.')
@@ -88,40 +82,81 @@ const Overview: FC<Props> = ({
         return
       }
       setError(null)
-      for (const j of jurisdictionOptions) {
-        const seriesAddresses = await MainContract.getContract(network, j.value)
-          .methods.mySeries()
-          .call({ from: account })
+      // for (const j of jurisdictionOptions) {
+      //   const seriesAddresses = await MainContract.getContract(network, j.value)
+      //     .methods.mySeries()
+      //     .call({ from: account })
 
-        for (const s of seriesAddresses) {
-          const newSeries: SeriesType = {
-            jurisdiction: j.text,
-            contract: s,
-            created: new Date(),
-            name: '',
-            owner: '',
+      //   for (const s of seriesAddresses) {
+      //     const newSeries: SeriesType = {
+      //       jurisdiction: j.text,
+      //       contract: s,
+      //       created: new Date(),
+      //       name: '',
+      //       owner: '',
+      //     }
+      //     const events = await SeriesContract.getContract(
+      //       s
+      //     ).getPastEvents('allEvents', { fromBlock: 0, toBlock: 'latest' })
+      //     const timestamp = await web3.eth.getBlock(events[0].blockNumber)
+      //     newSeries.created = new Date(
+      //       parseInt(timestamp.timestamp.toString()) * 1000
+      //     )
+      //     newSeries.name = await SeriesContract.getContract(s)
+      //       .methods.getName()
+      //       .call({ from: account })
+      //     newSeries.owner = await SeriesContract.getContract(s)
+      //       .methods.owner()
+      //       .call({ from: account })
+      //     ownSeries.push(newSeries)
+      //   }
+      const response: AxiosResponse = await Axios.post(
+        'https://api.thegraph.com/subgraphs/name/filipesoccol/otoco-ropsten',
+        {
+          query: `
+        {
+          owned:companies(where:{owner:"${account}"}) {
+            id
+            name
+            jurisdiction
+            creation
           }
-          // window.testContract = SeriesContract.getContract(s);
-          const events = await SeriesContract.getContract(
-            s
-          ).getPastEvents('allEvents', { fromBlock: 0, toBlock: 'latest' })
-          const timestamp = await web3.eth.getBlock(events[0].blockNumber)
-          newSeries.created = new Date(
-            parseInt(timestamp.timestamp.toString()) * 1000
-          )
-          newSeries.name = await SeriesContract.getContract(s)
-            .methods.getName()
-            .call({ from: account })
-          newSeries.owner = await SeriesContract.getContract(s)
-            .methods.owner()
-            .call({ from: account })
-          ownSeries.push(newSeries)
+          created:companies(where:{creator:"${account}"}) {
+            id
+            name
+            jurisdiction
+            creation
+          }
         }
-        dispatch({ type: SET_OWN_SERIES, payload: ownSeries })
-        if (ownSeries.length < 1)
-          setError('You own no companies at the moment.')
-        else setError(null)
+        `,
+        }
+      )
+
+      const addBadge = (company: any, badge: Badges) => {
+        if (!ownSeries[company.id]) {
+          const c: SeriesType = {
+            contract: company.id,
+            name: company.name,
+            jurisdiction: company.jurisdiction,
+            created: new Date(parseInt(company.creation.toString()) * 1000),
+            badges: [],
+          }
+          ownSeries[company.id] = c
+        }
+        ownSeries[company.id].badges.push(badge)
       }
+
+      for (const company of response.data.data.created) {
+        addBadge(company, Badges.FIRST)
+      }
+      for (const company of response.data.data.owned) {
+        addBadge(company, Badges.MANAGEMENT)
+      }
+
+      dispatch({ type: SET_OWN_SERIES, payload: Object.values(ownSeries) })
+      if (ownSeries.length < 1) setError('You own no companies at the moment.')
+      else setError(null)
+      // }
       setLoading(false)
     }, 0)
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -130,7 +165,19 @@ const Overview: FC<Props> = ({
   return (
     <div className="container-sm limiter-lg content">
       <h5>account</h5>
-      <WelcomeForm></WelcomeForm>
+      <CSSTransition
+        in={account != null}
+        timeout={{
+          appear: 200,
+          enter: 200,
+          exit: 200,
+        }}
+        classNames="slide-up"
+        unmountOnExit
+      >
+        <WelcomeForm></WelcomeForm>
+      </CSSTransition>
+      {!account && <div className="card">No connected account.</div>}
       <h5>companies</h5>
       <CSSTransition
         in={loading}
@@ -142,7 +189,7 @@ const Overview: FC<Props> = ({
         classNames="slide-up"
         unmountOnExit
       >
-        <div className="d-flex justify-content-center">
+        <div className="d-flex justify-content-center card">
           <div className="row">
             <div className="col-12 text-center">Loading Companies</div>
             <div className="col-12 text-center">
