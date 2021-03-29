@@ -95,26 +95,30 @@ const Wallet: FC<Props> = ({
     )
     // Variable to store unique Tokens info
     const tokensObject: { [contract: string]: MultisigBalance } = {}
-    // Store all data on object
-    if (transactionsRequest.data.result) {
-      transactionsRequest.data.result.forEach((elem) => {
-        tokensObject[elem.contractAddress] = {
-          contract: elem.contractAddress,
-          name: elem.tokenName,
-          symbol: elem.tokenSymbol,
-          decimals: parseInt(elem.tokenDecimal),
-          amount: '0',
+    try {
+      // Store all data on object
+      if (transactionsRequest.data.result) {
+        transactionsRequest.data.result.forEach((elem) => {
+          tokensObject[elem.contractAddress] = {
+            contract: elem.contractAddress,
+            name: elem.tokenName,
+            symbol: elem.tokenSymbol,
+            decimals: parseInt(elem.tokenDecimal),
+            amount: '0',
+          }
+        })
+        // For each unique token, fetch balance on smart contract
+        for (const token of Object.values(tokensObject)) {
+          const balanceBN = new BN(
+            await OtocoToken.getContract(token.contract)
+              .methods.balanceOf(multisigAddress)
+              .call({ from: account })
+          )
+          token.amount = balanceBN.div(getBNDecimals(token.decimals)).toString()
         }
-      })
-      // For each unique token, fetch balance on smart contract
-      for (const token of Object.values(tokensObject)) {
-        const balanceBN = new BN(
-          await OtocoToken.getContract(token.contract)
-            .methods.balanceOf(multisigAddress)
-            .call({ from: account })
-        )
-        token.amount = balanceBN.div(getBNDecimals(token.decimals)).toString()
       }
+    } catch (err) {
+      console.log('Error getting token balances')
     }
     // Adding ETH balance
     const ethBalance = await web3.eth.getBalance(multisigAddress)

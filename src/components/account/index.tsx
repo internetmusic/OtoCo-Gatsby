@@ -30,6 +30,7 @@ import {
 
 import { IJurisdictionOption } from '../../state/spinUp/types'
 import { PrivateKey } from '@textile/hub'
+import { GraphNetwork, requestSubgraph } from '../../services/thegraph'
 
 interface Props {
   account?: string
@@ -110,10 +111,11 @@ const Overview: FC<Props> = ({ account, network, series, dispatch }: Props) => {
       //       .call({ from: account })
       //     ownSeries.push(newSeries)
       //   }
-      const response: AxiosResponse = await Axios.post(
-        'https://api.thegraph.com/subgraphs/name/filipesoccol/otoco-ropsten',
-        {
-          query: `
+      let otocoNetwork = GraphNetwork.mainnet
+      if (network == 'ropsten') otocoNetwork = GraphNetwork.ropsten
+      const response: AxiosResponse = await requestSubgraph(
+        otocoNetwork,
+        `
         {
           owned:companies(where:{owner:"${account}"}) {
             id
@@ -128,8 +130,7 @@ const Overview: FC<Props> = ({ account, network, series, dispatch }: Props) => {
             creation
           }
         }
-        `,
-        }
+        `
       )
 
       const addBadge = (company: any, badge: Badges) => {
