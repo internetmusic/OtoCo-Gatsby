@@ -22,6 +22,7 @@ export type SeriesType = {
   name: string
   jurisdiction: string
   created: Date
+  owner: string
   badges: Badges[]
 }
 

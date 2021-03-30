@@ -69,6 +69,7 @@ const SeriesManagement: FC<Props> = ({
           created: new Date(),
           name: '',
           owner: '',
+          badges: [],
         }
         for (const j of jurisdictionOptions) {
           const seriesAddresses: string[] = await MainContract.getContract(
@@ -77,7 +78,13 @@ const SeriesManagement: FC<Props> = ({
           )
             .methods.mySeries()
             .call({ from: account })
-          if (seriesAddresses.includes(id)) newSeries.jurisdiction = j.text
+          if (
+            seriesAddresses
+              .map((sa) => sa.toLowerCase())
+              .includes(id.toLowerCase())
+          ) {
+            newSeries.jurisdiction = j.text
+          }
         }
         // window.testContract = SeriesContract.getContract(s);
         const events = await SeriesContract.getContract(
