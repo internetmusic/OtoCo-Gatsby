@@ -1,0 +1,30 @@
+// Bootstrap Initial Setup
+// Reassign color vars to semantic color scheme
+$primary: $teal;
+$secondary: $purple;
+$success: $green;
+$info: $cyan;
+$warning: $yellow;
+$danger: $red;
+$light: $gray-100;
+$dark: $gray-100;
+$background: $midnight-blue-0;
+
+$border-radius: 12px;
+$border-color: transparent;
+
+// Bootstrap Options
+// Quickly modify global styling by enabling or disabling optional features.
+$enable-rounded: true;
+$enable-shadows: true;
+$enable-gradients: true;
+$enable-transitions: true;
+$enable-hover-media-query: false;
+$enable-grid-classes: true;
+$enable-print-styles: true;
+
+// Bootstrap Body Settings
+$body-bg: $midnight-blue-0;
+$body-color: $white;
+$inverse-bg: $white;
+$inverse-color: $midnight-blue-0;

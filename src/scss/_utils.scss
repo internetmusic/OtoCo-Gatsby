@@ -1,0 +1,30 @@
+$border-radius-sm: 8px;
+
+.column-centered {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.special-bg {
+  background-color: $midnight-blue-2;
+  box-shadow: $elevation-4;
+}
+
+.padded {
+  position: relative;
+  padding: 32px 32px 167px 32px;
+  min-height: 100vh;
+  margin-bottom: -177px;
+}
+
+@media (max-width: 640px) {
+  .padded {
+    padding: 24px 24px 233px 24px;
+    margin-bottom: -200px;
+  }
+}
+
+.fix-icon-alignment {
+  margin-top: -0.25em !important;
+}

@@ -1,0 +1,30 @@
+.card {
+  padding: 40px;
+  background: $midnight-blue-1;
+  box-shadow: $elevation-2;
+  margin: 24px 0;
+}
+
+@media (max-width: 640px) {
+  .card {
+    padding: 16px;
+  }
+}
+
+.card-body {
+  padding: 1rem 0 0 0;
+  color: $white;
+}
+
+.card-header {
+  border: none;
+  padding: 0;
+  margin-top: -0.5rem;
+  color: $gray-100;
+  font-size: 1.5rem;
+  line-height: 1.25;
+  font-weight: 700;
+  &:first-child {
+    border-radius: 0;
+  }
+}

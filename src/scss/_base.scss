@@ -1,0 +1,61 @@
+// Basic styling and resets
+
+html,
+body {
+  height: 100%;
+  width: 100vw;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  text-decoration: none;
+  color: $accent-purple-brighter;
+  &:hover {
+    color: $accent-purple-brightest;
+  }
+}
+
+p {
+  font-size: 16px;
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+
+img {
+  margin-bottom: 15px;
+  max-width: 100%;
+}
+
+img:hover {
+  animation: pulse 0.5s;
+}
+
+.table {
+  margin-top: 1rem;
+  box-shadow: 0 0 2px 0 $teal inset;
+  background-clip: content-box, border-box;
+  border-radius: $border-radius-sm;
+
+  & th {
+    padding: 1rem;
+    font-weight: 400;
+    font-size: 0.75rem;
+    color: $gray-300;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  & td {
+    padding: 0 1rem 1rem 1rem;
+  }
+}
+
+.table thead th {
+  border-bottom: none;
+}
