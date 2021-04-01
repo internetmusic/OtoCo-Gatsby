@@ -1,0 +1,76 @@
+// Basic Styling
+@import './colors';
+@import './typography';
+
+// Initial Setup, Resets ans Bootstrap Customization
+@import './bootstrap-customization';
+@import 'node_modules/bootstrap/scss/bootstrap.scss';
+@import './base';
+
+// Structure and Utils
+@import './grids';
+@import './utils';
+
+// Global Component Styling
+@import './buttons';
+@import './dropdowns';
+@import './forms';
+@import './cards';
+
+.my-node-enter {
+  transform: translate3d(50px, 0px, 0px);
+  opacity: 0;
+}
+.my-node-enter-active {
+  transform: translate3d(0px, 0px, 0px);
+  opacity: 1;
+  transition: opacity 200ms, transform 200ms;
+}
+.my-node-exit {
+  transform: translate3d(0px, 0px, 0px);
+  opacity: 1;
+}
+.my-node-exit-active {
+  transform: translate3d(-50px, 0px, 0px);
+  opacity: 0;
+  transition: opacity 500ms, transform 500ms;
+}
+
+.sidebar-enter {
+  width: 0px;
+}
+.sidebar-enter-active {
+  width: 233px;
+  transition: width 200ms;
+}
+.sidebar-exit {
+  width: 233px;
+}
+.sidebar-exit-active {
+  width: 0;
+  transition: width 200ms;
+}
+
+.slide-up-enter {
+  transform: translate3d(0px, -50px, 0px);
+  max-height: 0px;
+  opacity: 0;
+}
+.slide-up-enter-active {
+  transform: translate3d(0px, 0px, 0px);
+  max-height: 100%;
+  opacity: 1;
+  transition: opacity 200ms, transform 200ms, max-height 200ms;
+}
+.slide-up-exit {
+  transform: translate3d(0px, 0px, 0px);
+  max-height: 100%;
+  opacity: 1;
+  position: absolute;
+}
+.slide-up-exit-active {
+  transform: translate3d(0px, -50px, 0px);
+  max-height: 0px;
+  opacity: 0;
+  transition: opacity 200ms, transform 200ms, max-height 200ms;
+}

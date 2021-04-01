@@ -13,6 +13,9 @@ const Footer = () => (
         <div className="row footer-links">
           <div className="col-4 d-block">
             <div className="mb-1">
+              <Link to="/">OtoCo</Link>
+            </div>
+            <div className="mb-1">
               <Link to="/terms/">Terms</Link>
             </div>
             <div className="mb-1">

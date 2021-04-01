@@ -1,19 +1,18 @@
-@import 'scss/colors.scss';
+@import 'scss/_colors.scss';
 
 .list-group {
+  border-radius: 0px;
+  text-align: right;
 
-    border-radius: 0px;
-    text-align: right;
+  .list-group-item {
+    border: none;
+    background-color: $gray-900;
+    color: $white;
+    border-right: 2px solid $gray-300;
+  }
 
-    .list-group-item {
-        border: none;
-        background-color: $gray-900;
-        color: $white;
-        border-right: 2px solid $gray-300;
-    }
-
-    .active {
-        color: $cyan;
-        border-right: 2px solid $cyan;
-    }
+  .active {
+    color: $cyan;
+    border-right: 2px solid $cyan;
+  }
 }
