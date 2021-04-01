@@ -18,7 +18,6 @@ import {
 } from '../../state/account/types'
 import { PrivateKey } from '@textile/hub'
 import { Link } from 'gatsby'
-import { Mailbox } from 'react-bootstrap-icons'
 
 interface Props {
   account: string
@@ -58,16 +57,14 @@ const MailboxForm: FC<Props> = ({
 
   const handleClickCreate = async () => {
     try {
+      if (!process.env.GATSBY_ORACLE_KEY) throw 'No oracle public key found.'
       setCreation({
         step: 1,
         message: 'First we ask to sign a message to create a key pair.',
       })
       await setWaitTimer()
       const pk = await Textile.generateIdentity(account)
-      if (!pk) {
-        setCreation(null)
-        return
-      }
+      if (!pk) throw 'Error: Private Key not created.'
       setCreation({
         step: 2,
         message:
@@ -78,10 +75,7 @@ const MailboxForm: FC<Props> = ({
         account,
         pk.public.toString()
       )
-      if (!signature) {
-        setCreation(null)
-        return
-      }
+      if (!signature) throw 'Error: Signature not created'
       const message = {
         _id: account,
         signature: signature,
@@ -90,9 +84,10 @@ const MailboxForm: FC<Props> = ({
         method: 'wallet',
         message,
       })
+      Textile.storeKeys(account)
       dispatch({ type: SET_PRIVATEKEY, payload: pk })
-      dispatch({ type: SET_CONTACT_FORM, payload: false })
     } catch (err) {
+      setCreation(null)
       console.error(err)
     }
   }

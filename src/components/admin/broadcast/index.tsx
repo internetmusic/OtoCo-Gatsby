@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { IState } from '../../../state/types'
 import Textile from '../../../services/textile'
 import {
+  BroadcastFilter,
   BroadcastMessage,
   MessageSchema,
   PaymentMessage,
@@ -18,7 +19,7 @@ const Broadcast: FC<Props> = ({ privatekey }: Props) => {
   const [title, setTitle] = useState<string>('')
   const [link, setLink] = useState<string>('')
   const [description, setDescription] = useState<string>('')
-  const [jurisdiction, setJurisdiction] = useState<string | null>('')
+  const [filter, setFilter] = useState<BroadcastFilter | null>(null)
 
   React.useEffect(() => {
     setTimeout(async () => {
@@ -35,14 +36,21 @@ const Broadcast: FC<Props> = ({ privatekey }: Props) => {
   const handleChangeDescription = (event) => {
     setDescription(event.target.value)
   }
-  const handleChangeJurisdiction = (val) => {
-    setJurisdiction(val)
+  const handleChangeTarget = (val: BroadcastFilter) => {
+    setFilter(val)
+    console.log(val)
+  }
+
+  const handleChangeAddress = (event) => {
+    setFilter({
+      address: event.target.value,
+    })
   }
 
   const handleBroadcastMessage = async (val) => {
     if (!privatekey) return
     if (!process.env.GATSBY_ORACLE_KEY) return
-    console.log('BROADCAST', title, link, description, jurisdiction)
+    console.log('BROADCAST', title, link, description, filter)
 
     const message: BroadcastMessage = {
       title,
@@ -51,10 +59,8 @@ const Broadcast: FC<Props> = ({ privatekey }: Props) => {
       icon: '',
     }
 
-    if (jurisdiction) {
-      message.filter = {
-        jurisdiction,
-      }
+    if (filter) {
+      message.filter = filter
     }
 
     await Textile.sendMessage(process.env.GATSBY_ORACLE_KEY, {
@@ -107,7 +113,8 @@ const Broadcast: FC<Props> = ({ privatekey }: Props) => {
                 type="radio"
                 name="flexRadioDefault"
                 id="flexRadioDefault0"
-                onClick={handleChangeJurisdiction.bind(undefined, null)}
+                checked={!filter}
+                onChange={handleChangeTarget.bind(undefined, null)}
               />
               <label className="form-check-label" htmlFor="flexRadioDefault0">
                 All Users
@@ -119,8 +126,10 @@ const Broadcast: FC<Props> = ({ privatekey }: Props) => {
                 type="radio"
                 name="flexRadioDefault"
                 id="flexRadioDefault1"
-                onClick={handleChangeJurisdiction.bind(undefined, 'DELAWARE')}
-                checked
+                checked={filter?.jurisdiction == 'DELAWARE'}
+                onChange={handleChangeTarget.bind(undefined, {
+                  jurisdiction: 'DELAWARE',
+                })}
               />
               <label className="form-check-label" htmlFor="flexRadioDefault1">
                 Only Delaware
@@ -132,12 +141,25 @@ const Broadcast: FC<Props> = ({ privatekey }: Props) => {
                 type="radio"
                 name="flexRadioDefault"
                 id="flexRadioDefault2"
-                onClick={handleChangeJurisdiction.bind(undefined, 'WYOMING')}
-                checked
+                checked={filter?.jurisdiction == 'WYOMING'}
+                onChange={handleChangeTarget.bind(undefined, {
+                  jurisdiction: 'WYOMING',
+                })}
               />
               <label className="form-check-label" htmlFor="flexRadioDefault2">
                 Only Wyoming
               </label>
+            </div>
+            <div className="input-group mb-4">
+              <input
+                type="text"
+                className="form-control right"
+                placeholder="To Specific Address"
+                onChange={handleChangeAddress}
+              />
+              <div className="input-group-append">
+                <div className="btn btn-primary disabled">To Address</div>
+              </div>
             </div>
             <button
               className="btn btn-primary mb-2"

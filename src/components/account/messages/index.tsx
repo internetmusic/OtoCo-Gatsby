@@ -46,35 +46,25 @@ const SeriesIdentity: FC<Props> = ({
         type: SET_OUTBOX_MESSAGES,
         payload: await Textile.listOutboxMessages(),
       })
-      console.log(inboxMessages)
+      // console.log(inboxMessages)
     }, 0)
   }, [privatekey])
-
-  const handleClickSendMessage = async () => {
-    // ASSINAR COM TEXTILE IDENTITY
-    const web3 = await Web3Modal.getWeb3()
-    if (!web3 || !privatekey) return
-    // await requestPaymentWyre(WyreEnv.TEST, 5)
-    const message: PaymentMessage = {
-      _id: 'SOME HASH OR URL',
-      plugin: 'EIN',
-      currency: 'DAI',
-      amount: 5,
-      body: {
-        field1: 'aaaa',
-        field2: 'bbbb',
-      },
-    }
-    await Textile.sendMessage(privatekey.public.toString(), {
-      method: 'payment',
-      message,
-    })
-  }
 
   const handleDelete = async (id: string) => {
     if (!privatekey) return
     await Textile.deleteMessage(id)
     console.log('DELETED', id)
+  }
+
+  const handleDownload = async (obj: any) => {
+    const dataStr =
+      'data:text/json;charset=utf-8,' +
+      encodeURIComponent(JSON.stringify(obj, undefined, 2))
+    const a = document.createElement('a')
+    a.href = 'data:' + dataStr
+    a.download = 'report.json'
+    a.innerHTML = 'download JSON'
+    a.click()
   }
 
   return (
@@ -131,6 +121,7 @@ const SeriesIdentity: FC<Props> = ({
                     publicKey={privatekey.public.toString()}
                     messages={inboxMessages}
                     handleDelete={handleDelete}
+                    handleDownload={handleDownload}
                   ></ListInboxMessages>
                 </tbody>
               </table>
@@ -158,12 +149,6 @@ const SeriesIdentity: FC<Props> = ({
               </table>
             </div>
           </div>
-          <button
-            className="btn btn-primary mx-2"
-            onClick={handleClickSendMessage}
-          >
-            Send Payment Message
-          </button>
         </div>
       )}
     </div>

@@ -1,17 +1,11 @@
-import React, { Dispatch, FC, useState } from 'react'
-import { CSSTransition } from 'react-transition-group'
-import Web3 from 'web3'
-import { navigate } from '@reach/router'
+import React, { Dispatch, FC } from 'react'
 import { connect } from 'react-redux'
 // import Icon from '../icon/icon'
 // import { faCog } from '@fortawesome/free-solid-svg-icons'
 import { Gear } from 'react-bootstrap-icons'
-import AddressWidget from '../addressWidget/addressWidget'
 import { ShieldLock } from 'react-bootstrap-icons'
 import { IState } from '../../state/types'
-import Web3Integrate from '../../services/web3-integrate'
 import {
-  SET_MANAGE_SERIES,
   ManagementActionTypes,
   SeriesType,
   Badges,
@@ -39,10 +33,7 @@ const ListBadges = (props: PropsBadges) => {
   ))
 }
 
-const SeriesListing: React.FC<PropsSeries> = ({
-  series,
-  dispatch,
-}: PropsSeries) => {
+const SeriesListing: FC<PropsSeries> = ({ series, dispatch }: PropsSeries) => {
   const listSeries = series.map((s: SeriesType, idx) => (
     <div key={idx} className="col-12 col-md-6">
       <div className="card squared">

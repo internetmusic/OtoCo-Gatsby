@@ -61,6 +61,7 @@ interface TextileInterface {
     address: string,
     publickey: string
   ) => Promise<string | null>
+  storeKeys: (address: string) => boolean
   storePrivateKey: (address: string, secret: string) => Promise<PrivateKey>
   fetchIdentity: (
     address: string,
@@ -159,18 +160,6 @@ const Textile: TextileInterface = {
     }
     this.privateKey = PrivateKey.fromRawEd25519Seed(Uint8Array.from(sigArray))
     console.log(this.privateKey.toString())
-    const encrypted = aes256.encrypt(
-      process.env.GATSBY_PASSWORD,
-      this.privateKey.toString()
-    )
-    localStorage.setItem(
-      `did:eth:${address.substr(2)}`,
-      JSON.stringify({
-        alias: '',
-        password: false,
-        key: encrypted,
-      })
-    )
     // Your app can now use this identity for generating a user Mailbox, Threads, Buckets, etc
     return this.privateKey
   },
@@ -188,6 +177,23 @@ const Textile: TextileInterface = {
       console.error('Signature Rejected.')
     }
     return null
+  },
+
+  storeKeys: function (address: string): boolean {
+    if (!this.privateKey) return false
+    const encrypted = aes256.encrypt(
+      process.env.GATSBY_PASSWORD,
+      this.privateKey.toString()
+    )
+    localStorage.setItem(
+      `did:eth:${address.substr(2)}`,
+      JSON.stringify({
+        alias: '',
+        password: false,
+        key: encrypted,
+      })
+    )
+    return true
   },
 
   fetchIdentity: async function (

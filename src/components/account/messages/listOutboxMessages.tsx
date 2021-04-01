@@ -40,10 +40,13 @@ export const ListOutboxMessages = ({
         {m.body.method == 'broadcast' && (
           <BroadcastMessage message={m}></BroadcastMessage>
         )}
+        {m.body.method == 'report' && (
+          <BroadcastMessage message={m}></BroadcastMessage>
+        )}
       </td>
       <td className="d-none d-md-block" style={{ textAlign: 'right' }}>
         <button
-          className="btn btn-primary btn-sm"
+          className="btn  btn-primary-outline btn-sm"
           onClick={handleDelete.bind(undefined, m.id)}
         >
           <Trash></Trash>

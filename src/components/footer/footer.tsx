@@ -21,19 +21,31 @@ const Footer = () => (
           </div>
           <div className="col-4 d-block">
             <div className="mb-1">
-              <Link to="https://t.me/TheRoadToOtoco" target="_blank">
+              <a
+                href="https://t.me/TheRoadToOtoco"
+                target="_blank"
+                rel="noreferrer"
+              >
                 Telegram
-              </Link>
+              </a>
             </div>
             <div className="mb-1">
-              <Link to="https://twitter.com/otonomos" target="_blank">
+              <a
+                href="https://twitter.com/otonomos"
+                target="_blank"
+                rel="noreferrer"
+              >
                 Twitter
-              </Link>
+              </a>
             </div>
             <div className="mb-1">
-              <Link to="https://github.com/otocorp" target="_blank">
+              <a
+                href="https://github.com/otocorp"
+                target="_blank"
+                rel="noreferrer"
+              >
                 Github
-              </Link>
+              </a>
             </div>
           </div>
           <div className="col-4 d-block">
@@ -41,7 +53,7 @@ const Footer = () => (
               <Link to="/spinup/">Spin up new Company</Link>
             </div>
             <div className="mb-1">
-              <Link to="/dashpanel/">Dashpanel</Link>
+              <Link to="/account/">My account</Link>
             </div>
           </div>
         </div>

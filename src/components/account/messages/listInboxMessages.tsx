@@ -9,6 +9,7 @@ interface ListMessagesProps {
   publicKey: string
   messages: DecryptedMailbox[]
   handleDelete: (id: string) => Promise<void>
+  handleDownload: (content: any) => Promise<void>
 }
 
 const oraclePublicKey = process.env.GATSBY_ORACLE_KEY
@@ -18,6 +19,7 @@ export const ListInboxMessages = ({
   publicKey,
   messages,
   handleDelete,
+  handleDownload,
 }: ListMessagesProps) => {
   return messages.map((m) => (
     <tr key={m.id}>
@@ -58,15 +60,29 @@ export const ListInboxMessages = ({
         {m.body.method == 'broadcast' && (
           <BroadcastMessage message={m}></BroadcastMessage>
         )}
+        {m.body.method == 'report' && (
+          <span className="badge bg-primary small me-3">{m.body.method}</span>
+        )}
       </td>
       <td className="d-none d-md-block" style={{ textAlign: 'right' }}>
         {m.body.method == 'broadcast' && (
-          <a className="btn btn-primary btn-sm me-2" href={m.body.message.link}>
+          <a
+            className="btn  btn-primary-outline btn-sm me-2"
+            href={m.body.message.link}
+          >
             visit
           </a>
         )}
+        {m.body.method == 'report' && (
+          <button
+            className="btn btn-primary-outline btn-sm me-2"
+            onClick={handleDownload.bind(undefined, m.body.companies)}
+          >
+            Download
+          </button>
+        )}
         <button
-          className="btn btn-primary btn-sm me-2"
+          className="btn btn-primary-outline btn-sm me-2"
           onClick={handleDelete.bind(undefined, m.id)}
         >
           <Trash />

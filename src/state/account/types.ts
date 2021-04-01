@@ -20,6 +20,7 @@ export interface PaymentMessage {
 
 export interface BroadcastFilter {
   jurisdiction?: string
+  address?: string
 }
 
 export interface BroadcastMessage {
@@ -37,9 +38,24 @@ export interface WalletMessage {
   signature: number
 }
 
+export interface CompanyInterface {
+  id: string
+  name: string
+  jurisdiction: string
+  owner: string
+  ownerEmail?: string
+  creator: string
+  creatorEmail?: string
+  creation: Date
+}
+
+export interface ReportMessage {
+  companies?: CompanyInterface[]
+}
+
 export interface MessageSchema {
   method: string
-  message: PaymentMessage | WalletMessage | BroadcastMessage
+  message: PaymentMessage | WalletMessage | BroadcastMessage | ReportMessage
 }
 
 export interface DecryptedMailbox {
