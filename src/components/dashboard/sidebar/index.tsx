@@ -69,6 +69,12 @@ const SidebarSeries: FC<Props> = ({
           >
             ENS
           </a>
+          <a
+            className="col-12 mx-2 btn"
+            onClick={handleChangeSection.bind(undefined, ManageSection.PLUGINS)}
+          >
+            Plugins
+          </a>
         </div>
       </div>
     </nav>
