@@ -47,7 +47,7 @@ const EnoughBalanceForm: FC<Props> = ({
       '200000'
     )
     try {
-      ERC20Contract.getContract(network)
+      ERC20Contract.getContractDAI(network)
         .methods.approve(
           mainContractAddress,
           web3.utils.toWei(feeBN.toString(), 'ether')

@@ -1,5 +1,7 @@
 // DOCS => https://docs.sendwyre.com/v3/docs/wyre-checkout-hosted-dialog
+import { faWindowRestore } from '@fortawesome/free-solid-svg-icons'
 import axios from 'axios'
+import Wyre from './wyre-core'
 
 type WyreResponseType = {
   url: string
@@ -25,7 +27,10 @@ export const requestPaymentWyre = async (
   env: WyreEnv,
   amount: number,
   target?: string
-): Promise<string> => {
+): Promise<{
+  id: string
+  timestamp: number
+}> => {
   return new Promise(async (resolve, reject) => {
     try {
       const res = await axios.post(
@@ -40,27 +45,67 @@ export const requestPaymentWyre = async (
         },
         options
       )
-      const widget = new Wyre({
-        env: env == WyreEnv.TEST ? 'test' : 'prod',
+      const wyre = Wyre()
+      const widget = new wyre.Widget({
+        // env: env == WyreEnv.TEST ? 'test' : 'prod',
+        // reservation: res.data.reservation,
+        // operation: {
+        //   type: 'debitcard-hosted-dialog',
+        // },
+        debug: true,
+        // operationHostedDialogWidget: {
+        //   type: 'debitcard-hosted-dialog',
+        // },
+        apiKey: process.env.GATSBY_WYRE_KEY,
         reservation: res.data.reservation,
+        auth: { type: 'metamask' },
+        env: env == WyreEnv.TEST ? 'test' : 'prod',
         operation: {
           type: 'debitcard-hosted-dialog',
         },
+        type: 'offramp',
+        web3PresentInParentButNotChild: false,
       })
       if (!widget) {
-        throw 'Failed to initialize Wyre Widget' + res.data.reservation
+        throw 'Failed to initialize Wyre widget' + res.data.reservation
       }
       widget.open()
-      widget.on('paymentSuccess', function (e) {
-        console.log('paymentSuccess', e)
-        resolve(`${env}/v3/orders/${e.id}`)
+      widget.on('paymentSuccess', async (e) => {
+        console.log('event', e)
+        const order = await axios.get(`${env}/v3/orders/${e.orderId}`)
+        resolve({
+          timestamp: order.data.createdAt,
+          id: e.orderId,
+        })
       })
-      setTimeout(() => {
-        throw 'Payment timed out.' + res.data.reservation
-      }, 1000 * 60 * 30)
+      const checkWindowOpen = () => {
+        try {
+          if (!widget.getTargetWindow().closed) {
+            setTimeout(checkWindowOpen, 1000)
+          } else {
+            widget.removeAllListeners()
+            widget.getTargetWindow().close()
+            console.log('Cleared Widget Listeners')
+            reject()
+          }
+        } catch (err) {
+          setTimeout(checkWindowOpen, 1000)
+        }
+      }
+      checkWindowOpen()
     } catch (err) {
       console.log(err)
       reject(err)
     }
   })
 }
+
+// data:
+//   data:
+//     accountId: "account:AC_ZVFDXHDNVG9"
+//     blockchainNetworkTx: null
+//     dest: "ethereum:0xa484165bd8E535F11C5820205E98d18DF8d22Bf7"
+//     destAmount: 39
+//     fees: "{"USD":5,"DAI":3}"
+//     orderId: "WO_F2AAQQWYL6"
+//     transferId: "TF_ZEFYMPBRBBW"

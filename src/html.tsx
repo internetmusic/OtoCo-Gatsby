@@ -33,7 +33,6 @@ const HTML: React.FC<Props> = ({
           href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&display=swap"
           rel="stylesheet"
         />
-        <script src="https://verify.sendwyre.com/js/verify-module-init-beta.js"></script>
       </head>
       <body>
         <div id="___gatsby" dangerouslySetInnerHTML={{ __html: body }} />

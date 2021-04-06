@@ -1,6 +1,11 @@
 import React, { Dispatch, FC, useState } from 'react'
 import { connect } from 'react-redux'
-import { ChevronLeft, ExclamationCircle, XDiamond } from 'react-bootstrap-icons'
+import {
+  ChevronLeft,
+  ExclamationCircle,
+  FileMedical,
+  XDiamond,
+} from 'react-bootstrap-icons'
 import Address from '../../addressWidget/addressWidget'
 import UTCDate from '../../utcDate/utcDate'
 import {
@@ -19,6 +24,11 @@ interface Props {
   dispatch: Dispatch<ManagementActionTypes>
 }
 
+interface ModalProps {
+  product: string
+  amount: number
+}
+
 const SeriesOverview: FC<Props> = ({
   account,
   network,
@@ -27,9 +37,18 @@ const SeriesOverview: FC<Props> = ({
   dispatch,
 }: Props) => {
   const [modalOpen, setModalOpen] = useState<boolean>(false)
+  const [modalInfo, setModalInfo] = useState<ModalProps | null>(null)
 
   const closeModal = () => {
     setModalOpen(false)
+  }
+
+  const handleSelectPlugin = async (p: string, a: number) => {
+    setModalInfo({
+      product: p,
+      amount: a,
+    })
+    setModalOpen(true)
   }
 
   return (
@@ -45,17 +64,22 @@ const SeriesOverview: FC<Props> = ({
               <div className="mb-5 p-4">
                 <button
                   className="btn btn-primary plugin-option"
-                  onClick={setModalOpen.bind(undefined, true)}
+                  onClick={handleSelectPlugin.bind(
+                    undefined,
+                    'Anual Taxes',
+                    39
+                  )}
                 >
-                  <div className="label">Annual Taxes</div>
-                  <XDiamond size={48}></XDiamond>
+                  <div className="label">Anual Taxes</div>
+                  <FileMedical size={48}></FileMedical>
                   <div className="label">39 USD</div>
                 </button>
                 {modalOpen}
               </div>
               <PaymentWidget
                 show={modalOpen}
-                amount={39}
+                product={modalInfo?.product}
+                amount={modalInfo?.amount}
                 closeModal={closeModal}
               ></PaymentWidget>
             </div>

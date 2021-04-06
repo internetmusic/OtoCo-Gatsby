@@ -53,10 +53,10 @@ const Master: FC<Props> = ({ account, network, dispatch }: Props) => {
       )
         setError('Not the contract owner WYOMING')
 
-      const balanceDelaware = await ERC20.getContract(network)
+      const balanceDelaware = await ERC20.getContractDAI(network)
         .methods.balanceOf(MainContract.addresses[network + '_us_de'])
         .call({ from: accounts[0] })
-      const balanceWyoming = await ERC20.getContract(network)
+      const balanceWyoming = await ERC20.getContractDAI(network)
         .methods.balanceOf(MainContract.addresses[network + '_us_wy'])
         .call({ from: accounts[0] })
 

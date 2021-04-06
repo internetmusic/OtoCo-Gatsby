@@ -322,15 +322,21 @@ const contractABI = [
 
 export default {
   abi: contractABI,
-  addresses: {
-    private: '0x2E2D10b41b7c8DDb995568A87185428d9A513ead',
+  addressesDAI: {
     main: '0x6b175474e89094c44da98b954eedeac495271d0f',
     ropsten: '0x13841F9D3E2a441800B209AAD3020308edd6c328',
-    kovan: '0x50ccB248667e116299cd1d2999713A709A78E077',
   },
-  getContract: function (network = 'kovan'): Contract {
+  addressesUSDT: {
+    main: '0xdac17f958d2ee523a2206206994597c13d831ec7',
+    ropsten: '0x722dd3f80bac40c951b51bdd28dd19d435762180',
+  },
+  getContractDAI: function (network = 'ropsten'): Contract {
     const web3: Web3 = window.web3
-    return new web3.eth.Contract(this.abi, this.addresses[network])
+    return new web3.eth.Contract(this.abi, this.addressesDAI[network])
+  },
+  getContractUSDT: function (network = 'ropsten'): Contract {
+    const web3: Web3 = window.web3
+    return new web3.eth.Contract(this.abi, this.addressesUSDT[network])
   },
 }
 
