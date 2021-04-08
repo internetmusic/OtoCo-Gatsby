@@ -128,10 +128,10 @@ const SeriesDocuments: FC<Props> = ({
   }
 
   return (
-    <div className="card">
-      <h6 className="card-header">Documents</h6>
-      <div className="card-body">
-        <div>Download documents related to your company:</div>
+    <div>
+      <div className="d-grid gap-1 mb-5">
+        <h3 className="m-0">Documents</h3>
+        <div className="small">Download documents related to your company:</div>
         <div className="mt-2">
           <a href="#" className="card-link" onClick={exportPDF}>
             {/* <Icon icon={faDownload}></Icon> */}

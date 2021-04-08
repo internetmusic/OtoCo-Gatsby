@@ -68,6 +68,7 @@ interface TextileInterface {
     secret: string
   ) => Promise<CachedWallet | null>
   loginWithChallenge: (identity: Identity) => Promise<UserAuth>
+  registerNewKey: (wallet: string, key: string, sig: string) => Promise<void>
   authorize: () => Promise<Client | null>
   watchInbox: (
     reply?: MailboxEvent | undefined,
@@ -266,6 +267,36 @@ const Textile: TextileInterface = {
               break
             }
           }
+        }
+      }
+    })
+  },
+
+  registerNewKey: async (
+    wallet: string,
+    key: string,
+    sig: string
+  ): Promise<void> => {
+    return new Promise((resolve, reject) => {
+      const socket = new WebSocket(process.env.GATSBY_ORACLE_URL)
+
+      /* Wait for our socket to open successfully */
+      socket.onopen = () => {
+        /* Send a new token request */
+        socket.send(
+          JSON.stringify({
+            type: 'register',
+            key,
+            sig,
+            wallet,
+          })
+        )
+
+        /* Listen for messages from the server */
+        socket.onmessage = async (event) => {
+          const data = JSON.parse(event.data)
+          if (data.type == 'error') reject('Error registering key.')
+          if (data.type == 'wallet') resolve()
         }
       }
     })

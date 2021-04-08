@@ -52,40 +52,60 @@ const SeriesOverview: FC<Props> = ({
   }
 
   return (
-    <div className="container-sm limiter-md content">
-      <div className="card">
-        <h6 className="card-header">Plugins</h6>
-        <div className="card-body">
-          <div className="small">
-            Pay taxes, request documents, improve your entity.
-          </div>
-          {managing !== undefined && (
-            <div className="row">
-              <div className="mb-5 p-4">
-                <button
-                  className="btn btn-primary plugin-option"
-                  onClick={handleSelectPlugin.bind(
-                    undefined,
-                    'Anual Taxes',
-                    39
-                  )}
-                >
-                  <div className="label">Anual Taxes</div>
-                  <FileMedical size={48}></FileMedical>
-                  <div className="label">39 USD</div>
-                </button>
-                {modalOpen}
-              </div>
-              <PaymentWidget
-                show={modalOpen}
-                product={modalInfo?.product}
-                amount={modalInfo?.amount}
-                closeModal={closeModal}
-              ></PaymentWidget>
-            </div>
-          )}
+    <div>
+      <div className="d-grid gap-1 mb-5">
+        <h3 className="m-0">Plugins</h3>
+        <div className="small">
+          Pay taxes, request documents, improve your entity.
         </div>
+        {managing !== undefined && (
+          <div className="row">
+            <div className="py-4">
+              <button
+                className="btn btn-primary plugin-option"
+                onClick={handleSelectPlugin.bind(undefined, 'Anual Taxes', 39)}
+              >
+                <div className="label">Anual Taxes</div>
+                <FileMedical size={48}></FileMedical>
+                <div className="label">39 USD</div>
+              </button>
+              {modalOpen}
+            </div>
+            <PaymentWidget
+              show={modalOpen}
+              product={modalInfo?.product}
+              amount={modalInfo?.amount}
+              closeModal={closeModal}
+            ></PaymentWidget>
+          </div>
+        )}
       </div>
+      <h3 className="m-0">Payment Confirmation</h3>
+      <div className="small">
+        Easy place to check the payments you have made using plugins
+      </div>
+      <table className="table small">
+        <thead>
+          <tr>
+            <th scope="col">Transaction or Plugin</th>
+            <th scope="col">ID/Hash</th>
+            <th scope="col" className="text-end">
+              Timestamp
+            </th>
+            <th scope="col" className="text-end">
+              Amount
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Teste</td>
+            <td>Teste</td>
+            <td>Teste</td>
+            <td>Teste</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   )
 }

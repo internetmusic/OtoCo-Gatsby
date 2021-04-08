@@ -76,9 +76,9 @@ const SeriesENS: FC<Props> = ({
   }, [account, multisigDeployed])
 
   return (
-    <div className="card">
-      <h6 className="card-header">ENS Domain</h6>
-      <div className="card-body">
+    <div>
+      <div className="d-grid gap-1 mb-5">
+        <h3 className="m-0">ENS Domain</h3>
         {(multisigDeployed?.contract || ensDomains?.domains.length) && (
           <div className="card-text">
             {loading && <p>Loading...</p>}
@@ -87,7 +87,7 @@ const SeriesENS: FC<Props> = ({
           </div>
         )}
         {!(multisigDeployed?.contract || ensDomains?.domains.length) && (
-          <div className="text-muted">
+          <div className="text-muted small">
             This option will be available when a Multisig is deployed.
           </div>
         )}

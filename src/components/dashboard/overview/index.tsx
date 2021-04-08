@@ -29,29 +29,27 @@ const SeriesOverview: FC<Props> = ({
   dispatch,
 }: Props) => {
   return (
-    <div className="container-sm limiter-md content">
+    <div>
       {managing !== undefined && (
-        <div className="my-4">
-          <div className="d-grid gap-1 mb-5 p-4">
-            <h3 className="m-0">
-              {managing?.name} ({managing?.jurisdiction})
-            </h3>
-            <div className="">
-              Manager: <Address address={managing.owner}></Address>
-            </div>
-            <div className="">
-              Address: <Address address={managing.contract}></Address>
-            </div>
-            <div className="">
-              Creation: <UTCDate date={managing.created} separator=""></UTCDate>
-            </div>
-            <div className="small text-warning mt-2">
-              <span style={{ marginRight: '0.5em' }}>
-                <ExclamationCircle className="fix-icon-alignment" />
-              </span>
-              Your company address is not a wallet. Please do never send{' '}
-              ether/tokens to this address.
-            </div>
+        <div className="d-grid gap-1 mb-5">
+          <h3 className="m-0">
+            {managing?.name} ({managing?.jurisdiction})
+          </h3>
+          <div className="">
+            Manager: <Address address={managing.owner}></Address>
+          </div>
+          <div className="">
+            Address: <Address address={managing.contract}></Address>
+          </div>
+          <div className="">
+            Creation: <UTCDate date={managing.created} separator=""></UTCDate>
+          </div>
+          <div className="small text-warning mt-2">
+            <span style={{ marginRight: '0.5em' }}>
+              <ExclamationCircle className="fix-icon-alignment" />
+            </span>
+            Your company address is not a wallet. Please do never send{' '}
+            ether/tokens to this address.
           </div>
         </div>
       )}

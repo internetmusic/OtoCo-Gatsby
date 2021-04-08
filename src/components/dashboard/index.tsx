@@ -109,7 +109,7 @@ const SeriesManagement: FC<Props> = ({
   }, [account, managing])
 
   return (
-    <div className="container-sm limiter-md content">
+    <div>
       <Link
         className="btn btn-back btn-primary-outline btn-sm"
         to={`/account/`}

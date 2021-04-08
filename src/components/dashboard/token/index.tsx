@@ -87,21 +87,23 @@ const SeriesToken: FC<Props> = ({
   }, [])
 
   return (
-    <div className="card">
-      <h6 className="card-header">Token</h6>
-      <div className="card-body">
-        {loading && (
-          <div className="d-flex justify-content-center">
-            <div className="row">
-              <div className="col-12 text-center">Loading</div>
-              <div className="col-12 text-center">
-                <div className="spinner-border" role="status"></div>
+    <div>
+      <div className="d-grid gap-1 mb-5">
+        <h3 className="m-0">Token</h3>
+        <div className="card-body">
+          {loading && (
+            <div className="d-flex justify-content-center">
+              <div className="row">
+                <div className="col-12 text-center">Loading</div>
+                <div className="col-12 text-center">
+                  <div className="spinner-border" role="status"></div>
+                </div>
               </div>
             </div>
-          </div>
-        )}
-        {!loading && !tokenDeployed && <Config></Config>}
-        {!loading && tokenDeployed && <Shares></Shares>}
+          )}
+          {!loading && !tokenDeployed && <Config></Config>}
+          {!loading && tokenDeployed && <Shares></Shares>}
+        </div>
       </div>
     </div>
   )

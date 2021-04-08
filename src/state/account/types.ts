@@ -10,12 +10,24 @@ export const ADD_INBOX_MESSAGES = 'ADD_INBOX_MESSAGES'
 export const SET_OUTBOX_MESSAGES = 'SET_OUTBOX_MESSAGES'
 export const ADD_OUTBOX_MESSAGES = 'ADD_OUTBOX_MESSAGES'
 
+export interface PaymentProps {
+  receipt: string
+  method: 'WYRE' | 'DAI' | 'USDT'
+  currency: 'USD' | 'DAI' | 'USDT'
+  timestamp: number
+}
+
 export interface PaymentMessage {
-  _id: string
-  plugin: string
-  currency: string
+  _id: string // Receipt
+  product: string // Service paid for
+  entity: string // Company ETH Address
+  environment: 'main' | 'ropsten'
+  method: 'WYRE' | 'DAI' | 'USDT'
+  currency: 'USD' | 'DAI' | 'USDT'
   amount: number
-  body: unknown
+  timestamp: number
+  status: 'PROCESSING' | 'FAILED' | 'SUCCESS'
+  body?: unknown
 }
 
 export interface BroadcastFilter {

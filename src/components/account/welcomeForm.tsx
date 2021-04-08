@@ -76,14 +76,7 @@ const MailboxForm: FC<Props> = ({
         pk.public.toString()
       )
       if (!signature) throw 'Error: Signature not created'
-      const message = {
-        _id: account,
-        signature: signature,
-      }
-      await Textile.sendMessage(process.env.GATSBY_ORACLE_KEY, {
-        method: 'wallet',
-        message,
-      })
+      await Textile.registerNewKey(account, pk.public.toString(), signature)
       Textile.storeKeys(account)
       dispatch({ type: SET_PRIVATEKEY, payload: pk })
     } catch (err) {

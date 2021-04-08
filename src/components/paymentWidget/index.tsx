@@ -5,20 +5,13 @@ import { CSSTransition } from 'react-transition-group'
 import { SeriesType, ManagementActionTypes } from '../../state/management/types'
 import { IState } from '../../state/types'
 import './style.scss'
-import {
-  Bell,
-  BellFill,
-  XDiamond,
-  Clipboard,
-  ChevronDown,
-  PencilSquare,
-  BoxArrowRight,
-  CreditCard,
-  Diamond,
-} from 'react-bootstrap-icons'
+import { XDiamond, CreditCard, Diamond } from 'react-bootstrap-icons'
 import ERC20Contract from '../../smart-contracts/ERC20'
 import TransactionUtils from '../../services/transactionUtils'
 import { requestPaymentWyre, WyreEnv } from '../../services/wyre'
+import { PrivateKey } from '@textile/crypto'
+import { PaymentMessage, PaymentProps } from '../../state/account/types'
+import Textile from '../../services/textile'
 
 interface PaymentReceipt {
   // Order ID or Transaction Hash in case of Crypto
@@ -27,6 +20,8 @@ interface PaymentReceipt {
   environment: string
   // Wyre, DAI or USDT
   method: string
+  // USD, DAI, USDT
+  currency: string
   timestamp: number
 }
 
@@ -38,8 +33,9 @@ enum StatusType {
 }
 
 interface Props {
-  account?: string | null
-  network?: string | null
+  account?: string
+  network?: string
+  privatekey?: PrivateKey
   managing?: SeriesType
   show: boolean
   product: string
@@ -51,6 +47,7 @@ interface Props {
 const PaymentWidget: FC<Props> = ({
   account,
   network,
+  privatekey,
   managing,
   show,
   product,
@@ -82,13 +79,15 @@ const PaymentWidget: FC<Props> = ({
     setStatus(StatusType.PROCESSING)
     try {
       const response = await requestPaymentWyre(env, amount)
-      setReceipt({
+      const receipt = {
         receipt: response.id,
-        environment: network,
         method: `WYRE`,
+        currency: 'USD',
         timestamp: response.timestamp,
-      })
+      }
+      setReceipt(receipt)
       setStatus(StatusType.SUCCESS)
+      await sendPaymentMessage(receipt)
     } catch (err) {
       setStatus(StatusType.OPENED)
       setError('Payment failed or cancelled.')
@@ -112,13 +111,16 @@ const PaymentWidget: FC<Props> = ({
         .send(requestInfo)
       if (!r.status) throw 'Transaction Errored'
       console.log('receipt', r)
-      setReceipt({
+      const receipt = {
         receipt: r.transactionHash,
         environment: network,
         method: 'DAI',
+        currency: 'DAI',
         timestamp: Date.now(),
-      })
+      }
+      setReceipt(receipt)
       setStatus(StatusType.SUCCESS)
+      await sendPaymentMessage(receipt)
     } catch (err) {
       setStatus(StatusType.OPENED)
       setError('Payment failed or cancelled.')
@@ -142,23 +144,56 @@ const PaymentWidget: FC<Props> = ({
         .send(requestInfo)
       if (!r.status) throw 'Transaction Errored'
       console.log('receipt', r)
-      setReceipt({
+      const receipt = {
         receipt: r.transactionHash,
         environment: network,
         method: 'USDT',
+        currency: 'USDT',
         timestamp: Date.now(),
-      })
+      }
+      setReceipt(receipt)
       setStatus(StatusType.SUCCESS)
+      // TODO In case of error sending message, suggest to RESEND receipt.
+      await sendPaymentMessage(receipt)
     } catch (err) {
-      setStatus(StatusType.OPENED)
-      setError('Payment failed or cancelled.')
-      console.log('PAYMENT CANCELLED', err)
+      // In case of error sending confirmation message
+      if (status != StatusType.SUCCESS) {
+        setStatus(StatusType.OPENED)
+        setError('Payment failed or cancelled.')
+        console.log('PAYMENT CANCELLED', err)
+      } else {
+        setError(
+          'Error sending receipt to oracle, wait some minutes and click Re-send message.'
+        )
+      }
     }
   }
   const handleCloseModal = async () => {
     setError('')
     setReceipt(null)
     setStatus(StatusType.CLOSED)
+  }
+  const sendPaymentMessage = async (receipt: PaymentProps) => {
+    if (!privatekey) throw 'Error sending payment. No Private Key present.'
+    if (!process.env.GATSBY_ORACLE_KEY)
+      throw 'Error sending payment. No Oracle public key set.'
+    if (!managing) throw 'Error sending payment. No receipt/company found.'
+    console.log('PAYMENT', receipt)
+    const message: PaymentMessage = {
+      _id: receipt.receipt,
+      method: receipt.method,
+      currency: receipt.currency,
+      entity: managing.contract,
+      environment: network,
+      timestamp: Date.now(),
+      product,
+      amount,
+      status: 'PROCESSING',
+    }
+    await Textile.sendMessage(process.env.GATSBY_ORACLE_KEY, {
+      method: 'payment',
+      message,
+    })
   }
 
   return (
@@ -193,22 +228,25 @@ const PaymentWidget: FC<Props> = ({
                       className="btn btn-primary modal-option"
                       onClick={handleWyrePayment}
                     >
-                      <div className="label">Credit-card</div>
-                      <CreditCard size={48}></CreditCard>
+                      <CreditCard
+                        className="text-primary"
+                        size={48}
+                      ></CreditCard>
+                      <div className="label">Credit card ${amount}</div>
                     </button>
                     <button
                       className="btn btn-primary modal-option"
                       onClick={handleDAIPayment}
                     >
+                      <XDiamond className="text-primary" size={48}></XDiamond>
                       <div className="label">{amount} DAI</div>
-                      <XDiamond size={48}></XDiamond>
                     </button>
                     <button
                       className="btn btn-primary modal-option"
                       onClick={handleUSDTPayment}
                     >
+                      <Diamond className="text-primary" size={48}></Diamond>
                       <div className="label">{amount} USDT</div>
-                      <Diamond size={48}></Diamond>
                     </button>
                   </div>
                   <p className="small">
@@ -270,6 +308,7 @@ const PaymentWidget: FC<Props> = ({
                       <span className="text-primary">{amount}</span>
                     </div>
                   </div>
+                  {error && <p className="small text-warning">{error}</p>}
                 </div>
               )}
             </div>
@@ -283,5 +322,6 @@ const PaymentWidget: FC<Props> = ({
 export default connect((state: IState) => ({
   account: state.account.account,
   network: state.account.network,
+  privatekey: state.account.privatekey,
   managing: state.management.managing,
 }))(PaymentWidget)

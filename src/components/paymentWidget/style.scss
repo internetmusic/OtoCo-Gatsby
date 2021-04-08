@@ -41,6 +41,9 @@
     color: $white;
     background: $gradient-subtle;
     transform: scale(1.025);
+    & svg {
+      color: $white;
+    }
   }
   & svg {
     margin: 16px 32px;
