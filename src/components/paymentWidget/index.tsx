@@ -13,18 +13,6 @@ import { PrivateKey } from '@textile/crypto'
 import { PaymentMessage, PaymentProps } from '../../state/account/types'
 import Textile from '../../services/textile'
 
-interface PaymentReceipt {
-  // Order ID or Transaction Hash in case of Crypto
-  receipt: string
-  // TestWyre or SendWyre, main, ropsten, etc..
-  environment: string
-  // Wyre, DAI or USDT
-  method: string
-  // USD, DAI, USDT
-  currency: string
-  timestamp: number
-}
-
 enum StatusType {
   CLOSED = 'closed',
   OPENED = 'opened',
@@ -58,7 +46,7 @@ const PaymentWidget: FC<Props> = ({
   const [status, setStatus] = useState<StatusType>(StatusType.CLOSED)
   const [countdown, setCountdown] = useState<boolean>(false)
   // Recept informations
-  const [receipt, setReceipt] = useState<PaymentReceipt | null>(null)
+  const [receipt, setReceipt] = useState<PaymentProps | null>(null)
   const [error, setError] = useState<string>('')
 
   React.useEffect(() => {
@@ -79,9 +67,9 @@ const PaymentWidget: FC<Props> = ({
     setStatus(StatusType.PROCESSING)
     try {
       const response = await requestPaymentWyre(env, amount)
-      const receipt = {
+      const receipt: PaymentProps = {
         receipt: response.id,
-        method: `WYRE`,
+        method: 'WYRE',
         currency: 'USD',
         timestamp: response.timestamp,
       }
@@ -111,9 +99,8 @@ const PaymentWidget: FC<Props> = ({
         .send(requestInfo)
       if (!r.status) throw 'Transaction Errored'
       console.log('receipt', r)
-      const receipt = {
+      const receipt: PaymentProps = {
         receipt: r.transactionHash,
-        environment: network,
         method: 'DAI',
         currency: 'DAI',
         timestamp: Date.now(),
@@ -144,9 +131,8 @@ const PaymentWidget: FC<Props> = ({
         .send(requestInfo)
       if (!r.status) throw 'Transaction Errored'
       console.log('receipt', r)
-      const receipt = {
+      const receipt: PaymentProps = {
         receipt: r.transactionHash,
-        environment: network,
         method: 'USDT',
         currency: 'USDT',
         timestamp: Date.now(),
@@ -185,7 +171,7 @@ const PaymentWidget: FC<Props> = ({
       currency: receipt.currency,
       entity: managing.contract,
       environment: network,
-      timestamp: Date.now(),
+      timestamp: receipt.timestamp,
       product,
       amount,
       status: 'PROCESSING',
@@ -194,6 +180,7 @@ const PaymentWidget: FC<Props> = ({
       method: 'payment',
       message,
     })
+    console.log('PAYMENT MESSAGE SENT')
   }
 
   return (

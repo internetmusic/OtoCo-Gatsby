@@ -47,15 +47,7 @@ export const requestPaymentWyre = async (
       )
       const wyre = Wyre()
       const widget = new wyre.Widget({
-        // env: env == WyreEnv.TEST ? 'test' : 'prod',
-        // reservation: res.data.reservation,
-        // operation: {
-        //   type: 'debitcard-hosted-dialog',
-        // },
         debug: true,
-        // operationHostedDialogWidget: {
-        //   type: 'debitcard-hosted-dialog',
-        // },
         apiKey: process.env.GATSBY_WYRE_KEY,
         reservation: res.data.reservation,
         auth: { type: 'metamask' },
@@ -72,10 +64,10 @@ export const requestPaymentWyre = async (
       widget.open()
       widget.on('paymentSuccess', async (e) => {
         console.log('event', e)
-        const order = await axios.get(`${env}/v3/orders/${e.orderId}`)
+        const order = await axios.get(`${env}/v3/orders/${e.data.orderId}`)
         resolve({
           timestamp: order.data.createdAt,
-          id: e.orderId,
+          id: order.data.id,
         })
       })
       const checkWindowOpen = () => {
