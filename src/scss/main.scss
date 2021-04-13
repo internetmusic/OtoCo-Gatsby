@@ -2,8 +2,9 @@
 @import './colors';
 @import './typography';
 
-// Initial Setup, Resets ans Bootstrap Customization
+// Initial Setup, Resets and Bootstrap Customization
 @import './bootstrap-customization';
+@import './bootstrap-mods';
 @import 'node_modules/bootstrap/scss/bootstrap.scss';
 @import './base';
 

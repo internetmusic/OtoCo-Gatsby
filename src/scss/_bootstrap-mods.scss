@@ -1,0 +1,29 @@
+// Changing Existent Bootstrap's classes
+
+@import 'node_modules/bootstrap/scss/functions';
+@import 'node_modules/bootstrap/scss/variables';
+@import 'node_modules/bootstrap/scss/utilities';
+
+$utilities: map-merge(
+  $utilities,
+  (
+    'line-height':
+      map-merge(
+        map-get($utilities, 'line-height'),
+        (
+          values:
+            map-merge(
+              map-get(map-get($utilities, 'line-height'), 'values'),
+              (
+                10: 1.1,
+                20: 1.2,
+                25: 1.25,
+                30: 1.3,
+                40: 1.4,
+                50: 1.5,
+              )
+            ),
+        )
+      ),
+  )
+);
