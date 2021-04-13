@@ -10,6 +10,8 @@ import {
   ManageSection,
   ManagementActionTypes,
 } from '../../../state/management/types'
+import { Inboxes } from 'react-bootstrap-icons'
+import OtocoIcon from '../../icons'
 
 interface Props {
   address: string
@@ -40,18 +42,21 @@ const SidebarSeries: FC<Props> = ({
             className="col-12 mx-2 btn"
             onClick={handleChangeSection.bind(undefined, undefined)}
           >
+            <OtocoIcon icon="house" className="me-3 mb-1" />
             Overview
           </a>
           <a
             className="col-12 mx-2 btn"
             onClick={handleChangeSection.bind(undefined, ManageSection.LEGAL)}
           >
-            Entity Legals
+            <OtocoIcon icon="fileearmarktext" className="me-3 mb-1" />
+            Files
           </a>
           <a
             className="col-12 mx-2 btn"
             onClick={handleChangeSection.bind(undefined, ManageSection.TOKEN)}
           >
+            <OtocoIcon icon="box" className="me-3 mb-1" />
             Tokens
           </a>
           <a
@@ -61,19 +66,22 @@ const SidebarSeries: FC<Props> = ({
               ManageSection.MULTISIG
             )}
           >
+            <OtocoIcon icon="keys" className="me-3 mb-1" />
             Multisig
           </a>
           <a
             className="col-12 mx-2 btn"
             onClick={handleChangeSection.bind(undefined, ManageSection.ENS)}
           >
+            <OtocoIcon icon="globe" className="me-3 mb-1" />
             ENS
           </a>
           <a
             className="col-12 mx-2 btn"
             onClick={handleChangeSection.bind(undefined, ManageSection.PLUGINS)}
           >
-            Plugins
+            <Inboxes className="me-3 mb-1" />
+            Billing
           </a>
         </div>
       </div>

@@ -60,7 +60,7 @@ const MailboxForm: FC<Props> = ({
       if (!process.env.GATSBY_ORACLE_KEY) throw 'No oracle public key found.'
       setCreation({
         step: 1,
-        message: 'First we ask to sign a message to create a key pair.',
+        message: 'First we ask you to sign a message to create a key pair.',
       })
       await setWaitTimer()
       const pk = await Textile.generateIdentity(account)
@@ -68,7 +68,7 @@ const MailboxForm: FC<Props> = ({
       setCreation({
         step: 2,
         message:
-          'Now we ask you to sign a message to proof link between publickey and your wallet account.',
+          'Now we need you to sign a second message to prove the link between the public key and your connected wallet.',
       })
       await setWaitTimer()
       const signature = await Textile.generatePublicKeyValidation(
@@ -111,7 +111,7 @@ const MailboxForm: FC<Props> = ({
             )}
             {creation && (
               <div className="col-6 col-lg-8">
-                <h4>{creation.step == 1 ? 'First' : 'Last'} step</h4>
+                <h4>Step {creation.step == 1 ? 'First' : 'Last'} of 2</h4>
                 <p className="small">{creation.message}</p>
                 <p>
                   <button

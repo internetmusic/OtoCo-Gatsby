@@ -2,6 +2,7 @@ import React, { FC } from 'react'
 import ReactJson from 'react-json-view'
 import { DecryptedMailbox } from '../../../state/account/types'
 import { BroadcastMessage } from './broadcastMessage'
+import { PaymentMessage } from './paymentMessage'
 import { WalletMessage } from './walletMessage'
 import { Trash } from 'react-bootstrap-icons'
 
@@ -42,6 +43,9 @@ export const ListOutboxMessages = ({
         )}
         {m.body.method == 'report' && (
           <BroadcastMessage message={m}></BroadcastMessage>
+        )}
+        {m.body.method == 'payment' && (
+          <PaymentMessage message={m}></PaymentMessage>
         )}
       </td>
       <td className="d-none d-md-block" style={{ textAlign: 'right' }}>

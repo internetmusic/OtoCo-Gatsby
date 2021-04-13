@@ -16,7 +16,7 @@ const Header: React.FC<unknown> = () => {
       <Logo></Logo>
       <div className="quick-links">
         <Link className="styled-link" to="/account/">
-          Access Account
+          Connect Wallet
         </Link>
       </div>
       <div className="content">

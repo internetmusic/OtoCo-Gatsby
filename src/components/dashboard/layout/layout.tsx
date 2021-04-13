@@ -8,6 +8,7 @@ const AccountWidget = loadable(
 )
 
 import './style.scss'
+import Logo from '../../logo/logo'
 
 interface Props {
   children?: React.ReactNode

@@ -15,13 +15,18 @@ import {
 import { IState } from '../../../state/types'
 import { IJurisdictionOption } from '../../../state/spinUp/types'
 import PaymentWidget from '../../paymentWidget'
+import { PaymentsList } from './paymentsList'
+import Textile from '../../../services/textile'
+import {
+  AccountActionTypes,
+  DecryptedMailbox,
+  SET_OUTBOX_MESSAGES,
+} from '../../../state/account/types'
 
 interface Props {
-  account?: string | null
-  network?: string | null
   managing?: SeriesType
-  jurisdictionOptions: IJurisdictionOption[]
-  dispatch: Dispatch<ManagementActionTypes>
+  outboxMessages: DecryptedMailbox[]
+  dispatch: Dispatch<AccountActionTypes | ManagementActionTypes>
 }
 
 interface ModalProps {
@@ -30,14 +35,21 @@ interface ModalProps {
 }
 
 const SeriesOverview: FC<Props> = ({
-  account,
-  network,
   managing,
-  jurisdictionOptions,
+  outboxMessages,
   dispatch,
 }: Props) => {
   const [modalOpen, setModalOpen] = useState<boolean>(false)
   const [modalInfo, setModalInfo] = useState<ModalProps | null>(null)
+
+  React.useEffect(() => {
+    setTimeout(async () => {
+      dispatch({
+        type: SET_OUTBOX_MESSAGES,
+        payload: await Textile.listOutboxMessages(),
+      })
+    }, 0)
+  }, [])
 
   const closeModal = () => {
     setModalOpen(false)
@@ -54,18 +66,19 @@ const SeriesOverview: FC<Props> = ({
   return (
     <div>
       <div className="d-grid gap-1 mb-5">
-        <h3 className="m-0">Plugins</h3>
+        <h3 className="m-0">Billing</h3>
         <div className="small">
-          Pay taxes, request documents, improve your entity.
+          Here you can pay for the maintenance of your entities and see what
+          else you paid for.
         </div>
         {managing !== undefined && (
           <div className="row">
             <div className="py-4">
               <button
                 className="btn btn-primary plugin-option"
-                onClick={handleSelectPlugin.bind(undefined, 'Anual Taxes', 39)}
+                onClick={handleSelectPlugin.bind(undefined, 'Annual Dues', 39)}
               >
-                <div className="label">Anual Taxes</div>
+                <div className="label">Annual Dues</div>
                 <FileMedical size={48}></FileMedical>
                 <div className="label">39 USD</div>
               </button>
@@ -80,14 +93,14 @@ const SeriesOverview: FC<Props> = ({
           </div>
         )}
       </div>
-      <h3 className="m-0">Payment Confirmation</h3>
+      <h3 className="m-0">Payments made</h3>
       <div className="small">
         Easy place to check the payments you have made using plugins
       </div>
       <table className="table small">
         <thead>
           <tr>
-            <th scope="col">Transaction or Plugin</th>
+            <th scope="col">Item</th>
             <th scope="col">ID/Hash</th>
             <th scope="col" className="text-end">
               Timestamp
@@ -98,12 +111,10 @@ const SeriesOverview: FC<Props> = ({
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>Teste</td>
-            <td>Teste</td>
-            <td>Teste</td>
-            <td>Teste</td>
-          </tr>
+          <PaymentsList
+            contract={managing?.contract}
+            messages={outboxMessages}
+          ></PaymentsList>
         </tbody>
       </table>
     </div>
@@ -114,5 +125,6 @@ export default connect((state: IState) => ({
   account: state.account.account,
   network: state.account.network,
   managing: state.management.managing,
+  outboxMessages: state.account.outboxMessages,
   jurisdictionOptions: state.spinUp.jurisdictionOptions,
 }))(SeriesOverview)

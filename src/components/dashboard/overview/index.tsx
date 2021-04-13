@@ -39,7 +39,8 @@ const SeriesOverview: FC<Props> = ({
             Manager: <Address address={managing.owner}></Address>
           </div>
           <div className="">
-            Address: <Address address={managing.contract}></Address>
+            Entity smart contract:{' '}
+            <Address address={managing.contract}></Address>
           </div>
           <div className="">
             Creation: <UTCDate date={managing.created} separator=""></UTCDate>
@@ -48,8 +49,8 @@ const SeriesOverview: FC<Props> = ({
             <span style={{ marginRight: '0.5em' }}>
               <ExclamationCircle className="fix-icon-alignment" />
             </span>
-            Your company address is not a wallet. Please do never send{' '}
-            ether/tokens to this address.
+            Your entity smart contract is not a wallet. Please do never send{' '}
+            ether/tokens to that address.
           </div>
         </div>
       )}

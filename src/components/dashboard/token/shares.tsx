@@ -173,7 +173,7 @@ const Shares: FC<Props> = ({
         </p>
       )}
       <p className="mt-2">
-        {tokenConfig?.symbol} token address:&nbsp;&nbsp;
+        {tokenConfig?.symbol} token contract address:&nbsp;&nbsp;
         <AddressWidget address={tokenDeployed?.contract}></AddressWidget>
       </p>
       <div className="small">List of current holders:</div>

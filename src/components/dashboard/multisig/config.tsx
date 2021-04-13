@@ -189,7 +189,7 @@ const Config: FC<Props> = ({
               <input
                 type="text"
                 className="form-control right"
-                placeholder="Paste an owner address to insert..."
+                placeholder="Number of signatures to aprove a transaction"
                 aria-label="Text input with button"
                 onChange={handleThresholdChange}
               />

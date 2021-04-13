@@ -89,7 +89,7 @@ const SeriesToken: FC<Props> = ({
   return (
     <div>
       <div className="d-grid gap-1 mb-5">
-        <h3 className="m-0">Token</h3>
+        <h3 className="m-0">Tokens</h3>
         <div className="card-body">
           {loading && (
             <div className="d-flex justify-content-center">

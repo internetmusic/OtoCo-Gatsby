@@ -30,6 +30,7 @@ import './style.scss'
 import { Link } from 'gatsby'
 import Textile from '../../services/textile'
 import { PrivateKey } from '@textile/hub'
+import OtocoIcon from '../icons'
 
 interface Props {
   account?: string
@@ -136,7 +137,7 @@ const AccountWidget: FC<Props> = ({
         {account && (
           <div className="vert">
             <div className="p-3 shine-on-hover" onClick={handleDropdown}>
-              <XDiamond className="me-3" />
+              <OtocoIcon icon="box" size="16px" className="me-3" />
               {alias && <span>{alias}</span>}
               {!alias && (
                 <span>
@@ -146,15 +147,21 @@ const AccountWidget: FC<Props> = ({
               )}
               <Link to="/account/messages/">
                 {inboxMessages.length > 0 && (
-                  <BellFill className="mx-3 text-warning bell-animation" />
+                  <OtocoIcon
+                    icon="bellring"
+                    size="16px"
+                    className="mx-3 text-warning bell-animation"
+                  />
                 )}
-                {inboxMessages.length == 0 && <Bell className="mx-3" />}
+                {inboxMessages.length == 0 && (
+                  <OtocoIcon icon="bell" size="16px" className="mx-3" />
+                )}
               </Link>
               <ChevronDown className={collapsed ? 'icon' : 'icon rotated'} />
             </div>
             {!collapsed && privatekey != undefined && (
               <div className="pt-3 pb-2 px-3 with-divider shine-on-hover">
-                <Clipboard className="me-3" />
+                <OtocoIcon icon="clipboard" size="16px" className="me-3" />
                 Copy Account Public Key
               </div>
             )}
@@ -163,7 +170,7 @@ const AccountWidget: FC<Props> = ({
                 className="pb-3 pt-2 px-3 shine-on-hover"
                 to="/account/settings"
               >
-                <PencilSquare className="me-3" />
+                <OtocoIcon icon="pencil" size="16px" className="me-3" />
                 My Account settings
               </Link>
             )}
@@ -172,7 +179,7 @@ const AccountWidget: FC<Props> = ({
                 className="p-3 with-divider shine-on-hover"
                 onClick={handleDisconnect}
               >
-                <BoxArrowRight className="me-3" />
+                <BoxArrowRight size="16px" className="me-3" />
                 Disconnect
               </div>
             )}
@@ -180,7 +187,8 @@ const AccountWidget: FC<Props> = ({
         )}
         {!account && (
           <div className="p-3" onClick={handleConnect}>
-            Connect your Wallet <XDiamond className="ms-3" />
+            Connect your Wallet{' '}
+            <OtocoIcon icon="box" size="16px" className="ms-3" />
           </div>
         )}
       </div>

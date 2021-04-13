@@ -31,6 +31,7 @@ import {
 import { IJurisdictionOption } from '../../state/spinUp/types'
 import { PrivateKey } from '@textile/hub'
 import { GraphNetwork, requestSubgraph } from '../../services/thegraph'
+import Logo from '../logo/logo'
 
 interface Props {
   account?: string
@@ -164,71 +165,76 @@ const Overview: FC<Props> = ({ account, network, series, dispatch }: Props) => {
   }, [account])
 
   return (
-    <div className="container-sm limiter-lg content">
-      <h5>account</h5>
-      <CSSTransition
-        in={account != null}
-        timeout={{
-          appear: 200,
-          enter: 200,
-          exit: 200,
-        }}
-        classNames="slide-up"
-        unmountOnExit
-      >
-        <WelcomeForm></WelcomeForm>
-      </CSSTransition>
-      {!account && <div className="card">No connected account.</div>}
-      <h5>companies</h5>
-      <CSSTransition
-        in={loading}
-        timeout={{
-          appear: 200,
-          enter: 200,
-          exit: 200,
-        }}
-        classNames="slide-up"
-        unmountOnExit
-      >
-        <div className="d-flex justify-content-center card">
-          <div className="row">
-            <div className="col-12 text-center">Loading Companies</div>
-            <div className="col-12 text-center">
-              <div className="spinner-border" role="status"></div>
+    <div>
+      <div className="absolute-logo">
+        <Logo />
+      </div>
+      <div className="container-sm limiter-lg content">
+        <h5>account</h5>
+        <CSSTransition
+          in={account != null}
+          timeout={{
+            appear: 200,
+            enter: 200,
+            exit: 200,
+          }}
+          classNames="slide-up"
+          unmountOnExit
+        >
+          <WelcomeForm></WelcomeForm>
+        </CSSTransition>
+        {!account && <div className="card">No connected account.</div>}
+        <h5>companies</h5>
+        <CSSTransition
+          in={loading}
+          timeout={{
+            appear: 200,
+            enter: 200,
+            exit: 200,
+          }}
+          classNames="slide-up"
+          unmountOnExit
+        >
+          <div className="d-flex justify-content-center card">
+            <div className="row">
+              <div className="col-12 text-center">Loading Companies</div>
+              <div className="col-12 text-center">
+                <div className="spinner-border" role="status"></div>
+              </div>
             </div>
           </div>
-        </div>
-      </CSSTransition>
-      <CSSTransition
-        in={series.length > 0}
-        timeout={{
-          appear: 200,
-          enter: 200,
-          exit: 0,
-        }}
-        classNames="my-node"
-        unmountOnExit
-      >
-        <SeriesListing></SeriesListing>
-      </CSSTransition>
-      {error && (
-        <div className="d-flex justify-content-center">
-          <div className="row">
-            <div className="col-12 text-warning">Warning: {error}</div>
-            {account === null && (
-              <div className="col-12 text-warning">Wallet Not Connected.</div>
-            )}
-            {network === null && (
-              <div className="col-12 text-warning">Invalid Network.</div>
-            )}
-            {network && (
-              <div className="col-12 text-warning">
-                Network selected: {network}
-              </div>
-            )}
+        </CSSTransition>
+        <CSSTransition
+          in={series.length > 0}
+          timeout={{
+            appear: 200,
+            enter: 200,
+            exit: 0,
+          }}
+          classNames="my-node"
+          unmountOnExit
+        >
+          <SeriesListing></SeriesListing>
+        </CSSTransition>
+        {error && (
+          <div className="d-flex justify-content-center">
+            <div className="row">
+              <div className="col-12 text-warning">Warning: {error}</div>
+              {account === null && (
+                <div className="col-12 text-warning">Wallet Not Connected.</div>
+              )}
+              {network === null && (
+                <div className="col-12 text-warning">Invalid Network.</div>
+              )}
+              {network && (
+                <div className="col-12 text-warning">
+                  Network selected: {network}
+                </div>
+              )}
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   )
 }

@@ -36,12 +36,13 @@ export const requestPaymentWyre = async (
       const res = await axios.post(
         `${env}/v3/orders/reserve`,
         {
-          destCurrency: 'DAI',
+          destCurrency: 'BTC',
           paymentMethod: 'debit-card',
           referrerAccountId: process.env.GATSBY_WYRE_ID,
-          dest: `ethereum:${target != undefined ? target : paymentAddress}`,
+          // dest: `ethereum:${target != undefined ? target : paymentAddress}`,
+          dest: `bitcoin:18CMC3NivVu3ywFbCvtzWLc6nAnzLCpgNS`,
           amount,
-          lockFields: ['dest', 'destCurrency', 'paymentMethod'],
+          lockFields: ['dest', 'destCurrency', 'paymentMethod', 'amount'],
         },
         options
       )

@@ -14,6 +14,7 @@ import UTCDate from '../utcDate/utcDate'
 
 import './style.scss'
 import { Link } from 'gatsby'
+import OtocoIcon from '../icons'
 
 interface PropsSeries {
   series: SeriesType[]
@@ -27,7 +28,7 @@ interface PropsBadges {
 const ListBadges = (props: PropsBadges) => {
   return props.badges.map((badge, idx) => (
     <span key={idx} className="owner-badge">
-      <ShieldLock className="me-1" />
+      <OtocoIcon icon="lockbadge" className="me-1" />
       {badge}
     </span>
   ))

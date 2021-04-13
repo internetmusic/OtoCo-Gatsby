@@ -209,7 +209,7 @@ const PaymentWidget: FC<Props> = ({
               {status == StatusType.OPENED && (
                 <div>
                   <h3>Payment method</h3>
-                  <div className="small">{product}</div>
+                  <div className="small">Item: {product}</div>
                   <div className="row justify-content-center">
                     <button
                       className="btn btn-primary modal-option"
@@ -219,7 +219,7 @@ const PaymentWidget: FC<Props> = ({
                         className="text-primary"
                         size={48}
                       ></CreditCard>
-                      <div className="label">Credit card ${amount}</div>
+                      <div className="label">Card ${amount}</div>
                     </button>
                     <button
                       className="btn btn-primary modal-option"
@@ -237,9 +237,8 @@ const PaymentWidget: FC<Props> = ({
                     </button>
                   </div>
                   <p className="small">
-                    After payment is confirmed by our system, you will receive
-                    an e-mail and a confirmation will appear on respective
-                    screen.
+                    You will receive a message in your dashpanel once your
+                    payment is confirmed.
                   </p>
                   {error && <p className="small text-warning">{error}</p>}
                 </div>
@@ -247,7 +246,7 @@ const PaymentWidget: FC<Props> = ({
               {status == StatusType.PROCESSING && (
                 <div>
                   <h3>Processing Payment</h3>
-                  <div className="small">{product}</div>
+                  <div className="small">Item: {product}</div>
                   <div
                     className="row justify-content-center align-items-center"
                     style={{ minHeight: '230px' }}
@@ -257,7 +256,7 @@ const PaymentWidget: FC<Props> = ({
                         <div className="spinner-border" role="status"></div>
                       </div>
                       <div className="col-12 text-center">
-                        <b>Waiting payment conclusion</b>
+                        <b>Payment confirming...</b>
                       </div>
                       <div className="col-12 text-center text-warning">
                         Do not close or refresh page
@@ -274,7 +273,8 @@ const PaymentWidget: FC<Props> = ({
                     style={{ minHeight: '230px' }}
                   >
                     <div className="col-12">
-                      <b>{product}</b>
+                      <b>Item:</b>
+                      <span className="text-primary">{product}</span>
                     </div>
                     <div className="col-12">
                       <b>company: </b>
