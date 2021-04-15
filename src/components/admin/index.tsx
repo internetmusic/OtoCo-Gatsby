@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import Master from './master'
 import Broadcast from './broadcast'
 import Report from './report'
+import Billing from './billing'
 
 import Web3Integrate from '../../services/web3-integrate'
 import Web3 from 'web3'
@@ -42,6 +43,7 @@ const Admin: FC<Props> = ({ account, dispatch }: Props) => {
       <Master></Master>
       <Broadcast></Broadcast>
       <Report></Report>
+      <Billing></Billing>
     </div>
   )
 }

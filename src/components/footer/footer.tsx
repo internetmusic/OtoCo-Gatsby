@@ -56,7 +56,7 @@ const Footer = () => (
               <Link to="/spinup/">Spin up new Company</Link>
             </div>
             <div className="mb-1">
-              <Link to="/account/">My account</Link>
+              <Link to="/dashpanel/">My Dashpanel</Link>
             </div>
           </div>
         </div>

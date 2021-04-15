@@ -138,7 +138,7 @@ const MailboxForm: FC<Props> = ({
                     <p className="small">No new messages.</p>
                     <Link
                       className="btn btn-primary-outline btn-sm"
-                      to={`/account/settings/`}
+                      to={`/dashpanel/account/settings/`}
                     >
                       Go to Account Settings
                     </Link>
@@ -152,7 +152,7 @@ const MailboxForm: FC<Props> = ({
                     </p>
                     <Link
                       className="btn btn-primary-outline btn-sm"
-                      to={`/account/messages/`}
+                      to={`/dashpanel/account/messages/`}
                     >
                       Go to Messages
                     </Link>

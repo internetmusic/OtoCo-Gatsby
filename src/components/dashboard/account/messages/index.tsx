@@ -2,25 +2,25 @@ import React, { Dispatch, FC, useState } from 'react'
 import axios, { AxiosError, AxiosResponse } from 'axios'
 import { Link } from 'gatsby'
 import { connect } from 'react-redux'
-import { IState } from '../../../state/types'
-import Textile from '../../../services/textile'
+import { IState } from '../../../../state/types'
+import Textile from '../../../../services/textile'
 import { PrivateKey } from '@textile/hub'
-import NotificationForm from '../welcomeForm'
+import NotificationForm from '../../welcomeForm'
 import { faChevronLeft } from '@fortawesome/free-solid-svg-icons'
-import Icon from '../../icon/icon'
-import Web3Modal from '../../../services/web3-integrate'
-import { requestPaymentWyre, WyreEnv } from '../../../services/wyre'
+import Icon from '../../../icon/icon'
+import Web3Modal from '../../../../services/web3-integrate'
+import { requestPaymentWyre, WyreEnv } from '../../../../services/wyre'
 import { ListInboxMessages } from './listInboxMessages'
 import { ListOutboxMessages } from './listOutboxMessages'
 
-import { ManagementActionTypes } from '../../../state/management/types'
+import { ManagementActionTypes } from '../../../../state/management/types'
 import {
   AccountActionTypes,
   DecryptedMailbox,
   PaymentMessage,
   SET_INBOX_MESSAGES,
   SET_OUTBOX_MESSAGES,
-} from '../../../state/account/types'
+} from '../../../../state/account/types'
 
 interface Props {
   account?: string
@@ -71,10 +71,10 @@ const SeriesIdentity: FC<Props> = ({
     <div className="container-sm limiter-md content">
       <Link
         className="btn btn-back btn-primary-outline btn-sm"
-        to={`/account/`}
+        to={`/dashpanel/`}
       >
         <Icon icon={faChevronLeft} />
-        <span style={{ paddingLeft: '10px' }}>Back to Account</span>
+        <span style={{ paddingLeft: '10px' }}>Back to Dashpanel</span>
       </Link>
       {!privatekey && <NotificationForm></NotificationForm>}
       {privatekey && (
@@ -86,7 +86,7 @@ const SeriesIdentity: FC<Props> = ({
                   <Link
                     className="nav-link active"
                     aria-current="page"
-                    to="/account/messages"
+                    to="/dashpanel/account/messages"
                   >
                     Messages
                   </Link>
@@ -95,7 +95,7 @@ const SeriesIdentity: FC<Props> = ({
                   <Link
                     className="nav-link"
                     aria-current="page"
-                    to="/account/settings"
+                    to="/dashpanel/account/settings"
                   >
                     Settings
                   </Link>

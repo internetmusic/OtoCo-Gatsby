@@ -5,13 +5,13 @@ import { CSSTransition } from 'react-transition-group'
 import { SeriesType, ManagementActionTypes } from '../../state/management/types'
 import { IState } from '../../state/types'
 import './style.scss'
-import { XDiamond, CreditCard, Diamond } from 'react-bootstrap-icons'
 import ERC20Contract from '../../smart-contracts/ERC20'
 import TransactionUtils from '../../services/transactionUtils'
 import { requestPaymentWyre, WyreEnv } from '../../services/wyre'
 import { PrivateKey } from '@textile/crypto'
 import { PaymentMessage, PaymentProps } from '../../state/account/types'
 import Textile from '../../services/textile'
+import OtocoIcon from '../icons'
 
 enum StatusType {
   CLOSED = 'closed',
@@ -26,6 +26,8 @@ interface Props {
   privatekey?: PrivateKey
   managing?: SeriesType
   show: boolean
+  billId: string
+  messageId: string
   product: string
   amount: number
   closeModal: () => void
@@ -38,6 +40,8 @@ const PaymentWidget: FC<Props> = ({
   privatekey,
   managing,
   show,
+  billId,
+  messageId,
   product,
   amount,
   closeModal,
@@ -50,6 +54,7 @@ const PaymentWidget: FC<Props> = ({
   const [error, setError] = useState<string>('')
 
   React.useEffect(() => {
+    console.log('SHOW ==>> ', show, status)
     if (show) {
       setStatus(StatusType.OPENED)
       setTimeout(() => {
@@ -158,6 +163,7 @@ const PaymentWidget: FC<Props> = ({
     setError('')
     setReceipt(null)
     setStatus(StatusType.CLOSED)
+    closeModal()
   }
   const sendPaymentMessage = async (receipt: PaymentProps) => {
     if (!privatekey) throw 'Error sending payment. No Private Key present.'
@@ -175,11 +181,13 @@ const PaymentWidget: FC<Props> = ({
       product,
       amount,
       status: 'PROCESSING',
+      body: { billRef: billId },
     }
     await Textile.sendMessage(process.env.GATSBY_ORACLE_KEY, {
       method: 'payment',
       message,
     })
+    await Textile.readMessage(messageId)
     console.log('PAYMENT MESSAGE SENT')
   }
 
@@ -209,30 +217,30 @@ const PaymentWidget: FC<Props> = ({
               {status == StatusType.OPENED && (
                 <div>
                   <h3>Payment method</h3>
-                  <div className="small">Item: {product}</div>
+                  <div className="small">
+                    Item: {product} -{' '}
+                    <span className="text-secondary">({billId})</span>
+                  </div>
                   <div className="row justify-content-center">
                     <button
                       className="btn btn-primary modal-option"
                       onClick={handleWyrePayment}
                     >
-                      <CreditCard
-                        className="text-primary"
-                        size={48}
-                      ></CreditCard>
+                      <OtocoIcon icon="creditcard" size={48} />
                       <div className="label">Card ${amount}</div>
                     </button>
                     <button
                       className="btn btn-primary modal-option"
                       onClick={handleDAIPayment}
                     >
-                      <XDiamond className="text-primary" size={48}></XDiamond>
+                      <OtocoIcon icon="dai" size={48} />
                       <div className="label">{amount} DAI</div>
                     </button>
                     <button
                       className="btn btn-primary modal-option"
                       onClick={handleUSDTPayment}
                     >
-                      <Diamond className="text-primary" size={48}></Diamond>
+                      <OtocoIcon icon="usdt" size={48} />
                       <div className="label">{amount} USDT</div>
                     </button>
                   </div>

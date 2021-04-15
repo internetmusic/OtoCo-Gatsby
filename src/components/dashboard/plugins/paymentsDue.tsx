@@ -7,18 +7,23 @@ import UTCDate from '../../utcDate/utcDate'
 interface ListMessagesProps {
   contract: string // Company/Entity contract address
   messages: DecryptedMailbox[]
+  handlePay: (p: string, a: number) => void
 }
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export const PaymentsList = ({ contract, messages }: ListMessagesProps) => {
+export const PaymentsDue = ({
+  contract,
+  messages,
+  handlePay: handle,
+}: ListMessagesProps) => {
   const tempMessages = messages
-    .filter((m) => m.body.method === 'payment')
+    .filter((m) => m.body.method === 'billing')
     .map((m) => {
       return {
-        id: m.id,
+        messageId: m.id,
+        billId: m.body.message._id,
         entity: m.body.message.entity,
         product: m.body.message.product,
-        receipt: m.body.message._id,
         timestamp: m.body.message.timestamp,
         env: m.body.message.method + '-' + m.body.message.environment,
         amount: m.body.message.amount,
@@ -27,22 +32,27 @@ export const PaymentsList = ({ contract, messages }: ListMessagesProps) => {
     })
     .filter((m) => m.entity === contract)
 
-  console.log(tempMessages)
+  //   console.log(tempMessages)
 
   return tempMessages.map((m) => (
-    <tr className="small" key={m.id}>
+    <tr className="small" key={m.billId}>
       <td>
-        {m.product} - {m.env}
+        {m.product} <span className="text-secondary">({m.billId})</span>
       </td>
-      <td>
-        {m.receipt.substring(0, 7)} ...
-        {m.receipt.substring(m.receipt.length - 8, m.receipt.length)}
-      </td>
+      <td className="text-end">{m.amount} USD</td>
       <td className="text-end">
-        <UTCDate date={new Date(m.timestamp)} separator="-" />
-      </td>
-      <td className="text-end">
-        {m.amount} {m.currency}
+        <button
+          className="btn btn-primary btn-sm"
+          onClick={handle.bind(
+            undefined,
+            m.product,
+            m.messageId,
+            m.billId,
+            m.amount
+          )}
+        >
+          Pay
+        </button>
       </td>
     </tr>
   ))

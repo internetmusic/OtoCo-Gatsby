@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 import ReactJson from 'react-json-view'
-import { DecryptedMailbox } from '../../../state/account/types'
+import { DecryptedMailbox } from '../../../../state/account/types'
 import { BroadcastMessage } from './broadcastMessage'
 import { PaymentMessage } from './paymentMessage'
 import { WalletMessage } from './walletMessage'

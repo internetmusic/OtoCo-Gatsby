@@ -2,8 +2,8 @@ import React, { FC } from 'react'
 import {
   DecryptedMailbox,
   PaymentMessage as PaymentParams,
-} from '../../../state/account/types'
-import UTCDate from '../../utcDate/utcDate'
+} from '../../../../state/account/types'
+import UTCDate from '../../../utcDate/utcDate'
 
 interface Props {
   message: DecryptedMailbox

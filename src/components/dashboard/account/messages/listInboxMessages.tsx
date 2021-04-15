@@ -1,9 +1,11 @@
 import React, { FC } from 'react'
 import ReactJson from 'react-json-view'
-import { DecryptedMailbox } from '../../../state/account/types'
+import { DecryptedMailbox } from '../../../../state/account/types'
 import { BroadcastMessage } from './broadcastMessage'
 import { WalletMessage } from './walletMessage'
 import { Trash } from 'react-bootstrap-icons'
+import { Link } from 'gatsby'
+import { BillingMessage } from './billingMessage'
 
 interface ListMessagesProps {
   publicKey: string
@@ -63,6 +65,9 @@ export const ListInboxMessages = ({
         {m.body.method == 'report' && (
           <span className="badge bg-primary small me-3">{m.body.method}</span>
         )}
+        {m.body.method == 'billing' && (
+          <BillingMessage message={m}></BillingMessage>
+        )}
       </td>
       <td className="d-none d-md-block" style={{ textAlign: 'right' }}>
         {m.body.method == 'broadcast' && (
@@ -72,6 +77,14 @@ export const ListInboxMessages = ({
           >
             visit
           </a>
+        )}
+        {m.body.method == 'billing' && (
+          <Link
+            className="btn  btn-primary-outline btn-sm me-2"
+            to={`/dashpanel/entity/${m.body.message.entity}`}
+          >
+            go pay
+          </Link>
         )}
         {m.body.method == 'report' && (
           <button

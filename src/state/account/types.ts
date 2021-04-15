@@ -17,6 +17,15 @@ export interface PaymentProps {
   timestamp: number
 }
 
+export interface BillingMessage {
+  _id?: string
+  product: string // Service paid for
+  entity: string // Company ETH Address
+  environment: 'main' | 'ropsten'
+  amount: number
+  body?: unknown
+}
+
 export interface PaymentMessage {
   _id: string // Receipt
   product: string // Service paid for
@@ -67,7 +76,12 @@ export interface ReportMessage {
 
 export interface MessageSchema {
   method: string
-  message: PaymentMessage | WalletMessage | BroadcastMessage | ReportMessage
+  message:
+    | PaymentMessage
+    | WalletMessage
+    | BroadcastMessage
+    | ReportMessage
+    | BillingMessage
 }
 
 export interface DecryptedMailbox {

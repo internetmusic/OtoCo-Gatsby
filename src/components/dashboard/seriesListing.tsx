@@ -61,7 +61,7 @@ const SeriesListing: FC<PropsSeries> = ({ series, dispatch }: PropsSeries) => {
             <div className="d-grid gap-2">
               <Link
                 className="btn btn-primary-outline"
-                to={`/dashpanel/${s.contract}`}
+                to={`/dashpanel/entity/${s.contract}`}
               >
                 <Gear className="fix-icon-alignment" />
                 <span style={{ paddingLeft: '0.5em' }}>Manage</span>

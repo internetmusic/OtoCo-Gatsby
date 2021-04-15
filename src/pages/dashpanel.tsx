@@ -5,22 +5,22 @@ import { Helmet } from 'react-helmet'
 import { Router } from '@reach/router'
 // const Layout = loadable(() => import('../components/dashboard/layout/layout'))
 import Layout from '../components/dashboard/layout/layout'
-const Company = loadable(() => import('../components/dashboard'))
-// import Company from '../components/dashboard'
+const Overview = loadable(() => import('../components/dashboard'))
+// import Overview from '../components/account/overview'
 
 interface Props {
   location: Location
 }
 
-const CompanyIndex: React.FC<Props> = ({ location }: Props) => {
+const DashpanelIndex: React.FC<Props> = ({ location }: Props) => {
   return (
     <Layout location={location}>
-      <Helmet title="Otoco - Entity" defer={false} />
-      <Router>
-        <Company path="/dashpanel/:id" />
-      </Router>
+      <Helmet title="Otoco - Dashpanel" defer={false} />
+      {/* <Router> */}
+      <Overview></Overview>
+      {/* </Router> */}
     </Layout>
   )
 }
 
-export default CompanyIndex
+export default DashpanelIndex

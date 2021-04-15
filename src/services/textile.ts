@@ -83,6 +83,7 @@ interface TextileInterface {
     message: MessageSchema
   ) => Promise<UserMessage | null>
   deleteMessage: (id: string) => Promise<void>
+  readMessage: (id: string) => Promise<void>
 }
 
 const Textile: TextileInterface = {
@@ -223,7 +224,9 @@ const Textile: TextileInterface = {
 
       /** Initialize our websocket connection */
       const socket = new WebSocket(process.env.GATSBY_ORACLE_URL)
-
+      socket.onerror = () => {
+        reject('Error connecting socket')
+      }
       /** Wait for our socket to open successfully */
       socket.onopen = () => {
         /** Get public key string */
@@ -303,7 +306,7 @@ const Textile: TextileInterface = {
   },
 
   authorize: async function () {
-    if (!this.privateKey) return null
+    if (!this.privateKey) throw 'No private key found'
     const auth: UserAuth = await this.loginWithChallenge(this.privateKey)
     this.user = await Users.withUserAuth(auth)
     this.client = await Client.withUserAuth(auth)
@@ -354,7 +357,7 @@ const Textile: TextileInterface = {
     // console.log('MESSAGES', this.user, this.privateKey)
     if (!this.user) return []
     if (!this.privateKey) return []
-    const messages = await this.user.listInboxMessages()
+    const messages = await this.user.listInboxMessages({ status: 2 })
     // console.log('MESSAGES', messages)
     const privateKey = PrivateKey.fromString(this.privateKey.toString())
     const messageList = Promise.all(
@@ -368,8 +371,8 @@ const Textile: TextileInterface = {
   listOutboxMessages: async function (): Promise<DecryptedMailbox[]> {
     await this.refreshAuthorization()
     // console.log('MESSAGES', this.user, this.privateKey)
-    if (!this.user) return []
-    if (!this.privateKey) return []
+    if (!this.user) throw 'No user defined'
+    if (!this.privateKey) throw 'No private key present'
     const messages = await this.user.listSentboxMessages()
     // console.log('MESSAGES OUT', messages)
     const privateKey = PrivateKey.fromString(this.privateKey.toString())
@@ -390,6 +393,12 @@ const Textile: TextileInterface = {
     // const encryptedEncoded = await toPublicKey.encrypt(encoded)
     // const decoded = new TextDecoder().decode(encryptedEncoded).toString()
     return await this.user.sendMessage(this.privateKey, toPublicKey, encoded)
+  },
+
+  readMessage: async function (id: string) {
+    await this.refreshAuthorization()
+    if (!this.user) return
+    await this.user.readInboxMessage(id)
   },
 
   deleteMessage: async function (id: string) {

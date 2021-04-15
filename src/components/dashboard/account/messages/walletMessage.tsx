@@ -1,5 +1,5 @@
 import React, { FC } from 'react'
-import { DecryptedMailbox } from '../../../state/account/types'
+import { DecryptedMailbox } from '../../../../state/account/types'
 
 interface Props {
   message: DecryptedMailbox

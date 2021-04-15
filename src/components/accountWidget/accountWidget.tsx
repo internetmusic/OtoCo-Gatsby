@@ -110,7 +110,7 @@ const AccountWidget: FC<Props> = ({
         type: SET_OUTBOX_MESSAGES,
         payload: await Textile.listOutboxMessages(),
       })
-    }, 20000)
+    }, 120000)
     return () => clearInterval(interval)
   }, [privatekey])
 
@@ -137,7 +137,7 @@ const AccountWidget: FC<Props> = ({
         {account && (
           <div className="vert">
             <div className="p-3 shine-on-hover" onClick={handleDropdown}>
-              <OtocoIcon icon="box" size="16px" className="me-3" />
+              <OtocoIcon icon="chainclosed" size="16px" className="me-3" />
               {alias && <span>{alias}</span>}
               {!alias && (
                 <span>
@@ -145,7 +145,7 @@ const AccountWidget: FC<Props> = ({
                   {account.substring(account.length - 4, account.length)}
                 </span>
               )}
-              <Link to="/account/messages/">
+              <Link to="/dashpanel/account/messages/">
                 {inboxMessages.length > 0 && (
                   <OtocoIcon
                     icon="bellring"
@@ -168,7 +168,7 @@ const AccountWidget: FC<Props> = ({
             {!collapsed && privatekey != undefined && (
               <Link
                 className="pb-3 pt-2 px-3 shine-on-hover"
-                to="/account/settings"
+                to="/dashpanel/account/settings"
               >
                 <OtocoIcon icon="pencil" size="16px" className="me-3" />
                 My Account settings
@@ -188,7 +188,7 @@ const AccountWidget: FC<Props> = ({
         {!account && (
           <div className="p-3" onClick={handleConnect}>
             Connect your Wallet{' '}
-            <OtocoIcon icon="box" size="16px" className="ms-3" />
+            <OtocoIcon icon="chainopen" size="16px" className="ms-3" />
           </div>
         )}
       </div>

@@ -1,62 +1,77 @@
 import React, { Dispatch, FC, useState } from 'react'
 import { connect } from 'react-redux'
 import {
-  ChevronLeft,
-  ExclamationCircle,
-  FileMedical,
-  XDiamond,
-} from 'react-bootstrap-icons'
-import Address from '../../addressWidget/addressWidget'
-import UTCDate from '../../utcDate/utcDate'
-import {
   SeriesType,
   ManagementActionTypes,
 } from '../../../state/management/types'
-import { IState } from '../../../state/types'
-import { IJurisdictionOption } from '../../../state/spinUp/types'
-import PaymentWidget from '../../paymentWidget'
-import { PaymentsList } from './paymentsList'
-import Textile from '../../../services/textile'
 import {
   AccountActionTypes,
   DecryptedMailbox,
+  SET_INBOX_MESSAGES,
   SET_OUTBOX_MESSAGES,
 } from '../../../state/account/types'
+import Textile from '../../../services/textile'
+import PaymentWidget from '../../paymentWidget'
+import { IState } from '../../../state/types'
+import { PaymentsMade } from './paymentsMade'
+import { PaymentsDue } from './paymentsDue'
 
 interface Props {
   managing?: SeriesType
+  inboxMessages: DecryptedMailbox[]
   outboxMessages: DecryptedMailbox[]
   dispatch: Dispatch<AccountActionTypes | ManagementActionTypes>
 }
 
 interface ModalProps {
+  messageId: string
+  billId: string
   product: string
   amount: number
 }
 
 const SeriesOverview: FC<Props> = ({
   managing,
+  inboxMessages,
   outboxMessages,
   dispatch,
 }: Props) => {
   const [modalOpen, setModalOpen] = useState<boolean>(false)
   const [modalInfo, setModalInfo] = useState<ModalProps | null>(null)
+  const [error, setError] = useState<string>('')
 
   React.useEffect(() => {
     setTimeout(async () => {
-      dispatch({
-        type: SET_OUTBOX_MESSAGES,
-        payload: await Textile.listOutboxMessages(),
-      })
+      try {
+        dispatch({
+          type: SET_INBOX_MESSAGES,
+          payload: await Textile.listInboxMessages(),
+        })
+        dispatch({
+          type: SET_OUTBOX_MESSAGES,
+          payload: await Textile.listOutboxMessages(),
+        })
+      } catch (err) {
+        console.log(err)
+        setError('An error ocurred acessing payment service.')
+      }
     }, 0)
-  }, [])
+  }, [managing])
 
   const closeModal = () => {
+    setModalInfo(null)
     setModalOpen(false)
   }
 
-  const handleSelectPlugin = async (p: string, a: number) => {
+  const handleSelectPlugin = async (
+    p: string,
+    messageId: string,
+    billId: string,
+    a: number
+  ) => {
     setModalInfo({
+      messageId,
+      billId,
       product: p,
       amount: a,
     })
@@ -71,9 +86,19 @@ const SeriesOverview: FC<Props> = ({
           Here you can pay for the maintenance of your entities and see what
           else you paid for.
         </div>
-        {managing !== undefined && (
-          <div className="row">
-            <div className="py-4">
+        {error && (
+          <div className="d-flex justify-content-center">
+            <div className="row">
+              <div className="col-12 text-center text-warning">{error}</div>
+              <div className="col-12 text-center">
+                Try again in some minutes.
+              </div>
+            </div>
+          </div>
+        )}
+        {!error && managing !== undefined && (
+          <div>
+            {/* <div className="py-4">
               <button
                 className="btn btn-primary plugin-option"
                 onClick={handleSelectPlugin.bind(undefined, 'Annual Dues', 39)}
@@ -83,9 +108,31 @@ const SeriesOverview: FC<Props> = ({
                 <div className="label">39 USD</div>
               </button>
               {modalOpen}
-            </div>
+            </div> */}
+            <table className="table">
+              <thead>
+                <tr>
+                  <th scope="col">Item</th>
+                  <th scope="col" className="text-end">
+                    Amount
+                  </th>
+                  <th scope="col" className="text-end">
+                    Action
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <PaymentsDue
+                  contract={managing?.contract}
+                  messages={inboxMessages}
+                  handlePay={handleSelectPlugin}
+                ></PaymentsDue>
+              </tbody>
+            </table>
             <PaymentWidget
               show={modalOpen}
+              messageId={modalInfo?.messageId}
+              billId={modalInfo?.billId}
               product={modalInfo?.product}
               amount={modalInfo?.amount}
               closeModal={closeModal}
@@ -93,30 +140,34 @@ const SeriesOverview: FC<Props> = ({
           </div>
         )}
       </div>
-      <h3 className="m-0">Payments made</h3>
-      <div className="small">
-        Easy place to check the payments you have made using plugins
-      </div>
-      <table className="table small">
-        <thead>
-          <tr>
-            <th scope="col">Item</th>
-            <th scope="col">ID/Hash</th>
-            <th scope="col" className="text-end">
-              Timestamp
-            </th>
-            <th scope="col" className="text-end">
-              Amount
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <PaymentsList
-            contract={managing?.contract}
-            messages={outboxMessages}
-          ></PaymentsList>
-        </tbody>
-      </table>
+      {!error && (
+        <div>
+          <h3 className="m-0">Payments made</h3>
+          <div className="small">
+            Easy place to check the payments you have made using plugins
+          </div>
+          <table className="table">
+            <thead>
+              <tr>
+                <th scope="col">Item</th>
+                <th scope="col">ID/Hash</th>
+                <th scope="col" className="text-end">
+                  Timestamp
+                </th>
+                <th scope="col" className="text-end">
+                  Amount
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <PaymentsMade
+                contract={managing?.contract}
+                messages={outboxMessages}
+              ></PaymentsMade>
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   )
 }
@@ -125,6 +176,7 @@ export default connect((state: IState) => ({
   account: state.account.account,
   network: state.account.network,
   managing: state.management.managing,
+  inboxMessages: state.account.inboxMessages,
   outboxMessages: state.account.outboxMessages,
   jurisdictionOptions: state.spinUp.jurisdictionOptions,
 }))(SeriesOverview)

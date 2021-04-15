@@ -4,8 +4,10 @@ import { Helmet } from 'react-helmet'
 // const Layout = loadable(
 //   () => import('../../components/dashboard/layout/layout')
 // )
-import Layout from '../../components/dashboard/layout/layout'
-const Messages = loadable(() => import('../../components/account/messages'))
+import Layout from '../../../components/dashboard/layout/layout'
+const Messages = loadable(
+  () => import('../../../components/dashboard/account/messages')
+)
 // import Messages from '../../components/account/messages'
 
 interface Props {
