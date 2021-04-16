@@ -15,9 +15,12 @@ import PaymentWidget from '../../paymentWidget'
 import { IState } from '../../../state/types'
 import { PaymentsMade } from './paymentsMade'
 import { PaymentsDue } from './paymentsDue'
+import { PrivateKey } from '@textile/crypto'
+import WelcomeForm from '../welcomeForm'
 
 interface Props {
   managing?: SeriesType
+  privatekey?: PrivateKey
   inboxMessages: DecryptedMailbox[]
   outboxMessages: DecryptedMailbox[]
   dispatch: Dispatch<AccountActionTypes | ManagementActionTypes>
@@ -32,6 +35,7 @@ interface ModalProps {
 
 const SeriesOverview: FC<Props> = ({
   managing,
+  privatekey,
   inboxMessages,
   outboxMessages,
   dispatch,
@@ -42,6 +46,8 @@ const SeriesOverview: FC<Props> = ({
 
   React.useEffect(() => {
     setTimeout(async () => {
+      if (!privatekey) return
+      setError('')
       try {
         dispatch({
           type: SET_INBOX_MESSAGES,
@@ -56,7 +62,7 @@ const SeriesOverview: FC<Props> = ({
         setError('An error ocurred acessing payment service.')
       }
     }, 0)
-  }, [managing])
+  }, [managing, privatekey])
 
   const closeModal = () => {
     setModalInfo(null)
@@ -86,6 +92,13 @@ const SeriesOverview: FC<Props> = ({
           Here you can pay for the maintenance of your entities and see what
           else you paid for.
         </div>
+        {!privatekey && (
+          <div className="d-flex justify-content-center">
+            <div className="row">
+              <WelcomeForm></WelcomeForm>
+            </div>
+          </div>
+        )}
         {error && (
           <div className="d-flex justify-content-center">
             <div className="row">
@@ -96,9 +109,10 @@ const SeriesOverview: FC<Props> = ({
             </div>
           </div>
         )}
-        {!error && managing !== undefined && (
+        {!error && privatekey && (
           <div>
-            {/* <div className="py-4">
+            <div>
+              {/* <div className="py-4">
               <button
                 className="btn btn-primary plugin-option"
                 onClick={handleSelectPlugin.bind(undefined, 'Annual Dues', 39)}
@@ -109,74 +123,69 @@ const SeriesOverview: FC<Props> = ({
               </button>
               {modalOpen}
             </div> */}
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th scope="col">Item</th>
+                    <th scope="col" className="text-end">
+                      Amount
+                    </th>
+                    <th scope="col" className="text-end">
+                      Action
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <PaymentsDue
+                    contract={managing?.contract}
+                    messages={inboxMessages}
+                    handlePay={handleSelectPlugin}
+                  ></PaymentsDue>
+                </tbody>
+              </table>
+              <PaymentWidget
+                show={modalOpen}
+                messageId={modalInfo?.messageId}
+                billId={modalInfo?.billId}
+                product={modalInfo?.product}
+                amount={modalInfo?.amount}
+                closeModal={closeModal}
+              ></PaymentWidget>
+            </div>
+            <h3 className="m-0">Payments made</h3>
+            <div className="small">
+              Easy place to check the payments you have made using plugins
+            </div>
             <table className="table">
               <thead>
                 <tr>
                   <th scope="col">Item</th>
+                  <th scope="col">ID/Hash</th>
                   <th scope="col" className="text-end">
-                    Amount
+                    Timestamp
                   </th>
                   <th scope="col" className="text-end">
-                    Action
+                    Amount
                   </th>
                 </tr>
               </thead>
               <tbody>
-                <PaymentsDue
+                <PaymentsMade
                   contract={managing?.contract}
-                  messages={inboxMessages}
-                  handlePay={handleSelectPlugin}
-                ></PaymentsDue>
+                  messages={outboxMessages}
+                ></PaymentsMade>
               </tbody>
             </table>
-            <PaymentWidget
-              show={modalOpen}
-              messageId={modalInfo?.messageId}
-              billId={modalInfo?.billId}
-              product={modalInfo?.product}
-              amount={modalInfo?.amount}
-              closeModal={closeModal}
-            ></PaymentWidget>
           </div>
         )}
       </div>
-      {!error && (
-        <div>
-          <h3 className="m-0">Payments made</h3>
-          <div className="small">
-            Easy place to check the payments you have made using plugins
-          </div>
-          <table className="table">
-            <thead>
-              <tr>
-                <th scope="col">Item</th>
-                <th scope="col">ID/Hash</th>
-                <th scope="col" className="text-end">
-                  Timestamp
-                </th>
-                <th scope="col" className="text-end">
-                  Amount
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <PaymentsMade
-                contract={managing?.contract}
-                messages={outboxMessages}
-              ></PaymentsMade>
-            </tbody>
-          </table>
-        </div>
-      )}
     </div>
   )
 }
 
 export default connect((state: IState) => ({
-  account: state.account.account,
-  network: state.account.network,
   managing: state.management.managing,
+  privatekey: state.account.privatekey,
   inboxMessages: state.account.inboxMessages,
   outboxMessages: state.account.outboxMessages,
-  jurisdictionOptions: state.spinUp.jurisdictionOptions,
 }))(SeriesOverview)

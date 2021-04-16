@@ -111,7 +111,7 @@ const MailboxForm: FC<Props> = ({
             )}
             {creation && (
               <div className="col-6 col-lg-8">
-                <h4>Step {creation.step == 1 ? 'First' : 'Last'} of 2</h4>
+                <h4>Step {creation.step} of 2</h4>
                 <p className="small">{creation.message}</p>
                 <p>
                   <button

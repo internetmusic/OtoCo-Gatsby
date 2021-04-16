@@ -1,16 +1,9 @@
 import React, { Dispatch, FC, useState } from 'react'
-import axios, { AxiosError, AxiosResponse } from 'axios'
-import { Link } from 'gatsby'
 import { connect } from 'react-redux'
 import { IState } from '../../../../state/types'
 import Textile from '../../../../services/textile'
 import { PrivateKey } from '@textile/hub'
 import KeyWidget from '../../../keyWidget/keyWidget'
-import NotificationForm from '../../welcomeForm'
-import { faChevronLeft } from '@fortawesome/free-solid-svg-icons'
-import Icon from '../../../icon/icon'
-import Web3Modal from '../../../../services/web3-integrate'
-import { requestPaymentWyre, WyreEnv } from '../../../../services/wyre'
 
 import {
   SeriesType,
@@ -29,6 +22,7 @@ import {
 import ReactJson from 'react-json-view'
 
 import '../../style.scss'
+import Account from '../index'
 
 interface Props {
   account?: string
@@ -161,122 +155,52 @@ const SeriesIdentity: FC<Props> = ({
   }
 
   return (
-    <div className="container-sm limiter-md content">
-      <Link
-        className="btn btn-back btn-primary-outline btn-sm"
-        to={`/dashpanel/`}
-      >
-        <Icon icon={faChevronLeft} />
-        <span style={{ paddingLeft: '10px' }}>Back to Dashpanel</span>
-      </Link>
-      {!privatekey && <NotificationForm></NotificationForm>}
-      {privatekey && (
-        <div>
-          <div className="card">
-            <div className="card-body">
-              <ul className="nav nav-account justify-content-left">
-                <li className="nav-item">
-                  <Link
-                    className="nav-link"
-                    aria-current="page"
-                    to="/dashpanel/account/messages"
-                  >
-                    Messages
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link
-                    className="nav-link active"
-                    aria-current="page"
-                    to="/dashpanel/account/settings"
-                  >
-                    Settings
-                  </Link>
-                </li>
-              </ul>
-              Your Public Key:{' '}
-              <KeyWidget publickey={privatekey.public.toString()}></KeyWidget>
-              {!hasEmail && (
-                <div>
-                  <h5 className="mt-4">
-                    Use following form to update/add your contact e-mail:
-                  </h5>
-                  <div className="input-group my-2 col-12 col-md-8">
-                    <input
-                      type="text"
-                      className="form-control right"
-                      placeholder="johndoe@domain.com"
-                      onChange={handleChangeEmail}
-                    />
-                    <div className="input-group-append">
-                      <div
-                        onClick={handleUpdateEmail}
-                        className="btn btn-primary"
-                      >
-                        update e-mail
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-              {/* <div>
-                <h5 className="mt-4">
-                  Use following form to encrypt your private-key locally:
-                </h5>
-                <div className="input-group my-2 col-12 col-md-8">
-                  <input
-                    type="text"
-                    className="form-control right"
-                    placeholder="choose a password"
-                    onChange={handleChangeEmail}
-                  />
-                  <div className="input-group-append">
-                    <div
-                      onClick={handleUpdateEmail}
-                      className="btn btn-primary disabled"
-                    >
-                      create password
-                    </div>
-                  </div>
-                </div>
-                <div className="input-group my-2 col-12 col-md-8">
-                  <input
-                    type="text"
-                    className="form-control right"
-                    placeholder="repeat password"
-                    onChange={handleChangeEmail}
-                  />
-                  <div className="input-group-append">
-                    <div
-                      onClick={handleUpdateEmail}
-                      className="btn btn-primary"
-                    >
-                      encrypt keys
-                    </div>
-                  </div>
-                </div>
-              </div> */}
-            </div>
-            <div>
-              <h5 className="mt-4">Create an alias to your wallet:</h5>
-              <div className="input-group my-2 col-12 col-md-8">
-                <input
-                  type="text"
-                  className="form-control right"
-                  placeholder={alias || 'choose an alias'}
-                  onChange={handleChangeAliasTemp}
-                />
-                <div className="input-group-append">
-                  <div onClick={handleChangeAlias} className="btn btn-primary">
-                    {alias ? 'update alias' : 'create alias'}
-                  </div>
+    <Account tab="settings">
+      <div>
+        {privatekey && (
+          <div>
+            Your Public Key:{' '}
+            <KeyWidget publickey={privatekey.public.toString()}></KeyWidget>
+          </div>
+        )}
+        {!hasEmail && (
+          <div>
+            <h5 className="mt-4">
+              Use following form to update/add your contact e-mail:
+            </h5>
+            <div className="input-group my-2 col-12 col-md-8">
+              <input
+                type="text"
+                className="form-control right"
+                placeholder="johndoe@domain.com"
+                onChange={handleChangeEmail}
+              />
+              <div className="input-group-append">
+                <div onClick={handleUpdateEmail} className="btn btn-primary">
+                  update e-mail
                 </div>
               </div>
             </div>
           </div>
+        )}
+      </div>
+      <div>
+        <h5 className="mt-4">Create an alias to your wallet:</h5>
+        <div className="input-group my-2 col-12 col-md-8">
+          <input
+            type="text"
+            className="form-control right"
+            placeholder={alias || 'choose an alias'}
+            onChange={handleChangeAliasTemp}
+          />
+          <div className="input-group-append">
+            <div onClick={handleChangeAlias} className="btn btn-primary">
+              {alias ? 'update alias' : 'create alias'}
+            </div>
+          </div>
         </div>
-      )}
-    </div>
+      </div>
+    </Account>
   )
 }
 

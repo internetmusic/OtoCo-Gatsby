@@ -5,9 +5,7 @@ import loadable from '@loadable/component'
 const AccountWidget = loadable(
   () => import('../../../accountWidget/accountWidget')
 )
-
-import '../dashboard/layout/style.scss'
-import Logo from '../../../logo/logo'
+import '../../layout/style.scss'
 
 interface Props {
   children?: React.ReactNode

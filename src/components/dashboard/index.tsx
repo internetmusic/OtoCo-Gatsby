@@ -8,9 +8,6 @@ import Web3Integrate from '../../services/web3-integrate'
 import SeriesListing from './seriesListing'
 import WelcomeForm from './welcomeForm'
 
-import MainContract from '../../smart-contracts/MainContract'
-import SeriesContract from '../../smart-contracts/SeriesContract'
-
 import './style.scss'
 
 import {
