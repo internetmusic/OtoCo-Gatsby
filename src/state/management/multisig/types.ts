@@ -1,6 +1,7 @@
 export const SET_MULTISIG_CONFIG = 'SET_MULTISIG_CONFIG'
 export const SET_MULTISIG_DEPLOYED = 'SET_MULTISIG_DEPLOYED'
 export const SET_MULTISIG_BALANCES = 'UPDATE_MULTISIG_BALANCE'
+export const CLEAR_MULTISIG_DEPLOYED = 'CLEAR_MULTISIG_DEPLOYED'
 
 export type MultisigConfig = {
   owners: string[]
@@ -35,6 +36,9 @@ interface SetMultisigBalances {
   type: typeof SET_MULTISIG_BALANCES
   payload: MultisigBalances
 }
+interface ClearMultisigDeployed {
+  type: typeof CLEAR_MULTISIG_DEPLOYED
+}
 
 export interface IMultisigState {
   multisigConfig?: MultisigConfig
@@ -46,3 +50,4 @@ export type MultisigActionTypes =
   | SetMultisigConfig
   | SetMultisigDeployed
   | SetMultisigBalances
+  | ClearMultisigDeployed

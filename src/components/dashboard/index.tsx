@@ -32,6 +32,18 @@ import { IJurisdictionOption } from '../../state/spinUp/types'
 import { PrivateKey } from '@textile/hub'
 import { GraphNetwork, requestSubgraph } from '../../services/thegraph'
 import Logo from '../logo/logo'
+import {
+  CLEAR_MULTISIG_DEPLOYED,
+  MultisigActionTypes,
+} from '../../state/management/multisig/types'
+import {
+  CLEAR_TOKEN_DEPLOYED,
+  TokenActionTypes,
+} from '../../state/management/token/types'
+import {
+  CLEAR_ENS_DOMAINS,
+  ENSActionTypes,
+} from '../../state/management/ens/types'
 
 interface Props {
   account?: string
@@ -42,7 +54,12 @@ interface Props {
   jurisdictionOptions: IJurisdictionOption[]
   contactForm: boolean
   dispatch: Dispatch<
-    AccountActionTypes | ManagementActionTypes | AccountActionTypes
+    | AccountActionTypes
+    | ManagementActionTypes
+    | AccountActionTypes
+    | TokenActionTypes
+    | MultisigActionTypes
+    | ENSActionTypes
   >
 }
 
@@ -52,6 +69,9 @@ const Overview: FC<Props> = ({ account, network, series, dispatch }: Props) => {
 
   React.useEffect(() => {
     dispatch({ type: CLEAR_MANAGE_SERIES })
+    dispatch({ type: CLEAR_MULTISIG_DEPLOYED })
+    dispatch({ type: CLEAR_TOKEN_DEPLOYED })
+    dispatch({ type: CLEAR_ENS_DOMAINS })
     setTimeout(async () => {
       // IF NOT CONNECTED YET
       setLoading(true)
@@ -195,7 +215,7 @@ const Overview: FC<Props> = ({ account, network, series, dispatch }: Props) => {
           classNames="slide-up"
           unmountOnExit
         >
-          <div className="d-flex justify-content-center card">
+          <div className="d-flex justify-content-center">
             <div className="row">
               <div className="col-12 text-center">Loading Companies</div>
               <div className="col-12 text-center">

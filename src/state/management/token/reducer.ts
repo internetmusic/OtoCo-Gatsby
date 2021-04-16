@@ -1,6 +1,7 @@
 import {
   SET_TOKEN_CONFIG,
   SET_TOKEN_DEPLOYED,
+  CLEAR_TOKEN_DEPLOYED,
   ITokenState,
   TokenActionTypes,
 } from './types'
@@ -19,6 +20,12 @@ const reducer = (
       return {
         ...state,
         tokenDeployed: action.payload,
+      }
+    case CLEAR_TOKEN_DEPLOYED:
+      return {
+        ...state,
+        tokenDeployed: undefined,
+        tokenConfig: undefined,
       }
     default:
       return state

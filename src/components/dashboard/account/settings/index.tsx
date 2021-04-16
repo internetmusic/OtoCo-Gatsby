@@ -174,7 +174,7 @@ const SeriesIdentity: FC<Props> = ({
         <div>
           <div className="card">
             <div className="card-body">
-              <ul className="nav justify-content-left">
+              <ul className="nav nav-account justify-content-left">
                 <li className="nav-item">
                   <Link
                     className="nav-link"

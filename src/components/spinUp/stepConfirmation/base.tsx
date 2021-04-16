@@ -1,20 +1,19 @@
-import React, { Dispatch, FC, useState } from 'react'
-import Web3 from 'web3'
-import { navigate } from '@reach/router'
+import React, { FC } from 'react'
 import { connect } from 'react-redux'
 import { IState } from '../../../state/types'
 import ConfirmationIllustration from '../../../../static/img/spinup-finished-illustration.svg'
 import ConfirmationAnimationWebM from '../../../../static/video/spinup-finished-animation.webm'
+import { Link } from 'gatsby'
 
 interface Props {
   companyName: string
+  companyContract: string
 }
 
-const StepConfirmation: FC<Props> = ({ companyName }: Props) => {
-  const clickToDashpanel = async () => {
-    navigate('/dashpanel')
-  }
-
+const StepConfirmation: FC<Props> = ({
+  companyName,
+  companyContract,
+}: Props) => {
   return (
     <div className="row">
       <div className="col-12 text-center mb-4 mt-2">
@@ -34,13 +33,12 @@ const StepConfirmation: FC<Props> = ({ companyName }: Props) => {
         and read our FAQ or use our help desk if you have any questions.
       </div>
       <div className="d-flex row-cols-2 pt-4 gap-5 flex-row">
-        <button
-          type="button"
+        <Link
           className="btn btn-primary flex-fill"
-          onClick={clickToDashpanel}
+          to={`/dashpanel/entity/${companyContract}`}
         >
           Go To Dashpanel
-        </button>
+        </Link>
       </div>
     </div>
   )
@@ -48,4 +46,5 @@ const StepConfirmation: FC<Props> = ({ companyName }: Props) => {
 
 export default connect((state: IState) => ({
   companyName: state.spinUp.companyName,
+  companyContract: state.spinUp.companyContract,
 }))(StepConfirmation)

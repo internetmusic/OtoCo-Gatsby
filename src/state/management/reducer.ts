@@ -33,7 +33,8 @@ const reducer = (
         ...state,
         managing: undefined,
         section: undefined,
-        token: {},
+        tokenConfig: {},
+        tokenDeployed: {},
         ens: {},
         multisig: {},
       }

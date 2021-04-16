@@ -1,5 +1,6 @@
 export const SET_TOKEN_CONFIG = 'SET_TOKEN_CONFIG'
 export const SET_TOKEN_DEPLOYED = 'SET_TOKEN_DEPLOYED'
+export const CLEAR_TOKEN_DEPLOYED = 'CLEAR_TOKEN_DEPLOYED'
 
 export type TokenConfig = {
   shares: string
@@ -26,10 +27,16 @@ interface SetTokenDeployed {
   type: typeof SET_TOKEN_DEPLOYED
   payload: TokenDeployed
 }
+interface ClearTokenDeployed {
+  type: typeof CLEAR_TOKEN_DEPLOYED
+}
 
 export interface ITokenState {
   tokenConfig?: TokenConfig
   tokenDeployed?: TokenDeployed
 }
 
-export type TokenActionTypes = SetTokenConfig | SetTokenDeployed
+export type TokenActionTypes =
+  | SetTokenConfig
+  | SetTokenDeployed
+  | ClearTokenDeployed

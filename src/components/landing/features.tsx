@@ -1,20 +1,13 @@
 import React, { useState } from 'react'
-import Web3 from 'web3'
-import { navigate } from '@reach/router'
 import illustrationOne from '../../../static/img/features-icon-1.svg'
 import illustrationTwo from '../../../static/img/features-icon-2.svg'
 import illustrationThree from '../../../static/img/features-icon-3.svg'
 import './style.scss'
 
-import MainContract from '../../smart-contracts/MainContract'
 import { GraphNetwork, requestSubgraph } from '../../services/thegraph'
 
 const Features: React.FC<unknown> = () => {
   const [counter, setCounter] = useState<number>(100)
-
-  const handleClickSpinUp = () => {
-    navigate(`/spinup/`)
-  }
 
   React.useEffect(() => {
     setTimeout(async () => {

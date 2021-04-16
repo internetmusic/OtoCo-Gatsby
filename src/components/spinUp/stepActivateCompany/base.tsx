@@ -17,6 +17,7 @@ import {
   SET_COMPANY_NAME,
   CLEAR_AVAILABLE_NAME,
   SpinUpActionTypes,
+  SET_COMPANY_CONTRACT,
 } from '../../../state/spinUp/types'
 import transactionMonitor from '../../transactionMonitor/transactionMonitor'
 
@@ -84,6 +85,7 @@ const StepActivateCompany: FC<Props> = ({
       .call({ from: account })
     console.log('RESULT', contract, finalName)
     dispatch({ type: SET_COMPANY_NAME, payload: finalName })
+    dispatch({ type: SET_COMPANY_CONTRACT, payload: contract })
     dispatch({ type: SET_CURRENT_STEP, payload: 5 })
   }
 
