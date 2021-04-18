@@ -4,9 +4,12 @@
   overflow-x: hidden;
   width: 300px;
   background: $midnight-blue-2;
-  transition: width 200ms;
+  transition: all 200ms;
   &.collapsed {
     width: 0px;
+    padding: 0px !important;
+    max-width: 0px;
+    min-width: 0px;
   }
 
   & a {
@@ -18,14 +21,23 @@
   }
 }
 
+@media (max-width: 640px) {
+  #sidebar {
+    width: 58px;
+    &.collapsed {
+      width: 0px;
+    }
+  }
+}
+
 #sidebar-content {
   width: 233px;
-  padding: 32px;
 }
 
 .entity-card {
   padding: 8px;
   border-radius: 8px;
+  max-width: 208px;
   & .jurisdiction {
     font-size: 10px;
   }

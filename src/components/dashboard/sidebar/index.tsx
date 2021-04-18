@@ -12,9 +12,10 @@ import {
   SeriesType,
   Badges,
 } from '../../../state/management/types'
-import { Inboxes } from 'react-bootstrap-icons'
+import { ChevronLeft, Inboxes } from 'react-bootstrap-icons'
 import OtocoIcon from '../../icons'
 import EntityCard from './entityCard'
+import { Link } from 'gatsby'
 
 interface Props {
   account: string
@@ -37,28 +38,35 @@ const SidebarSeries: FC<Props> = ({
   }
 
   return (
-    <nav id="sidebar" className={managing ? '' : 'collapsed'}>
+    <nav id="sidebar" className={`p-2 p-md-4 ${managing ? '' : 'collapsed'}`}>
       <div id="sidebar-content">
-        <Logo />
+        <div className="d-none d-md-block">
+          <Logo />
+        </div>
         <div className="row mt-2">
           {managing && (
-            <EntityCard
-              name={managing.name}
-              jurisdiction={managing?.jurisdiction}
-              badges={managing?.badges}
-            />
+            <div className="d-none d-md-block px-0">
+              <EntityCard
+                name={managing.name}
+                jurisdiction={managing?.jurisdiction}
+                badges={managing?.badges}
+              />
+            </div>
           )}
           {managing && managing?.badges.length > 0 && (
             <div>
+              <Link className="d-block d-md-none col-12 btn" to={`/dashpanel/`}>
+                <ChevronLeft className="fix-icon-alignment" />
+              </Link>
               <a
-                className="col-12 mx-2 btn"
+                className="col-12 btn"
                 onClick={handleChangeSection.bind(undefined, undefined)}
               >
                 <OtocoIcon icon="house" className="me-3 mb-1" />
                 Overview
               </a>
               <a
-                className="col-12 mx-2 btn"
+                className="col-12 btn"
                 onClick={handleChangeSection.bind(
                   undefined,
                   ManageSection.LEGAL
@@ -68,7 +76,7 @@ const SidebarSeries: FC<Props> = ({
                 Files
               </a>
               <a
-                className="col-12 mx-2 btn"
+                className="col-12 btn"
                 onClick={handleChangeSection.bind(
                   undefined,
                   ManageSection.TOKEN
@@ -78,7 +86,7 @@ const SidebarSeries: FC<Props> = ({
                 Tokens
               </a>
               <a
-                className="col-12 mx-2 btn"
+                className="col-12 btn"
                 onClick={handleChangeSection.bind(
                   undefined,
                   ManageSection.MULTISIG
@@ -88,14 +96,14 @@ const SidebarSeries: FC<Props> = ({
                 Multisig
               </a>
               <a
-                className="col-12 mx-2 btn"
+                className="col-12 btn"
                 onClick={handleChangeSection.bind(undefined, ManageSection.ENS)}
               >
                 <OtocoIcon icon="globe" className="me-3 mb-1" />
                 ENS
               </a>
               <a
-                className="col-12 mx-2 btn"
+                className="col-12 btn"
                 onClick={handleChangeSection.bind(
                   undefined,
                   ManageSection.PLUGINS

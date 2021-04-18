@@ -70,7 +70,7 @@ const Account: FC<Props> = ({
         to={`/dashpanel/`}
       >
         <Icon icon={faChevronLeft} />
-        <span style={{ paddingLeft: '10px' }}>Back to Dashpanel</span>
+        <span style={{ paddingLeft: '10px' }}>Back</span>
       </Link>
       {account && !privatekey && <NotificationForm></NotificationForm>}
       {!error && account && privatekey && (

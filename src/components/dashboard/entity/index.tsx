@@ -123,7 +123,7 @@ const SeriesManagement: FC<Props> = ({
   return (
     <div>
       <Link
-        className="btn btn-back btn-primary-outline btn-sm"
+        className="d-none d-md-block btn btn-back btn-primary-outline btn-sm"
         to={`/dashpanel/`}
       >
         <ChevronLeft className="fix-icon-alignment" />
