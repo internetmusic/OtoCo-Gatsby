@@ -91,7 +91,7 @@ const MailboxForm: FC<Props> = ({
         {!loading && privatekey == undefined && (
           <div className="row">
             {!creation && (
-              <div className="col-6 col-lg-8">
+              <div className="col-12 col-md-6 col-lg-8">
                 <h4>Access everything in one place</h4>
                 <p className="small">
                   Sign with your connected wallet to send and receive encrypted
@@ -110,7 +110,7 @@ const MailboxForm: FC<Props> = ({
               </div>
             )}
             {creation && (
-              <div className="col-6 col-lg-8">
+              <div className="col-12 col-md-6 col-lg-8">
                 <h4>Step {creation.step} of 2</h4>
                 <p className="small">{creation.message}</p>
                 <p>
@@ -118,7 +118,7 @@ const MailboxForm: FC<Props> = ({
                     className="btn btn-primary disabled"
                     onClick={handleClickCreate}
                   >
-                    activate
+                    Activate
                   </button>
                 </p>
               </div>

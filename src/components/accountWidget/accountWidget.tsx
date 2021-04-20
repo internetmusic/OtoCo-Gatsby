@@ -159,15 +159,15 @@ const AccountWidget: FC<Props> = ({
               </Link>
               <ChevronDown className={collapsed ? 'icon' : 'icon rotated'} />
             </div>
-            {!collapsed && privatekey != undefined && (
+            {/* {!collapsed && privatekey != undefined && (
               <div className="pt-3 pb-2 px-3 with-divider shine-on-hover">
                 <OtocoIcon icon="clipboard" size="16px" className="me-3" />
                 Copy Account Public Key
               </div>
-            )}
+            )} */}
             {!collapsed && privatekey != undefined && (
               <Link
-                className="pb-3 pt-2 px-3 shine-on-hover"
+                className="py-3 px-3 with-divider shine-on-hover"
                 to="/dashpanel/account/settings"
               >
                 <OtocoIcon icon="pencil" size="16px" className="me-3" />

@@ -184,7 +184,7 @@ const SeriesIdentity: FC<Props> = ({
           </div>
         )}
       </div>
-      <div>
+      {/* <div>
         <h5 className="mt-4">Create an alias to your wallet:</h5>
         <div className="input-group my-2 col-12 col-md-8">
           <input
@@ -199,7 +199,7 @@ const SeriesIdentity: FC<Props> = ({
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
     </Account>
   )
 }

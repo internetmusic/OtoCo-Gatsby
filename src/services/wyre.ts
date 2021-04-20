@@ -33,26 +33,64 @@ export const requestPaymentWyre = async (
 }> => {
   return new Promise(async (resolve, reject) => {
     try {
+      console.log({
+        Authorization:
+          env == WyreEnv.PROD
+            ? process.env.GATSBY_SENDWYRE_KEY
+            : process.env.GATSBY_TESTWYRE_KEY,
+        'Content-Type': 'application/json',
+      })
+
       const res = await axios.post(
         `${env}/v3/orders/reserve`,
         {
-          destCurrency: 'BTC',
+          sourceCurrency: 'USD',
+          destCurrency: 'USD',
           paymentMethod: 'debit-card',
-          referrerAccountId: process.env.GATSBY_WYRE_ID,
-          // dest: `ethereum:${target != undefined ? target : paymentAddress}`,
-          dest: `bitcoin:18CMC3NivVu3ywFbCvtzWLc6nAnzLCpgNS`,
-          amount,
-          lockFields: ['dest', 'destCurrency', 'paymentMethod', 'amount'],
+          referrerAccountId:
+            env == WyreEnv.PROD
+              ? process.env.GATSBY_SENDWYRE_ID
+              : process.env.GATSBY_TESTWYRE_ID,
+          // dest: `ethereum:${
+          //   target != undefined
+          //     ? target
+          //     : '0xa484165bd8E535F11C5820205E98d18DF8d22Bf7'
+          // }`,
+          dest: `account:${
+            env == WyreEnv.PROD
+              ? process.env.GATSBY_SENDWYRE_ID
+              : process.env.GATSBY_TESTWYRE_ID
+          }`,
+          amount: amount.toString(),
+          lockFields: [
+            'dest',
+            'destCurrency',
+            'sourceCurrency',
+            'paymentMethod',
+            'amount',
+          ],
         },
-        options
+        {
+          headers: {
+            Authorization:
+              env == WyreEnv.PROD
+                ? process.env.GATSBY_SENDWYRE_KEY
+                : process.env.GATSBY_TESTWYRE_KEY,
+            'Content-Type': 'application/json',
+          },
+        }
       )
+      console.log(res)
       const wyre = Wyre()
       const widget = new wyre.Widget({
         debug: true,
-        apiKey: process.env.GATSBY_WYRE_KEY,
+        apiKey:
+          env == WyreEnv.PROD
+            ? process.env.GATSBY_SENDWYRE_ID
+            : process.env.GATSBY_TESTWYRE_ID,
         reservation: res.data.reservation,
         auth: { type: 'metamask' },
-        env: env == WyreEnv.TEST ? 'test' : 'prod',
+        env: env == WyreEnv.PROD ? 'prod' : 'test',
         operation: {
           type: 'debitcard-hosted-dialog',
         },

@@ -41,6 +41,7 @@ import {
   CLEAR_ENS_DOMAINS,
   ENSActionTypes,
 } from '../../state/management/ens/types'
+import { ExclamationTriangle } from 'react-bootstrap-icons'
 
 interface Props {
   account?: string
@@ -236,18 +237,36 @@ const Overview: FC<Props> = ({ account, network, series, dispatch }: Props) => {
         {error && (
           <div className="d-flex justify-content-center">
             <div className="row">
-              <div className="col-12 text-warning">Warning: {error}</div>
+              <div className="col-12 text-center text-warning">
+                Warning: {error}
+              </div>
               {account === null && (
-                <div className="col-12 text-warning">Wallet Not Connected.</div>
+                <div className="col-12 text-center text-warning">
+                  Wallet Not Connected.
+                </div>
               )}
               {network === null && (
-                <div className="col-12 text-warning">Invalid Network.</div>
+                <div className="col-12 text-center text-warning">
+                  Invalid Network.
+                </div>
               )}
               {network && (
-                <div className="col-12 text-warning">
+                <div className="col-12 text-center text-warning">
                   Network selected: {network}
                 </div>
               )}
+            </div>
+          </div>
+        )}
+        {!error && !loading && series.length == 0 && (
+          <div className="d-flex justify-content-center">
+            <div className="row text-secondary">
+              <div className="col-12 text-center">
+                <ExclamationTriangle></ExclamationTriangle>
+              </div>
+              <div className="col-12 text-center">
+                No entities for selected network
+              </div>
             </div>
           </div>
         )}
