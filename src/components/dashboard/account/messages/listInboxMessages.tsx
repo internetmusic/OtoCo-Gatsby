@@ -71,12 +71,20 @@ export const ListInboxMessages = ({
       </td>
       <td className="d-none d-md-block" style={{ textAlign: 'right' }}>
         {m.body.method == 'broadcast' && (
-          <a
-            className="btn  btn-primary-outline btn-sm me-2"
-            href={m.body.message.link}
-          >
-            visit
-          </a>
+          <div>
+            <a
+              className="btn  btn-primary-outline btn-sm me-2"
+              href={m.body.message.link}
+            >
+              visit
+            </a>
+            <button
+              className="btn btn-primary-outline btn-sm me-2"
+              onClick={handleDelete.bind(undefined, m.id)}
+            >
+              <Trash />
+            </button>
+          </div>
         )}
         {m.body.method == 'billing' && (
           <Link
@@ -87,19 +95,21 @@ export const ListInboxMessages = ({
           </Link>
         )}
         {m.body.method == 'report' && (
-          <button
-            className="btn btn-primary-outline btn-sm me-2"
-            onClick={handleDownload.bind(undefined, m.body.companies)}
-          >
-            Download
-          </button>
+          <div>
+            <button
+              className="btn btn-primary-outline btn-sm me-2"
+              onClick={handleDownload.bind(undefined, m.body.companies)}
+            >
+              Download
+            </button>
+            <button
+              className="btn btn-primary-outline btn-sm me-2"
+              onClick={handleDelete.bind(undefined, m.id)}
+            >
+              <Trash />
+            </button>
+          </div>
         )}
-        <button
-          className="btn btn-primary-outline btn-sm me-2"
-          onClick={handleDelete.bind(undefined, m.id)}
-        >
-          <Trash />
-        </button>
       </td>
     </tr>
   ))

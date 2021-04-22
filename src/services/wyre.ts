@@ -130,13 +130,3 @@ export const requestPaymentWyre = async (
     }
   })
 }
-
-// data:
-//   data:
-//     accountId: "account:AC_ZVFDXHDNVG9"
-//     blockchainNetworkTx: null
-//     dest: "ethereum:0xa484165bd8E535F11C5820205E98d18DF8d22Bf7"
-//     destAmount: 39
-//     fees: "{"USD":5,"DAI":3}"
-//     orderId: "WO_F2AAQQWYL6"
-//     transferId: "TF_ZEFYMPBRBBW"

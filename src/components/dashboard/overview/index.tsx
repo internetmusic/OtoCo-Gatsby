@@ -49,8 +49,8 @@ const SeriesOverview: FC<Props> = ({
             <span style={{ marginRight: '0.5em' }}>
               <ExclamationCircle className="fix-icon-alignment" />
             </span>
-            Your entity smart contract is not a wallet. Please do never send{' '}
-            ether/tokens to that address.
+            Your entity smart contract is not a wallet. Go to Multisig to create
+            a digital wallet for your company.
           </div>
         </div>
       )}
