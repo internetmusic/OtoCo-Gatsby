@@ -1,43 +1,32 @@
 import React, { useState } from 'react'
-import Web3 from 'web3'
-import { navigate } from '@reach/router'
 import illustrationOne from '../../../static/img/features-icon-1.svg'
 import illustrationTwo from '../../../static/img/features-icon-2.svg'
 import illustrationThree from '../../../static/img/features-icon-3.svg'
 import './style.scss'
 
-import MainContract from '../../smart-contracts/MainContract'
+import { GraphNetwork, requestSubgraph } from '../../services/thegraph'
 
 const Features: React.FC<unknown> = () => {
   const [counter, setCounter] = useState<number>(100)
 
-  const handleClickSpinUp = () => {
-    navigate(`/spinup/`)
-  }
-
   React.useEffect(() => {
     setTimeout(async () => {
-      const ws_provider =
-        'wss://mainnet.infura.io/ws/v3/f2e6a40391274a0793c63e923de0a170'
-      const web3 = new Web3(new Web3.providers.WebsocketProvider(ws_provider))
-      const contractDelaware = new web3.eth.Contract(
-        MainContract.abi,
-        MainContract.addresses['main_us_de']
+      const response = await requestSubgraph(
+        GraphNetwork.mainnet,
+        `
+        {
+          masters(first:5) {
+            companiesCount
+          }
+        }
+        `
       )
-      const contractWyoming = new web3.eth.Contract(
-        MainContract.abi,
-        MainContract.addresses['main_us_wy']
+      const count = response.data.data.masters.reduce(
+        (accumulator: number, jur) => accumulator + jur.companiesCount,
+        0
       )
-      const delawareCount = await contractDelaware.getPastEvents(
-        'NewSeriesCreated',
-        { fromBlock: 0, toBlock: 'latest' }
-      )
-      const wyomingCount = await contractWyoming.getPastEvents(
-        'NewSeriesCreated',
-        { fromBlock: 0, toBlock: 'latest' }
-      )
-      console.log(delawareCount.length, wyomingCount.length)
-      setCounter(delawareCount.length + wyomingCount.length)
+      console.log(count)
+      setCounter(count)
     }, 0)
   }, [])
 

@@ -1,7 +1,8 @@
 import React from 'react'
 import { Link } from 'gatsby'
-
 import { Helmet } from 'react-helmet'
+// import loadable from '@loadable/component'
+// const Layout = loadable(() => import('../components/layout/layout'))
 import Layout from '../components/layout/layout'
 
 interface Props {
@@ -784,7 +785,7 @@ const Terms: React.FC<Props> = ({ location }: Props) => {
               <td>2 years</td>
             </tr>
             <tr>
-              <td>Dashboard welcome cookie</td>
+              <td>Dashpanel welcome cookie</td>
               <td>Website function</td>
               <td>1st - OtoCo</td>
               <td>Persistent</td>

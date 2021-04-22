@@ -2,6 +2,7 @@ export const SET_CURRENT_STEP = 'SET_CURRENT_STEP'
 export const SET_FAST_FEE = 'SET_FAST_FEE'
 export const SET_TOTAL_COST = 'SET_TOTAL_COST'
 export const SET_COMPANY_NAME = 'SET_COMPANY_NAME'
+export const SET_COMPANY_CONTRACT = 'SET_COMPANY_CONTRACT'
 export const SET_AVAILABLE_NAME = 'SET_AVAILABLE_NAME'
 export const CLEAR_AVAILABLE_NAME = 'CLEAR_AVAILABLE_NAME'
 export const SET_JURISDICTION = 'SET_JURISDICTION'
@@ -23,6 +24,11 @@ interface SetTotalCost {
 
 interface SetCompanyName {
   type: typeof SET_COMPANY_NAME
+  payload: string
+}
+
+interface SetCompanyContract {
+  type: typeof SET_COMPANY_CONTRACT
   payload: string
 }
 
@@ -50,6 +56,7 @@ export interface ISpinUpState {
   fastFee: number
   totalCost: number
   companyName: string
+  companyContract: string
   availableName: string
   jurisdictionSelected: string
   jurisdictionName: string
@@ -63,6 +70,7 @@ export type SpinUpActionTypes =
   | SetFastFee
   | SetTotalCost
   | SetCompanyName
+  | SetCompanyContract
   | SetAvailableName
   | ClearAvailableName
   | SetJurisdiction

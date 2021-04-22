@@ -1,20 +1,91 @@
-@import 'scss/colors.scss';
+@import 'scss/_colors.scss';
 
 .account-widget {
-  color: $accent-purple-100;
+  background: $accent-purple-20;
+  color: $white;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 400;
   float: right;
   position: fixed;
   top: 25px;
   right: 25px;
   cursor: pointer;
+  z-index: 1000;
+  transition: all 200ms;
+  & svg {
+    color: $accent-purple-brightest;
+    margin: 0px 0px 4px 0px;
+  }
   p {
     text-align: right;
   }
   .network {
     text-transform: uppercase;
   }
+  a {
+    color: $white;
+  }
+}
 
-  &:hover {
-    color: $accent-purple-brightest;
+.vert {
+  display: flex;
+  flex-direction: column;
+}
+
+.with-divider {
+  border-top: 1px solid $gray-700;
+}
+
+.shine-on-hover:hover {
+  background-color: $accent-purple-20;
+}
+
+.icon {
+  transition: transform 200ms;
+  &.rotated {
+    -o-transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    -webkit-transform: rotate(180deg);
+    transform: rotate(180deg);
+  }
+}
+
+.bell-animation {
+  animation: bellshake 1s infinite cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+  transform-origin: top;
+  :hover {
+    color: $white;
+  }
+}
+
+@keyframes bellshake {
+  0% {
+    transform: rotate(0);
+  }
+  15% {
+    transform: rotate(10deg);
+  }
+  30% {
+    transform: rotate(-10deg);
+  }
+  45% {
+    transform: rotate(6deg);
+  }
+  60% {
+    transform: rotate(-6deg);
+  }
+  75% {
+    transform: rotate(3deg);
+  }
+  85% {
+    transform: rotate(-3deg);
+  }
+  92% {
+    transform: rotate(1deg);
+  }
+  100% {
+    transform: rotate(0);
   }
 }

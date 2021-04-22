@@ -1,0 +1,29 @@
+@import '../../scss/colors.scss';
+
+.btn-icon {
+  border-radius: 30px;
+}
+
+.btn-back {
+  position: absolute;
+  top: 34px;
+  left: 24px;
+  border: none !important;
+}
+
+.jurisdiction {
+  letter-spacing: 0.05em;
+  color: $gray-200;
+}
+
+.bot-icon {
+  float: right;
+  position: absolute;
+  height: 341px;
+  top: -34px;
+}
+
+// .squared {
+//   width: 60vh;
+//   height: 60vh;
+// }

@@ -1,4 +1,4 @@
-@import 'scss/colors.scss';
+@import 'scss/_colors.scss';
 
 .footer {
   position: relative;
@@ -8,7 +8,7 @@
   // float: right;
   // text-align: right;
   z-index: 1;
-  padding: 40px;
+  // padding: 40px;
   // margin-top: 60px;
   color: $gray-200;
 }
@@ -20,8 +20,8 @@
     color: $gray-200 !important;
     text-decoration: none;
     transition: color 200ms ease-out;
-  &:hover {
-    color: $white !important;
-  }
+    &:hover {
+      color: $white !important;
+    }
   }
 }

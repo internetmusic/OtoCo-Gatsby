@@ -5,15 +5,15 @@ import BN from 'bn.js'
 import { connect } from 'react-redux'
 import AddressWidget from '../../addressWidget/addressWidget'
 import OtocoToken from '../../../smart-contracts/OtocoToken'
+import { SeriesType } from '../../../state/management/types'
 import {
   SET_MULTISIG_BALANCES,
-  ManagementActionTypes,
-  SeriesType,
   MultisigBalance,
   MultisigBalances,
   MultisigConfig,
   MultisigDeployed,
-} from '../../../state/management/types'
+  MultisigActionTypes,
+} from '../../../state/management/multisig/types'
 import { IState } from '../../../state/types'
 
 type TokenListTransaction = {
@@ -38,7 +38,7 @@ interface Props {
   multisigConfig?: MultisigConfig
   multisigDeployed?: MultisigDeployed
   multisigBalances?: MultisigBalances
-  dispatch: Dispatch<ManagementActionTypes>
+  dispatch: Dispatch<MultisigActionTypes>
 }
 
 interface ListOwnersProps {
@@ -70,7 +70,6 @@ const ListOwners = ({ owners }: ListOwnersProps) => {
 const Wallet: FC<Props> = ({
   account,
   network,
-  managing,
   multisigConfig,
   multisigDeployed,
   multisigBalances,
@@ -96,24 +95,30 @@ const Wallet: FC<Props> = ({
     )
     // Variable to store unique Tokens info
     const tokensObject: { [contract: string]: MultisigBalance } = {}
-    // Store all data on object
-    transactionsRequest.data.result.forEach((elem) => {
-      tokensObject[elem.contractAddress] = {
-        contract: elem.contractAddress,
-        name: elem.tokenName,
-        symbol: elem.tokenSymbol,
-        decimals: parseInt(elem.tokenDecimal),
-        amount: '0',
+    try {
+      // Store all data on object
+      if (transactionsRequest.data.result) {
+        transactionsRequest.data.result.forEach((elem) => {
+          tokensObject[elem.contractAddress] = {
+            contract: elem.contractAddress,
+            name: elem.tokenName,
+            symbol: elem.tokenSymbol,
+            decimals: parseInt(elem.tokenDecimal),
+            amount: '0',
+          }
+        })
+        // For each unique token, fetch balance on smart contract
+        for (const token of Object.values(tokensObject)) {
+          const balanceBN = new BN(
+            await OtocoToken.getContract(token.contract)
+              .methods.balanceOf(multisigAddress)
+              .call({ from: account })
+          )
+          token.amount = balanceBN.div(getBNDecimals(token.decimals)).toString()
+        }
       }
-    })
-    // For each unique token, fetch balance on smart contract
-    for (const token of Object.values(tokensObject)) {
-      const balanceBN = new BN(
-        await OtocoToken.getContract(token.contract)
-          .methods.balanceOf(multisigAddress)
-          .call({ from: account })
-      )
-      token.amount = balanceBN.div(getBNDecimals(token.decimals)).toString()
+    } catch (err) {
+      console.log('Error getting token balances')
     }
     // Adding ETH balance
     const ethBalance = await web3.eth.getBalance(multisigAddress)
@@ -196,7 +201,7 @@ export default connect((state: IState) => ({
   account: state.account.account,
   network: state.account.network,
   managing: state.management.managing,
-  multisigConfig: state.management.multisigConfig,
-  multisigDeployed: state.management.multisigDeployed,
-  multisigBalances: state.management.multisigBalances,
+  multisigConfig: state.multisig.multisigConfig,
+  multisigDeployed: state.multisig.multisigDeployed,
+  multisigBalances: state.multisig.multisigBalances,
 }))(Wallet)

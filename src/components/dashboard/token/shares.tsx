@@ -14,6 +14,7 @@ import {
   TokenDeployed,
 } from '../../../state/management/types'
 import { IState } from '../../../state/types'
+import { Link } from 'gatsby'
 
 interface ListOwnerProps {
   owners: TokenOwner[]
@@ -172,7 +173,7 @@ const Shares: FC<Props> = ({
         </p>
       )}
       <p className="mt-2">
-        {tokenConfig?.symbol} token address:&nbsp;&nbsp;
+        {tokenConfig?.symbol} token contract address:&nbsp;&nbsp;
         <AddressWidget address={tokenDeployed?.contract}></AddressWidget>
       </p>
       <div className="small">List of current holders:</div>
@@ -193,9 +194,12 @@ const Shares: FC<Props> = ({
           ></ListOwners>
         </tbody>
       </table>
-      <button className="btn btn-primary" onClick={clickTransferHandler}>
+      <Link
+        className="btn btn-primary"
+        to={`/token/${tokenDeployed?.contract}`}
+      >
         Transfer Tokens
-      </button>
+      </Link>
     </div>
   )
 }
@@ -204,6 +208,6 @@ export default connect((state: IState) => ({
   account: state.account.account,
   network: state.account.network,
   managing: state.management.managing,
-  tokenConfig: state.management.tokenConfig,
-  tokenDeployed: state.management.tokenDeployed,
+  tokenConfig: state.token.tokenConfig,
+  tokenDeployed: state.token.tokenDeployed,
 }))(Shares)

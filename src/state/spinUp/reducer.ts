@@ -3,6 +3,7 @@ import {
   SET_AVAILABLE_NAME,
   CLEAR_AVAILABLE_NAME,
   SET_COMPANY_NAME,
+  SET_COMPANY_CONTRACT,
   SET_FAST_FEE,
   SET_TOTAL_COST,
   SET_JURISDICTION,
@@ -16,6 +17,7 @@ export const initialState = {
   fastFee: 0,
   totalCost: 0,
   companyName: '',
+  companyContract: '',
   availableName: '',
   jurisdictionSelected: 'us_de',
   jurisdictionName: 'Delaware',
@@ -62,6 +64,11 @@ const reducer = (
       return {
         ...state,
         companyName: action.payload,
+      }
+    case SET_COMPANY_CONTRACT:
+      return {
+        ...state,
+        companyContract: action.payload,
       }
     case SET_AVAILABLE_NAME:
       let name = state.companyName

@@ -1,8 +1,10 @@
 import React from 'react'
+import loadable from '@loadable/component'
 import { Helmet } from 'react-helmet'
+// const Layout = loadable(() => import('../components/layout/layout'))
 import Layout from '../components/layout/layout'
-import Admin from '../components/admin/admin'
-import Dashboard from '../components/dashboard/dashboard'
+const Admin = loadable(() => import('../components/admin'))
+// import Admin from '../components/admin'
 
 interface Props {
   location: Location
@@ -13,8 +15,7 @@ const DashboardIndex: React.FC<Props> = ({ location }: Props) => {
     <Layout location={location}>
       <Helmet title="Otoco - Administration" defer={false} />
       <div className="container-sm limiter-md content">
-        <h1>Admin Tool</h1>
-        <h5 className="mb-4">Change taxes and token used.</h5>
+        <h1>Admin Section</h1>
         <Admin></Admin>
       </div>
     </Layout>

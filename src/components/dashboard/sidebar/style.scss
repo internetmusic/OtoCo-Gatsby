@@ -1,0 +1,47 @@
+@import '../../../scss/colors.scss';
+
+#sidebar {
+  overflow-x: hidden;
+  width: 300px;
+  background: $midnight-blue-2;
+  transition: all 200ms;
+  &.collapsed {
+    width: 0px;
+    padding: 0px !important;
+    max-width: 0px;
+    min-width: 0px;
+  }
+
+  & a {
+    text-align: left;
+    font-size: 14px;
+    &:hover {
+      color: $accent-purple-60;
+    }
+  }
+}
+
+@media (max-width: 640px) {
+  #sidebar {
+    width: 58px;
+    &.collapsed {
+      width: 0px;
+    }
+  }
+}
+
+#sidebar-content {
+  width: 233px;
+}
+
+.entity-card {
+  padding: 8px;
+  border-radius: 8px;
+  max-width: 208px;
+  & .jurisdiction {
+    font-size: 10px;
+  }
+  & .greish {
+    color: $gray-600;
+  }
+}

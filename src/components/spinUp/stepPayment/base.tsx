@@ -50,16 +50,16 @@ const StepPayment: FC<Props> = ({
 
   React.useEffect(() => {
     setTimeout(async () => {
-      const allowance: BN = await ERC20Contract.getContract(network)
+      const allowance: BN = await ERC20Contract.getContractDAI(network)
         .methods.allowance(
           account,
           MainContract.addresses[network + '_' + jurisdictionSelected]
         )
         .call({ from: account })
-      const balance: BN = await ERC20Contract.getContract(network)
+      const balance: BN = await ERC20Contract.getContractDAI(network)
         .methods.balanceOf(account)
         .call({ from: account })
-      const dec: number = await ERC20Contract.getContract(network)
+      const dec: number = await ERC20Contract.getContractDAI(network)
         .methods.decimals()
         .call({ from: account })
       //const allowance = parseFloat(allowance / 10 ** dec)
@@ -100,7 +100,7 @@ const StepPayment: FC<Props> = ({
   React.useEffect(() => {
     const interval = window.setInterval(updateBalance, 3000)
     setTimeout(async () => {
-      const balance: BN = await ERC20Contract.getContract(network)
+      const balance: BN = await ERC20Contract.getContractDAI(network)
         .methods.balanceOf(account)
         .call({ from: account })
       const decimalBN = new BN(decimals)
@@ -118,7 +118,7 @@ const StepPayment: FC<Props> = ({
   })
 
   const updateBalance = async () => {
-    const balance: BN = await ERC20Contract.getContract(network)
+    const balance: BN = await ERC20Contract.getContractDAI(network)
       .methods.balanceOf(account)
       .call({ from: account })
     const decimalBN = new BN(decimals)

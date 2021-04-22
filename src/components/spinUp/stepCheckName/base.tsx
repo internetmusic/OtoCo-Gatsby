@@ -2,7 +2,7 @@ import React, { Dispatch, FC, useState } from 'react'
 import Web3 from 'web3'
 import { Link } from 'gatsby'
 import Icon from '../../icon/icon'
-import axios from 'axios'
+import axios, { AxiosResponse } from 'axios'
 import { connect } from 'react-redux'
 import { IState } from '../../../state/types'
 import { faCheckCircle, faTimesCircle } from '@fortawesome/free-solid-svg-icons'
@@ -18,6 +18,7 @@ import './style.scss'
 import MainContract from '../../../smart-contracts/MainContract'
 import TransactionMonitor from '../../transactionMonitor/transactionMonitor'
 import JurisdictionSelector from '../jurisdictionSelector/jurisdictionSelector'
+import { GraphNetwork, requestSubgraph } from '../../../services/thegraph'
 
 interface Props {
   companyName: string
@@ -69,19 +70,21 @@ const StepCheckName: FC<Props> = ({
       const conflictOpenCorporates =
         opencorporates_result.data.results.total_count > 0
 
-      const ws_provider =
-        'wss://mainnet.infura.io/ws/v3/f2e6a40391274a0793c63e923de0a170'
-      const web3 = new Web3(new Web3.providers.WebsocketProvider(ws_provider))
-      const contract = new web3.eth.Contract(
-        MainContract.abi,
-        MainContract.addresses['main_' + jurisdictionSelected]
+      let jurisdictionGraph = ''
+      if (jurisdictionSelected == 'us_de') jurisdictionGraph = 'DELAWARE'
+      if (jurisdictionSelected == 'us_wy') jurisdictionGraph = 'WYOMING'
+      const response: AxiosResponse = await requestSubgraph(
+        GraphNetwork.mainnet,
+        `
+        {
+          companies(first:1000,where:{jurisdiction:${jurisdictionGraph}}) {
+            name
+          }
+        }
+        `
       )
-      const contractEvents = await contract.getPastEvents('NewSeriesCreated', {
-        fromBlock: 10318659,
-        toBlock: 'latest',
-      })
-      const conflictSeries = contractEvents
-        .map((elem) => elem.returnValues[2])
+      const conflictSeries = response.data.data.companies
+        .map((elem) => elem.name)
         .some((elem) => {
           if (formatName(elem, jurisdictionSelected) == formatName(companyName))
             return true

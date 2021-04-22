@@ -7,19 +7,19 @@ import MasterRegistry from '../../../smart-contracts/MasterRegistry'
 import TokenContract from '../../../smart-contracts/OtocoToken'
 import TransactionUtils from '../../../services/transactionUtils'
 import TransactionMonitor from '../../transactionMonitor/transactionMonitor'
+import { SeriesType } from '../../../state/management/types'
 import {
   SET_TOKEN_CONFIG,
   SET_TOKEN_DEPLOYED,
-  SeriesType,
-  ManagementActionTypes,
-} from '../../../state/management/types'
+  TokenActionTypes,
+} from '../../../state/management/token/types'
 import { IState } from '../../../state/types'
 
 interface Props {
   account?: string | null
   network?: string | null
   managing?: SeriesType
-  dispatch: Dispatch<ManagementActionTypes>
+  dispatch: Dispatch<TokenActionTypes>
 }
 
 const Config: FC<Props> = ({ account, network, managing, dispatch }: Props) => {

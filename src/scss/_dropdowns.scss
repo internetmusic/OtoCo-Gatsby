@@ -1,0 +1,32 @@
+.dropdown-toggle {
+  border-radius: $border-radius-sm;
+  padding: 12px 24px;
+  &:hover,
+  :active {
+    transform: none;
+    background-color: $midnight-blue-2;
+  }
+
+  &::after {
+    margin-left: 1em;
+    margin-bottom: -0.1em;
+  }
+}
+
+.dropdown-item {
+  transition: background-color 200ms ease-out;
+  color: $white;
+  &:hover,
+  &:active,
+  &:focus {
+    color: $white;
+    background: $accent-purple-20;
+  }
+}
+
+.dropdown-menu {
+  background: $midnight-blue-2;
+  border-radius: $border-radius-sm;
+  // border: 1px solid $accent-purple-20;
+  box-shadow: $elevation-1;
+}

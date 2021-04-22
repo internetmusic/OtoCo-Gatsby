@@ -1,0 +1,48 @@
+// Bootstrap Initial Setup
+// Reassign color vars to semantic color scheme
+$primary: $teal;
+$secondary: $purple;
+$success: $green;
+$info: $cyan;
+$warning: $yellow;
+$danger: $red;
+$light: $gray-100;
+$dark: $gray-100;
+$background: $midnight-blue-0;
+
+$border-radius: 12px;
+$border-color: transparent;
+
+// Bootstrap Options
+// Quickly modify global styling by enabling or disabling optional features.
+$enable-rounded: true;
+$enable-shadows: true;
+$enable-gradients: true;
+$enable-transitions: true;
+$enable-hover-media-query: false;
+$enable-grid-classes: true;
+$enable-print-styles: true;
+
+// Bootstrap Body Settings
+$body-bg: $midnight-blue-0;
+$body-color: $white;
+$inverse-bg: $white;
+$inverse-color: $midnight-blue-0;
+
+// Altering and adding values to the spacing utilities such as margin and padding
+// $spacers: (
+//   0: 0,
+//   1: $spacer * 0.25,
+//   2: $spacer * 0.5,
+//   3: $spacer * 0.75,
+//   4: $spacer,
+//   5: $spacer * 1.25,
+//   6: $spacer * 1.5,
+//   7: $spacer * 1.75,
+//   8: $spacer * 2,
+//   9: $spacer * 2.5,
+//   10: $spacer * 3,
+//   11: $spacer * 4,
+//   12: $spacer * 4.5,
+//   13: $spacer * 6
+// );

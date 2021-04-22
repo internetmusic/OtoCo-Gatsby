@@ -1,22 +1,17 @@
 import React from 'react'
 import { Link } from 'gatsby'
-import { navigate } from '@reach/router'
 import Logo from '../logo/logo'
 import HeaderIllustration from '../../../static/img/header-illustration.png'
 import HeaderAnimationWebm from '../../../static/video/header-animation.webm'
 import './style.scss'
 
 const Header: React.FC<unknown> = () => {
-  const handleClickSpinUp = () => {
-    navigate(`/spinup/`)
-  }
-
   return (
     <div>
       <Logo></Logo>
       <div className="quick-links">
-        <Link className="styled-link" to="/dashboard/">
-          Dashpanel
+        <Link className="styled-link" to="/dashpanel/">
+          Connect Wallet
         </Link>
       </div>
       <div className="content">
@@ -35,12 +30,9 @@ const Header: React.FC<unknown> = () => {
               <h1 className="mt-2 display-5">
                 Automated Company Assembly on Blockchain
               </h1>
-              <button
-                className="btn styled-button mt-4 mb-4"
-                onClick={handleClickSpinUp}
-              >
+              <Link className="btn styled-button mt-4 mb-4" to="/spinup/">
                 Spin up your company now →
-              </button>
+              </Link>
             </div>
           </div>
           <div className="col-12 col-lg-7 py-4 justify-content-center">
@@ -57,9 +49,9 @@ const Header: React.FC<unknown> = () => {
           </div>
           <div className="col-12 d-lg-none d-flex justify-content-center">
             <div className="align-self-center">
-              <button className="btn styled-button" onClick={handleClickSpinUp}>
+              <Link className="btn styled-button" to="/spinup/">
                 Spin up your company now →
-              </button>
+              </Link>
             </div>
           </div>
         </div>

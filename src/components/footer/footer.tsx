@@ -13,6 +13,9 @@ const Footer = () => (
         <div className="row footer-links">
           <div className="col-4 d-block">
             <div className="mb-1">
+              <Link to="/">OtoCo</Link>
+            </div>
+            <div className="mb-1">
               <Link to="/terms/">Terms</Link>
             </div>
             <div className="mb-1">
@@ -21,19 +24,31 @@ const Footer = () => (
           </div>
           <div className="col-4 d-block">
             <div className="mb-1">
-              <Link to="https://t.me/TheRoadToOtoco" target="_blank">
+              <a
+                href="https://t.me/TheRoadToOtoco"
+                target="_blank"
+                rel="noreferrer"
+              >
                 Telegram
-              </Link>
+              </a>
             </div>
             <div className="mb-1">
-              <Link to="https://twitter.com/otonomos" target="_blank">
+              <a
+                href="https://twitter.com/otonomos"
+                target="_blank"
+                rel="noreferrer"
+              >
                 Twitter
-              </Link>
+              </a>
             </div>
             <div className="mb-1">
-              <Link to="https://github.com/otocorp" target="_blank">
+              <a
+                href="https://github.com/otocorp"
+                target="_blank"
+                rel="noreferrer"
+              >
                 Github
-              </Link>
+              </a>
             </div>
           </div>
           <div className="col-4 d-block">
@@ -41,7 +56,7 @@ const Footer = () => (
               <Link to="/spinup/">Spin up new Company</Link>
             </div>
             <div className="mb-1">
-              <Link to="/dashboard/">Dashpanel</Link>
+              <Link to="/dashpanel/">My Dashpanel</Link>
             </div>
           </div>
         </div>

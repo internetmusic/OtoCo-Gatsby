@@ -1,0 +1,20 @@
+@import '../../scss/colors.scss';
+
+.plugin-option {
+  width: 148px;
+  height: 148px;
+  padding: 12px;
+  margin: 12px;
+  background: $accent-purple-20;
+  border-radius: 12px;
+  color: $gray-100;
+  transition: all 200ms ease-out;
+  &:hover {
+    color: $white;
+    background: $gradient-subtle;
+    transform: scale(1.025);
+  }
+  & svg {
+    margin: 16px 32px;
+  }
+}

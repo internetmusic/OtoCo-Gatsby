@@ -6,7 +6,7 @@ import 'bootstrap/js/dist/dropdown'
 import 'bootstrap/js/dist/modal'
 import 'firebase/database'
 import 'font-awesome/css/font-awesome.css'
-import './src/scss/otoco.scss'
+import './src/scss/main.scss'
 
 import wrapWithProvider from './wrap-with-provider'
 export const wrapRootElement = wrapWithProvider
