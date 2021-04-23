@@ -1,5 +1,5 @@
 import React, { Dispatch, FC, useState } from 'react'
-import web3 from 'web3'
+import Web3, { TransactionReceipt } from 'web3'
 import { connect } from 'react-redux'
 import { CSSTransition } from 'react-transition-group'
 import { SeriesType, ManagementActionTypes } from '../../state/management/types'
@@ -96,16 +96,22 @@ const PaymentWidget: FC<Props> = ({
         account,
         '60000'
       )
-      const r = await ERC20Contract.getContractDAI(network)
-        .methods.transfer(
-          process.env.GATSBY_WYRE_WALLET,
-          web3.utils.toWei(amount.toString(), 'ether')
-        )
-        .send(requestInfo)
-      if (!r.status) throw 'Transaction Errored'
-      console.log('receipt', r)
+      const hash: string = await new Promise((resolve, reject) => {
+        ERC20Contract.getContractDAI(network)
+          .methods.transfer(
+            process.env.GATSBY_WYRE_WALLET,
+            Web3.utils.toWei(amount.toString(), 'ether')
+          )
+          .send(requestInfo, (error: Error, hash: string) => {
+            if (error) reject(error.message)
+            else resolve(hash)
+          })
+      })
+
+      // if (!r.status) throw 'Transaction Errored'
+      // console.log('receipt', r)
       const receipt: PaymentProps = {
-        receipt: r.transactionHash,
+        receipt: hash,
         method: 'DAI',
         currency: 'DAI',
         timestamp: Date.now(),
@@ -128,16 +134,21 @@ const PaymentWidget: FC<Props> = ({
         account,
         '60000'
       )
-      const r = await ERC20Contract.getContractUSDT(network)
-        .methods.transfer(
-          process.env.GATSBY_WYRE_WALLET,
-          web3.utils.toWei(amount.toString(), 'ether')
-        )
-        .send(requestInfo)
-      if (!r.status) throw 'Transaction Errored'
-      console.log('receipt', r)
+      const hash: string = await new Promise((resolve, reject) => {
+        ERC20Contract.getContractUSDT(network)
+          .methods.transfer(
+            process.env.GATSBY_WYRE_WALLET,
+            Web3.utils.toWei(amount.toString(), 'mwei')
+          )
+          .send(requestInfo, (error: Error, hash: string) => {
+            if (error) reject(error.message)
+            else resolve(hash)
+          })
+      })
+      // if (!r.status) throw 'Transaction Errored'
+      // console.log('receipt', r)
       const receipt: PaymentProps = {
-        receipt: r.transactionHash,
+        receipt: hash,
         method: 'USDT',
         currency: 'USDT',
         timestamp: Date.now(),
