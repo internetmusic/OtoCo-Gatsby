@@ -65,7 +65,6 @@ const Config: FC<Props> = ({
   }
 
   const handleRemoveOwner = (idx: number) => {
-    console.log('passou', idx)
     const owns = [...owners]
     owns.splice(idx, 1)
     setOwners(owns)
@@ -175,6 +174,7 @@ const Config: FC<Props> = ({
                 className="form-control right"
                 placeholder="Paste an owner address to insert..."
                 aria-label="Text input with button"
+                value={currentOwner}
                 onChange={handleOwnerInputChange}
               />
               <div className="input-group-append">

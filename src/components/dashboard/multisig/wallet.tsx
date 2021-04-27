@@ -190,9 +190,18 @@ const Wallet: FC<Props> = ({
           </div>
         </div>
       )}
-      <button className="btn btn-primary" onClick={clickManageHandler}>
-        Manage Wallet
-      </button>
+      <div className="d-flex">
+        <div className="row">
+          <div className="col-12 col-md-4">
+            <button className="btn btn-primary" onClick={clickManageHandler}>
+              Manage Wallet
+            </button>
+          </div>
+          <div className="col-12 col-md-8 py-2 text-warning small">
+            To manage your multisig you will be redirected to Gnosis-Safe App.
+          </div>
+        </div>
+      </div>
     </div>
   )
 }

@@ -25,3 +25,21 @@
     }
   }
 }
+
+.footer-spinup-link {
+  -webkit-animation: glow 1s ease-in-out infinite alternate;
+  -moz-animation: glow 1s ease-in-out infinite alternate;
+  animation: glow 1s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+  from {
+    text-shadow: 0 0 1px transparent, 0 0 2px transparent, 0 0 3px transparent,
+      0 0 4px transparent, 0 0 5px transparent, 0 0 6px transparent,
+      0 0 7px transparent;
+  }
+  to {
+    text-shadow: 0 0 2px $white, 0 0 3px $purple, 0 0 4px $purple,
+      0 0 5px $purple, 0 0 6px $purple, 0 0 7px $purple, 0 0 8px $purple;
+  }
+}
