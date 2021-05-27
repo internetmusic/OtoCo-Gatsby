@@ -155,7 +155,8 @@ const Wallet: FC<Props> = ({
         <AddressWidget address={multisigDeployed.contract}></AddressWidget>
       </div>
       <div className="small">
-        Number os signatures needed to approve transactions: 1
+        Number of signatures needed to approve transactions:{' '}
+        {multisigConfig?.threshold}
       </div>
       <table className="table small">
         <thead>
