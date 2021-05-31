@@ -1,8 +1,8 @@
 import React, { FC } from 'react'
 import ReactJson from 'react-json-view'
-import { DecryptedMailbox } from '../../../state/account/types'
+import { DecryptedMailbox } from '../../state/account/types'
 import { DashSquareFill } from 'react-bootstrap-icons'
-import UTCDate from '../../utcDate/utcDate'
+import UTCDate from '../utcDate/utcDate'
 
 import { StakeInterface } from './index'
 

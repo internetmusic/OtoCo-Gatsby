@@ -4,10 +4,8 @@ import { withPrefix } from 'gatsby'
 import { Helmet } from 'react-helmet'
 import { Router } from '@reach/router'
 // const Layout = loadable(() => import('../components/dashboard/layout/layout'))
-import Layout from '../../../components/dashboard/layout/layout'
-const LaunchPool = loadable(
-  () => import('../../../components/dashboard/launchpool')
-)
+import Layout from '../components/dashboard/layout/layout'
+const LaunchPool = loadable(() => import('../components/launchpool'))
 // import Company from '../components/dashboard'
 
 interface Props {
@@ -19,7 +17,7 @@ const LaunchPoolIndex: React.FC<Props> = ({ location }: Props) => {
     <Layout location={location}>
       <Helmet title="Otoco - Launch Pool" defer={false} />
       <Router>
-        <LaunchPool path="/dashpanel/launchpool/:id" />
+        <LaunchPool path="/launchpool/:id" />
       </Router>
     </Layout>
   )
