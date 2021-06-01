@@ -43,7 +43,7 @@ const Footer = () => (
             </div>
             <div className="mb-1">
               <a
-                href="https://github.com/otocorp"
+                href="https://github.com/otoco-io"
                 target="_blank"
                 rel="noreferrer"
               >
