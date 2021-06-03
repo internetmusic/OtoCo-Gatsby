@@ -7,11 +7,13 @@
 
   width: 100%;
   max-width: 275px;
-  height: 20vh;
+  height: 135px;
 
   background: #151938;
 
   z-index: 1001;
+
+  font-size: 2rem;
 
   -webkit-touch-callout: none;
   -webkit-user-select: none;
@@ -29,24 +31,26 @@
     justify-content: center;
 
     text-align: left;
-
     font-family: IBM Plex Sans;
     font-style: normal;
-    font-weight: normal;
+    font-weight: 400;
     line-height: 30px;
 
-    h1 {
+    .info-card-title {
       font-family: IBM Plex Sans;
       font-style: normal;
       font-weight: normal;
       line-height: 30px;
-      font-size: 1.75rem;
+      font-weight: 400 !important;
+      font-size: 1.5rem;
 
-      margin-bottom: 0;
+      margin-bottom: 2px;
     }
 
     p {
       margin-bottom: 0;
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 0.99rem;
     }
 
     .graident-text {
@@ -72,10 +76,10 @@
 
     .text-wrapper {
       line-height: 1;
-      h1 {
+      .info-card-title {
         font-family: IBM Plex Sans;
         font-style: normal;
-        font-weight: normal;
+        font-weight: 400 !important;
         line-height: 1;
         font-size: 1rem;
 
@@ -95,21 +99,23 @@
     max-height: 85px;
     max-width: 40vw;
 
-    margin: 0 2.5vw;
+    margin: 2px 2.5vw;
 
     display: flex;
     align-items: space-between;
 
     .text-wrapper {
       line-height: 13px;
-      h1 {
+      .info-card-title {
         font-family: IBM Plex Sans;
         font-style: normal;
         font-weight: normal;
         font-size: 1rem;
+        font-weight: 400 !important;
 
         margin: 0;
-        margin-bottom: 5px;
+
+        z-index: 1004;
       }
       p {
         font-size: 0.9rem;

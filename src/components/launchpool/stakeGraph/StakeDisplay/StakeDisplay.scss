@@ -11,6 +11,13 @@
   min-height: 95vh;
   overflow: hidden;
 
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+
   .content-container {
     display: flex;
     flex-direction: row;
@@ -25,10 +32,12 @@
     color: white;
 
     height: 100%;
+    max-height: 650px;
     width: 100%;
     //max-width: 1125px;
 
     font-family: IBM Plex Sans;
+    font-weight: 400 !important;
 
     .info-container {
       display: flex;
@@ -52,13 +61,33 @@
         position: absolute;
         top: 0;
         left: 0;
-
+        height: 125px;
+        width: 300px;
         font-size: 2.25rem;
+        font-weight: 400 !important;
+        line-height: 1.25;
         margin: 0;
         background: -webkit-linear-gradient(#6369f9, #b441d1);
         background-clip: text;
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
+
+        z-index: 1003;
+
+        a {
+          display: block;
+          font-size: 1rem;
+          line-height: 0;
+          background: white;
+          background-clip: text;
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: white;
+          margin-top: 7px;
+        }
+
+        a:hover {
+          text-decoration: underline;
+        }
       }
 
       .button-container {
@@ -94,6 +123,17 @@
         }
         button:active {
           background: transparent;
+        }
+        .disabled {
+          background: #11142d;
+          border: 2px solid rgba(255, 255, 255, 0.2);
+          color: rgba(255, 255, 255, 0.6);
+        }
+        .disabled:hover {
+          border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        .disabled:active {
+          background: #11142d;
         }
       }
     }
@@ -171,6 +211,9 @@
       .stake-container {
         .title {
           font-size: 1.5rem;
+          a {
+            margin-top: 15px;
+          }
         }
         .button-container {
           margin-top: 7vh;

@@ -130,8 +130,8 @@ const Graph = ({ currentIdx, currentPrice, specs }: Props) => {
                   y2="91.1377"
                   gradientUnits="userSpaceOnUse"
                 >
-                  <stop stop-color="#6369F9" />
-                  <stop offset="1" stop-color="#B441D1" />
+                  <stop stopColor="#6369F9" />
+                  <stop offset="1" stopColor="#B441D1" />
                 </linearGradient>
               </defs>
             </svg>
@@ -159,8 +159,8 @@ const Graph = ({ currentIdx, currentPrice, specs }: Props) => {
           backgroundComponent={<PulsePoint />}
           backgroundStyle={{ fill: 'null' }}
           backgroundPadding={50}
-          dy={-45.5}
-          dx={3}
+          dy={-43.5}
+          dx={2}
           datum={specs[currentIdx]}
         />
       </VictoryGroup>

@@ -22,7 +22,13 @@ const InfoCard = ({
     }
   >
     <div className={'text-wrapper'}>
-      <h1 className={`${useGraidentText && 'graident-text'}`}>{titleText}</h1>
+      <span
+        className={
+          useGraidentText ? 'graident-text info-card-title' : 'info-card-title'
+        }
+      >
+        {titleText}
+      </span>
       <p>{infoText}</p>
     </div>
   </div>

@@ -292,12 +292,13 @@ const LaunchPool: FC<Props> = ({ id, account }: Props) => {
           <StakeDisplay
             poolInfo={poolInfo}
             getUnitPrice={getUnitPrice}
-            tokenSum={200000}
+            tokenSum={20234000}
             onStake={() => {}}
             onUnstake={() => {}}
           />
 
-          <div className="row">
+          {console.log({ poolInfo })}
+          {/* <div className="row">
             <h1 className="col-12 text-left">{poolInfo.title}</h1>
             <h2 className="col-12 text-left">{poolInfo.description}</h2>
             <div className="col-12 text-left">
@@ -369,7 +370,7 @@ const LaunchPool: FC<Props> = ({ id, account }: Props) => {
                 </tbody>
               </table>
             </div>
-          </div>
+          </div> */}
         </>
       )}
       {!account && (
