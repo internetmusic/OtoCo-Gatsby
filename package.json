@@ -47,7 +47,12 @@
     "web3modal": "^1.9.1"
   },
   "devDependencies": {
+    "@hapi/hoek": "^9.0.0",
+    "@hapi/topo": "^5.0.0",
     "@popperjs/core": "^2.5.4",
+    "@sideway/address": "^4.1.0",
+    "@sideway/formula": "^3.0.0",
+    "@sideway/pinpoint": "^2.0.0",
     "@types/react": "^17.0.7",
     "@types/react-helmet": "6.1.1",
     "@types/react-redux": "^7.1.9",
