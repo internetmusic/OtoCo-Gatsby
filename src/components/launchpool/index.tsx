@@ -6,12 +6,11 @@ import { Link } from 'gatsby'
 import { connect } from 'react-redux'
 import { IState } from '../../state/types'
 import TransactionUtils from '../../services/transactionUtils'
-import { faChevronLeft } from '@fortawesome/free-solid-svg-icons'
+import { ChevronLeft } from 'react-bootstrap-icons'
 import LaunchPoolContract from '../../smart-contracts/LaunchPool'
 import ERC20Contract from '../../smart-contracts/OtocoToken'
 import StakesList from './stakesList'
 import TokensList from './tokensList'
-import Icon from '../icon/icon'
 
 import '../style.scss'
 
@@ -282,7 +281,7 @@ const LaunchPool: FC<Props> = ({ id, account }: Props) => {
         className="btn btn-back btn-primary-outline btn-sm"
         to={`/dashpanel/`}
       >
-        <Icon icon={faChevronLeft} />
+        <ChevronLeft></ChevronLeft>
         <span style={{ paddingLeft: '10px' }}>Back</span>
       </Link>
       {!error && account && !loading && poolInfo && (

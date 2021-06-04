@@ -4,6 +4,7 @@
   "version": "3.0.0",
   "author": "Filipe Soccol <filipe.soccol@gmail.com>",
   "dependencies": {
+    "@hapi/formula": "^3.0.0",
     "@loadable/component": "^5.14.1",
     "@textile/hub": "^6.1.2",
     "@types/react-transition-group": "^4.4.0",
@@ -47,17 +48,12 @@
     "web3modal": "^1.9.1"
   },
   "devDependencies": {
-    "@fortawesome/fontawesome-svg-core": "1.2.35",
-    "@fortawesome/free-brands-svg-icons": "5.15.3",
-    "@fortawesome/free-solid-svg-icons": "5.15.3",
-    "@fortawesome/react-fontawesome": "0.1.14",
     "@popperjs/core": "^2.5.4",
     "@types/react": "^17.0.7",
     "@types/react-helmet": "6.1.1",
     "@types/react-redux": "^7.1.9",
     "@typescript-eslint/eslint-plugin": "3.10.1",
     "@typescript-eslint/parser": "3.10.1",
-    "animate.css": "4.1.1",
     "assert": "^2.0.0",
     "axios": "^0.21.1",
     "babel-eslint": "10.1.0",
@@ -70,10 +66,7 @@
     "eslint-plugin-prettier": "3.1.4",
     "eslint-plugin-react": "7.21.2",
     "eslint-plugin-react-hooks": "4.1.2",
-    "font-awesome": "4.7.0",
-    "gh-pages": "3.1.0",
     "https-browserify": "^1.0.0",
-    "husky": "4.3.0",
     "lint-staged": "10.4.0",
     "modern-normalize": "0.7.0",
     "node-sass": "4.14.1",
@@ -87,8 +80,6 @@
     "stream-browserify": "^3.0.0",
     "stream-http": "^3.2.0",
     "textlint": "11.7.6",
-    "textlint-rule-preset-ja-spacing": "2.0.2",
-    "textlint-rule-preset-japanese": "5.0.0",
     "typescript": "3.9.7"
   },
   "keywords": [

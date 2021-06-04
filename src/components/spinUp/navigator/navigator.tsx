@@ -1,9 +1,7 @@
 import React, { FC } from 'react'
 import { connect } from 'react-redux'
 import { IState } from '../../state/types'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { IconDefinition } from '@fortawesome/fontawesome-svg-core'
-import { faCheckCircle } from '@fortawesome/free-solid-svg-icons'
+import { CheckCircleFill } from 'react-bootstrap-icons'
 import step1Icon from '../../../../public/img/spinup1.svg'
 import step2Icon from '../../../../public/img/spinup2.svg'
 import step3Icon from '../../../../public/img/spinup3.svg'
@@ -18,11 +16,10 @@ const Navigator: FC<Props> = ({ step }: Props) => {
 
   return (
     <nav className="nav flex-row">
-      <FontAwesomeIcon
+      <CheckCircleFill
         className={step > 1 ? 'nav-badge' : 'invisible'}
-        icon={faCheckCircle}
-        size="xs"
-      ></FontAwesomeIcon>
+        size="11px"
+      ></CheckCircleFill>
       <div
         className={
           step >= 1 ? iconClass + 'text-center' : iconClass + 'text-center o-50'
@@ -37,11 +34,10 @@ const Navigator: FC<Props> = ({ step }: Props) => {
       <div className="nav-hr flex-fill text-sm-start">
         <hr className="d-none d-sm-block"></hr>
       </div>
-      <FontAwesomeIcon
+      <CheckCircleFill
         className={step > 2 ? 'nav-badge' : 'invisible'}
-        icon={faCheckCircle}
-        size="xs"
-      ></FontAwesomeIcon>
+        size="11px"
+      ></CheckCircleFill>
       <div
         className={
           step >= 2
@@ -57,11 +53,10 @@ const Navigator: FC<Props> = ({ step }: Props) => {
       <div className="nav-hr flex-fill text-sm-start">
         <hr className="d-none d-sm-block"></hr>
       </div>
-      <FontAwesomeIcon
+      <CheckCircleFill
         className={step > 3 ? 'nav-badge' : 'invisible'}
-        icon={faCheckCircle}
-        size="xs"
-      ></FontAwesomeIcon>
+        size="11px"
+      ></CheckCircleFill>
       <div
         className={
           step >= 3 ? iconClass + 'text-center' : iconClass + 'text-center o-50'
@@ -75,11 +70,10 @@ const Navigator: FC<Props> = ({ step }: Props) => {
       <div className="nav-hr flex-fill text-sm-start">
         <hr className="d-none d-sm-block"></hr>
       </div>
-      <FontAwesomeIcon
+      <CheckCircleFill
         className={step > 4 ? 'nav-badge' : 'invisible'}
-        icon={faCheckCircle}
-        size="xs"
-      ></FontAwesomeIcon>
+        size="11px"
+      ></CheckCircleFill>
       <div
         className={
           step >= 4 ? iconClass + 'text-sm-end' : iconClass + 'text-sm-end o-50'

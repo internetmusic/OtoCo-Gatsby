@@ -6,8 +6,6 @@ import {
   SeriesType,
   ManagementActionTypes,
 } from '../../../state/management/types'
-// import Icon from '../icon/icon'
-// import { faDownload } from '@fortawesome/free-solid-svg-icons'
 import { FileEarmarkText } from 'react-bootstrap-icons'
 import { IState } from '../../../state/types'
 

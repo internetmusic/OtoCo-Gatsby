@@ -1,5 +1,4 @@
 import React, { FC } from 'react'
-import ReactJson from 'react-json-view'
 import { DecryptedMailbox } from '../../../state/account/types'
 import { Trash } from 'react-bootstrap-icons'
 import UTCDate from '../../utcDate/utcDate'
