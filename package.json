@@ -5,6 +5,7 @@
   "author": "Filipe Soccol <filipe.soccol@gmail.com>",
   "dependencies": {
     "@hapi/formula": "^3.0.0",
+    "@hapi/pinpoint": "^2.0.0",
     "@loadable/component": "^5.14.1",
     "@textile/hub": "^6.1.2",
     "@types/react-transition-group": "^4.4.0",
