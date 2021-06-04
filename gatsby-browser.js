@@ -4,7 +4,7 @@
 // import 'bootstrap/js/dist/carousel'
 import 'bootstrap/js/dist/dropdown'
 import 'bootstrap/js/dist/modal'
-import 'firebase/database'
+// import 'firebase/database'
 import 'font-awesome/css/font-awesome.css'
 import './src/scss/main.scss'
 

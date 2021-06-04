@@ -1,6 +1,4 @@
 import React, { FC } from 'react'
-import ReactJson from 'react-json-view'
-import { DecryptedMailbox } from '../../state/account/types'
 import { DashSquareFill } from 'react-bootstrap-icons'
 import UTCDate from '../utcDate/utcDate'
 
@@ -15,18 +13,19 @@ interface ListMessagesProps {
 const StakeList = ({ stakes, handleUnstake }: ListMessagesProps) => {
   return (
     <>
-      {stakes.map((m) => (
+      {stakes.map((m, idx) => (
         <tr className="small" key={m.id}>
           <td>#{m.id}</td>
           <td className="text-end">
             {m.amount} {m.token.symbol}
           </td>
           <td className="text-end">{m.price} USD</td>
+          <td className="text-end">{m.shares.toFixed(2)}</td>
           <td className="text-end">
             {m.amount > 0 && (
               <button
                 className="btn btn-primary btn-sm"
-                onClick={handleUnstake.bind(undefined, m.id)}
+                onClick={handleUnstake.bind(undefined, idx)}
               >
                 unstake <DashSquareFill></DashSquareFill>
               </button>
