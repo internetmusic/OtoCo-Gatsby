@@ -5,11 +5,12 @@ import axios, { AxiosResponse } from 'axios'
 import { Link } from 'gatsby'
 import { connect } from 'react-redux'
 import { IState } from '../../state/types'
-import { faChevronLeft } from '@fortawesome/free-solid-svg-icons'
+import TransactionUtils from '../../services/transactionUtils'
+import { ChevronLeft } from 'react-bootstrap-icons'
 import LaunchPoolContract from '../../smart-contracts/LaunchPool'
 import ERC20Contract from '../../smart-contracts/OtocoToken'
 import StakesList from './stakesList'
-import Icon from '../icon/icon'
+import TokensList from './tokensList'
 
 import '../style.scss'
 
@@ -97,21 +98,6 @@ const LaunchPool: FC<Props> = ({ id, account }: Props) => {
   const [stakes, setStakes] = useState<BN[]>([])
   const [accountStakes, setAccountStakes] = useState<StakeInterface[]>([])
 
-  const unstake = async (index: number) => {
-    console.log('Index unstaked:', index)
-  }
-
-  const ListTokens = () => {
-    if (!allowedTokens) return <div></div>
-    return allowedTokens.map((t) => (
-      <div className="row" key={t.address}>
-        <div className="col-4">{t.address.substring(0, 8)}...</div>
-        <div className="col-4">{t.symbol}</div>
-        <div className="col-4">{t.decimals} decimals</div>
-      </div>
-    ))
-  }
-
   // Fetch general Launch pool info and allowed tokens
   const fetchGeneralInfo = async () => {
     try {
@@ -179,14 +165,12 @@ const LaunchPool: FC<Props> = ({ id, account }: Props) => {
 
   const fetchStakes = async () => {
     if (!account) return
-    console.log('chegou', poolInfo)
     if (!poolInfo) return
     const web3: Web3 = window.web3
     const stakesList = await LaunchPoolContract.getContract(id)
       .methods.stakesList()
       .call({ from: account })
     setStakes(stakesList)
-    console.log(stakesList)
     const stakesAccountList: EventData[] = await LaunchPoolContract.getContract(
       id
     ).getPastEvents('Staked', {
@@ -197,7 +181,6 @@ const LaunchPool: FC<Props> = ({ id, account }: Props) => {
     console.log('Stakes Fetched', stakesAccountList)
     const listStakes: StakeInterface[] = []
     for (const stakeObject of stakesAccountList) {
-      console.log(allowedTokens, stakeObject.returnValues[2])
       const stake: StakeInterface = {
         id: stakeObject.returnValues[0],
         token: allowedTokens?.find(
@@ -220,8 +203,8 @@ const LaunchPool: FC<Props> = ({ id, account }: Props) => {
       if (stake.amount == 0) return stake
       // Get pool balance until stake offer
       const poolBalance: BN = stakesList
-        .slice(0, id)
-        .reduce((acc: BN, s: BN) => acc.add(new BN(s)), new BN(0))
+        .slice(0, stake.id)
+        .reduce((acc: BN, s: string) => acc.add(new BN(s)), new BN(0))
       // Set stake current price for each share
       stake.price = parseFloat(
         Web3.utils.fromWei(
@@ -250,6 +233,28 @@ const LaunchPool: FC<Props> = ({ id, account }: Props) => {
     setAccountStakes(listStakes)
   }
 
+  const handleUnstake = async (index: number) => {
+    if (!account) return
+    console.log('Index unstaked:', index)
+    const requestInfo = await TransactionUtils.getTransactionRequestInfo(
+      account,
+      '60000'
+    )
+    try {
+      const hash: string = await new Promise((resolve, reject) => {
+        LaunchPoolContract.getContract(id)
+          .methods.unstake(index)
+          .send(requestInfo, (error: Error, hash: string) => {
+            if (error) reject(error.message)
+            else resolve(hash)
+          })
+      })
+      console.log(hash)
+    } catch (err) {
+      console.error('Staking error', err)
+    }
+  }
+
   React.useEffect(() => {
     setTimeout(async () => {
       setLoading(true)
@@ -276,7 +281,7 @@ const LaunchPool: FC<Props> = ({ id, account }: Props) => {
         className="btn btn-back btn-primary-outline btn-sm"
         to={`/dashpanel/`}
       >
-        <Icon icon={faChevronLeft} />
+        <ChevronLeft></ChevronLeft>
         <span style={{ paddingLeft: '10px' }}>Back</span>
       </Link>
       {!error && account && !loading && poolInfo && (
@@ -317,23 +322,36 @@ const LaunchPool: FC<Props> = ({ id, account }: Props) => {
             Max Price: {Web3.utils.fromWei(poolInfo.maximumPrice.toString())}
           </div>
           <div className="col-12 text-left">
-            <div>ALLOWED TOKENS:</div>
-            <ListTokens></ListTokens>
+            <h5>Allowed Tokens</h5>
+            <table className="table table-hover mb-5">
+              <thead>
+                <tr>
+                  <th scope="col">Address</th>
+                  <th scope="col">Symbol</th>
+                  <th scope="col">Decimals</th>
+                </tr>
+              </thead>
+              <tbody>
+                <TokensList tokens={allowedTokens} poolId={id}></TokensList>
+              </tbody>
+            </table>
           </div>
           <div className="col-12 text-left">
+            <h5>Account Stakes</h5>
             <table className="table table-hover mb-5">
               <thead>
                 <tr>
                   <th scope="col">Queue</th>
                   <th scope="col">Amount</th>
                   <th scope="col">Current Price</th>
+                  <th scope="col">Shares</th>
                   <th scope="col">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 <StakesList
                   stakes={accountStakes}
-                  handleUnstake={unstake}
+                  handleUnstake={handleUnstake}
                 ></StakesList>
               </tbody>
             </table>

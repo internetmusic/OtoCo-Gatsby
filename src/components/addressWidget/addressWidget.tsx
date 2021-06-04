@@ -1,8 +1,6 @@
 import React, { useState, FC } from 'react'
 import Web3 from 'web3'
 import ENS from 'ethereum-ens'
-// import Icon from '../icon/icon'
-// import { faCopy } from '@fortawesome/free-solid-svg-icons'
 import { Clipboard } from 'react-bootstrap-icons'
 import { connect } from 'react-redux'
 import { IState } from '../../state/types'

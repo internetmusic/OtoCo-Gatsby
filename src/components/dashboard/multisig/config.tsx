@@ -1,11 +1,9 @@
 import React, { Dispatch, FC, useState } from 'react'
 import Web3 from 'web3'
 import { connect } from 'react-redux'
-import Icon from '../../icon/icon'
-import { faTimes } from '@fortawesome/free-solid-svg-icons'
+import { XLg } from 'react-bootstrap-icons'
 import TransactionUtils from '../../../services/transactionUtils'
 import TransactionMonitor from '../../transactionMonitor/transactionMonitor'
-import AddressWidget from '../../addressWidget/addressWidget'
 import GnosisSafe from '../../../smart-contracts/GnosisSafe'
 import MultisigFactory from '../../../smart-contracts/MultisigFactory'
 import MasterRegistry from '../../../smart-contracts/MasterRegistry'
@@ -52,7 +50,7 @@ const Config: FC<Props> = ({
             className="btn btn-sm"
             onClick={handleRemoveOwner.bind(undefined, idx)}
           >
-            <Icon icon={faTimes}>&#10005;</Icon>
+            <XLg>&#10005;</XLg>
           </button>
         </div>
       </div>

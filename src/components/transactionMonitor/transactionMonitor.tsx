@@ -3,15 +3,14 @@ import Web3 from 'web3'
 import { TransactionReceipt } from 'web3-core'
 import { connect } from 'react-redux'
 import { IState } from '../../state/types'
-import Icon from '../icon/icon'
 import {
-  faCheck,
-  faCheckDouble,
-  faExclamation,
-  faEnvelopeOpen,
-  faEnvelope,
-  faClock,
-} from '@fortawesome/free-solid-svg-icons'
+  Check,
+  Check2,
+  Exclamation,
+  Envelope,
+  EnvelopeOpen,
+  Clock,
+} from 'react-bootstrap-icons'
 
 import './style.scss'
 
@@ -98,12 +97,12 @@ const TransactionMonitor: FC<Props> = ({
         <div className="row">
           <div className="col-4 text-center align-items-center">
             {/* <i className="file outline massive icon align-self-center"></i> */}
-            {error && <Icon icon={faExclamation} size="3x" />}
-            {!exists && !error && <Icon icon={faEnvelopeOpen} size="3x" />}
+            {error && <Exclamation size={32}></Exclamation>}
+            {!exists && !error && <EnvelopeOpen size={32}></EnvelopeOpen>}
             {exists && !confirmations && !error && (
-              <Icon icon={faEnvelope} size="3x" />
+              <Envelope size={32}></Envelope>
             )}
-            {confirmations > 0 && !error && <Icon icon={faCheck} size="3x" />}
+            {confirmations > 0 && !error && <Check size={32}></Check>}
           </div>
           <div className="col-8">
             <div className="small">
@@ -122,7 +121,7 @@ const TransactionMonitor: FC<Props> = ({
               </a>{' '}
             </div>
             <div className="small" style={{ display: 'inline', float: 'left' }}>
-              <Icon icon={faClock} size="1x" spin={true} />
+              <Clock />
               &nbsp;{counter} seconds
             </div>
           </div>
