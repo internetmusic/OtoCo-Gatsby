@@ -12,6 +12,8 @@ import ERC20Contract from '../../smart-contracts/OtocoToken'
 import StakesList from './stakesList'
 import TokensList from './tokensList'
 
+import StakeDisplay from './stakeGraph/StakeDisplay/StakeDisplay'
+
 import '../style.scss'
 
 const options = {
@@ -276,87 +278,99 @@ const LaunchPool: FC<Props> = ({ id, account }: Props) => {
   }, [allowedTokens])
 
   return (
-    <div className="container-sm limiter-md content">
+    <div className="container-sm limiter-md content container-sg">
       <Link
         className="btn btn-back btn-primary-outline btn-sm"
         to={`/dashpanel/`}
       >
-        <ChevronLeft></ChevronLeft>
+        <ChevronLeft />
         <span style={{ paddingLeft: '10px' }}>Back</span>
       </Link>
+
       {!error && account && !loading && poolInfo && (
-        <div className="row">
-          <h1 className="col-12 text-left">{poolInfo.title}</h1>
-          <h2 className="col-12 text-left">{poolInfo.description}</h2>
-          <div className="col-12 text-left">
-            Start Date: {poolInfo.startTimestamp.toISOString()}
+        <>
+          <StakeDisplay
+            poolInfo={poolInfo}
+            getUnitPrice={getUnitPrice}
+            tokenSum={200000}
+            onStake={() => {}}
+            onUnstake={() => {}}
+          />
+
+          <div className="row">
+            <h1 className="col-12 text-left">{poolInfo.title}</h1>
+            <h2 className="col-12 text-left">{poolInfo.description}</h2>
+            <div className="col-12 text-left">
+              Start Date: {poolInfo.startTimestamp.toISOString()}
+            </div>
+            <div className="col-12 text-left">
+              End Date: {poolInfo.endTimestamp.toISOString()}
+            </div>
+            <div className="col-12 text-left">
+              Stakes Min: {Web3.utils.fromWei(poolInfo.stakesMin.toString())}
+            </div>
+            <div className="col-12 text-left">
+              Stakes Max: {Web3.utils.fromWei(poolInfo.stakesMax.toString())}
+            </div>
+            <div className="col-12 text-left">
+              Pool Balance:{' '}
+              {Web3.utils.fromWei(poolInfo.stakesTotal.toString())}
+            </div>
+            <div className="col-12 text-left">
+              Curve Reducer: {poolInfo.curveReducer}
+            </div>
+            <div className="col-12 text-left">Stage: {poolInfo.stage}</div>
+            <div className="col-12 text-left">
+              Stake Amount Min allowed:{' '}
+              {Web3.utils.fromWei(poolInfo.stakeAmountMin)}
+            </div>
+            <div className="col-12 text-left">
+              Stake Amount Max allowed:{' '}
+              {Web3.utils.fromWei(poolInfo.stakeAmountMax)}
+            </div>
+            <div className="col-12 text-left">
+              Min Price: {Web3.utils.fromWei(poolInfo.minimumPrice.toString())}
+            </div>
+            <div className="col-12 text-left">
+              Max Price: {Web3.utils.fromWei(poolInfo.maximumPrice.toString())}
+            </div>
+            <div className="col-12 text-left">
+              <h5>Allowed Tokens</h5>
+              <table className="table table-hover mb-5">
+                <thead>
+                  <tr>
+                    <th scope="col">Address</th>
+                    <th scope="col">Symbol</th>
+                    <th scope="col">Decimals</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <TokensList tokens={allowedTokens} poolId={id}></TokensList>
+                </tbody>
+              </table>
+            </div>
+            <div className="col-12 text-left">
+              <h5>Account Stakes</h5>
+              <table className="table table-hover mb-5">
+                <thead>
+                  <tr>
+                    <th scope="col">Queue</th>
+                    <th scope="col">Amount</th>
+                    <th scope="col">Current Price</th>
+                    <th scope="col">Shares</th>
+                    <th scope="col">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <StakesList
+                    stakes={accountStakes}
+                    handleUnstake={handleUnstake}
+                  ></StakesList>
+                </tbody>
+              </table>
+            </div>
           </div>
-          <div className="col-12 text-left">
-            End Date: {poolInfo.endTimestamp.toISOString()}
-          </div>
-          <div className="col-12 text-left">
-            Stakes Min: {Web3.utils.fromWei(poolInfo.stakesMin.toString())}
-          </div>
-          <div className="col-12 text-left">
-            Stakes Max: {Web3.utils.fromWei(poolInfo.stakesMax.toString())}
-          </div>
-          <div className="col-12 text-left">
-            Pool Balance: {Web3.utils.fromWei(poolInfo.stakesTotal.toString())}
-          </div>
-          <div className="col-12 text-left">
-            Curve Reducer: {poolInfo.curveReducer}
-          </div>
-          <div className="col-12 text-left">Stage: {poolInfo.stage}</div>
-          <div className="col-12 text-left">
-            Stake Amount Min allowed:{' '}
-            {Web3.utils.fromWei(poolInfo.stakeAmountMin)}
-          </div>
-          <div className="col-12 text-left">
-            Stake Amount Max allowed:{' '}
-            {Web3.utils.fromWei(poolInfo.stakeAmountMax)}
-          </div>
-          <div className="col-12 text-left">
-            Min Price: {Web3.utils.fromWei(poolInfo.minimumPrice.toString())}
-          </div>
-          <div className="col-12 text-left">
-            Max Price: {Web3.utils.fromWei(poolInfo.maximumPrice.toString())}
-          </div>
-          <div className="col-12 text-left">
-            <h5>Allowed Tokens</h5>
-            <table className="table table-hover mb-5">
-              <thead>
-                <tr>
-                  <th scope="col">Address</th>
-                  <th scope="col">Symbol</th>
-                  <th scope="col">Decimals</th>
-                </tr>
-              </thead>
-              <tbody>
-                <TokensList tokens={allowedTokens} poolId={id}></TokensList>
-              </tbody>
-            </table>
-          </div>
-          <div className="col-12 text-left">
-            <h5>Account Stakes</h5>
-            <table className="table table-hover mb-5">
-              <thead>
-                <tr>
-                  <th scope="col">Queue</th>
-                  <th scope="col">Amount</th>
-                  <th scope="col">Current Price</th>
-                  <th scope="col">Shares</th>
-                  <th scope="col">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                <StakesList
-                  stakes={accountStakes}
-                  handleUnstake={handleUnstake}
-                ></StakesList>
-              </tbody>
-            </table>
-          </div>
-        </div>
+        </>
       )}
       {!account && (
         <div className="d-flex justify-content-center">

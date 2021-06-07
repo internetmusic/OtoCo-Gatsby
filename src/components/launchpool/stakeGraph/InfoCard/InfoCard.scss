@@ -1,0 +1,121 @@
+.info-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 12px;
+
+  width: 100%;
+  max-width: 275px;
+  height: 20vh;
+
+  background: #151938;
+
+  .text-wrapper {
+    width: 80%;
+    height: 80%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    text-align: left;
+
+    font-family: IBM Plex Sans;
+    font-style: normal;
+    font-weight: normal;
+    line-height: 30px;
+
+    h1 {
+      font-family: IBM Plex Sans;
+      font-style: normal;
+      font-weight: normal;
+      line-height: 30px;
+      font-size: 1.75rem;
+
+      margin-bottom: 0;
+    }
+
+    .graident-text {
+      background: -webkit-linear-gradient(#6369f9, #b441d1);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  }
+}
+.graident-background {
+  background: linear-gradient(158.43deg, #6369f9 4.89%, #b441d1 83.82%);
+}
+@media screen and (max-width: 900px) {
+  .info-card {
+    max-height: 85px;
+    max-width: 30vw;
+
+    margin: 0 1.5vw;
+
+    display: flex;
+    align-items: space-between;
+
+    .text-wrapper {
+      line-height: 1;
+      h1 {
+        font-family: IBM Plex Sans;
+        font-style: normal;
+        font-weight: normal;
+        line-height: 1;
+        font-size: 1rem;
+
+        margin: 0;
+        margin-bottom: 10px;
+      }
+      p {
+        font-size: 0.75rem;
+        margin: 0;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 460px) {
+  .info-card {
+    max-height: 85px;
+    max-width: 40vw;
+
+    margin: 0 2.5vw;
+
+    display: flex;
+    align-items: space-between;
+
+    .text-wrapper {
+      line-height: 13px;
+      h1 {
+        font-family: IBM Plex Sans;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 1rem;
+
+        margin: 0;
+        margin-bottom: 5px;
+      }
+      p {
+        font-size: 0.9rem;
+        line-height: 1rem;
+        margin: 0;
+      }
+    }
+  }
+  .graident-background {
+    min-width: 85vw;
+
+    .text-wrapper {
+      line-height: 1;
+      h1 {
+        font-size: 1.2rem;
+      }
+      p {
+        font-size: 0.85rem;
+      }
+    }
+  }
+}
