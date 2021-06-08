@@ -110,12 +110,13 @@ const StakeDisplay = ({
 
     const timeLeft =
       difference < 0
-        ? { days: 0, hours: 0, minutes: 0, seconds: 0 }
+        ? { days: 0, hours: 0, minutes: 0, seconds: 0, isClosed: true }
         : {
             days: Math.floor(difference / (1000 * 60 * 60 * 24)),
             hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
             minutes: Math.floor((difference / 1000 / 60) % 60),
             seconds: Math.floor((difference / 1000) % 60),
+            isClosed: false,
           }
 
     return timeLeft
@@ -130,6 +131,23 @@ const StakeDisplay = ({
 
     return () => clearTimeout(timer)
   })
+
+  const [timeDisplay, setTimeDisplay] = useState('loading...')
+
+  useEffect(() => {
+    if (timeLeft.days > 0) {
+      setTimeDisplay(`${timeLeft.days} days ${timeLeft.hours} hours`)
+      return
+    } else if (timeLeft.days < 0 && timeLeft.hours > 0) {
+      setTimeDisplay(`${timeLeft.hours} hours ${timeLeft.minutes} min`)
+      return
+    } else if (timeLeft.hours < 0 && timeLeft.minutes > 0) {
+      setTimeDisplay(`${timeLeft.minutes} min ${timeLeft.seconds} sec`)
+      return
+    } else if (timeLeft.isClosed) {
+      setTimeDisplay('Staking is over.')
+    }
+  }, [timeLeft])
 
   return (
     <div className="stake-display">
@@ -157,12 +175,10 @@ const StakeDisplay = ({
             useGraidentText={true}
           />
           <InfoCard
-            titleText={
-              timeLeft.hours > 0
-                ? `${timeLeft.days} days ${timeLeft.hours} hours`
-                : `${timeLeft.minutes} min ${timeLeft.seconds} sec`
+            titleText={timeDisplay}
+            infoText={`Pre-order window ${
+              timeLeft.isClosed ? 'ended on' : 'ends'
             }
-            infoText={`Pre-order window ends
                  ${format(fromUnixTime(closeTime), 'MMM do, h:mmaaa O')}`}
             useGraidentText={true}
           />

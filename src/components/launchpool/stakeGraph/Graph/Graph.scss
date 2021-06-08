@@ -1,8 +1,10 @@
 .graph {
   background-color: #11142d;
 
-  width: 100%;
+  width: 108%;
   height: 100%;
+
+  margin-left: -4%;
 
   min-width: 357px;
 
@@ -35,8 +37,10 @@
 
 @media screen and (max-width: 460px) {
   .graph {
-    margin-top: 30vh;
+    margin-top: 35vh;
+    margin-left: 0;
     max-height: none;
     max-width: none;
+    width: 95vw;
   }
 }

@@ -11,6 +11,15 @@
 
   background: #151938;
 
+  z-index: 1001;
+
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+
   .text-wrapper {
     width: 80%;
     height: 80%;
@@ -33,6 +42,10 @@
       line-height: 30px;
       font-size: 1.75rem;
 
+      margin-bottom: 0;
+    }
+
+    p {
       margin-bottom: 0;
     }
 

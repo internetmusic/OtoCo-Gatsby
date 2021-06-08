@@ -70,7 +70,7 @@ const Graph = ({ currentIdx, currentPrice, specs }: Props) => {
           </linearGradient>
         </defs>
       </svg>
-      <VictoryGroup padding={{ left: 0, right: 0, top: 0, bottom: 0 }}>
+      <VictoryGroup padding={18}>
         <VictoryArea
           // interpolation="natural"
 
