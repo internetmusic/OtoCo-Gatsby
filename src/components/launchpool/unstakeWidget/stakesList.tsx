@@ -1,5 +1,5 @@
 import React, { FC } from 'react'
-import { DashSquareFill } from 'react-bootstrap-icons'
+import { XLg } from 'react-bootstrap-icons'
 import UTCDate from '../utcDate/utcDate'
 
 import { StakeInterface } from './index'
@@ -27,10 +27,9 @@ const StakeList = ({ stakes, handleUnstake }: ListMessagesProps) => {
                 className="btn btn-primary btn-sm"
                 onClick={handleUnstake.bind(undefined, idx)}
               >
-                unstake <DashSquareFill></DashSquareFill>
+                <XLg></XLg>
               </button>
             )}
-            {m.amount == 0 && <span className="text-gray"> unstaked </span>}
           </td>
         </tr>
       ))}

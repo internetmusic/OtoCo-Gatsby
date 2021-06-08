@@ -9,10 +9,11 @@ import TransactionUtils from '../../services/transactionUtils'
 import { ChevronLeft } from 'react-bootstrap-icons'
 import LaunchPoolContract from '../../smart-contracts/LaunchPool'
 import ERC20Contract from '../../smart-contracts/OtocoToken'
-import StakesList from './stakesList'
 import TokensList from './tokensList'
-import StakeWidget from './stakeWidget'
 import '../style.scss'
+
+import StakeWidget from './stakeWidget'
+import UnstakeWidget from './unstakeWidget'
 
 const options = {
   headers: {
@@ -105,38 +106,30 @@ interface Props {
 const LaunchPool: FC<Props> = ({ id, account }: Props) => {
   const [loading, setLoading] = useState<boolean>(true)
   const [error, setError] = useState<string>('')
-  const [modalOpen, setModalOpen] = useState<boolean>(false)
+  const [stakeModalOpen, setStakeModalOpen] = useState<boolean>(false)
+  const [unstakeModalOpen, setUnstakeModalOpen] = useState<boolean>(false)
   const [poolInfo, setPoolInfo] = useState<LaunchPoolInterface | undefined>(
     undefined
   )
   const [allowedTokens, setAllowedTokens] = useState<TokensInterface[]>()
-  const [stakes, setStakes] = useState<BN[]>([])
-  const [accountStakes, setAccountStakes] = useState<StakeInterface[]>([])
+  const [stakes, setStakes] = useState<BN[] | undefined>()
+  const [accountStakes, setAccountStakes] = useState<
+    StakeInterface[] | undefined
+  >()
 
-  const openModal = () => {
+  const openStakeModal = () => {
     console.log('SHOW MODAL')
-    setModalOpen(true)
+    setStakeModalOpen(true)
   }
 
-  const closeModal = () => {
-    setModalOpen(false)
-    fetchStakes()
+  const openUnstakeModal = () => {
+    console.log('SHOW MODAL')
+    setUnstakeModalOpen(true)
   }
 
-  const fetchTotalShares = (currentStakes: BN[]) => {
-    let balance = new BN(0)
-    const total: BN = currentStakes.reduce(function (acc, s) {
-      const shares = getShares(
-        new BN(poolInfo?.stakesMax),
-        balance,
-        new BN(s),
-        new BN(poolInfo?.curveReducer),
-        new BN(poolInfo?.minimumPrice)
-      )
-      balance = balance.add(new BN(s))
-      return acc.add(shares)
-    }, new BN(0))
-    return Web3.utils.fromWei(total.toString())
+  const closeModals = () => {
+    setStakeModalOpen(false)
+    setUnstakeModalOpen(false)
   }
 
   // Fetch general Launch pool info and allowed tokens
@@ -145,43 +138,51 @@ const LaunchPool: FC<Props> = ({ id, account }: Props) => {
       const infosContract = await LaunchPoolContract.getContract(id)
         .methods.getGeneralInfos()
         .call({ from: account })
-      console.log(infosContract)
-      const infos: any = {}
-      infos.startTimestamp = new Date(
-        parseInt(infosContract[0].toString()) * 1000
-      )
-      infos.endTimestamp = new Date(
-        parseInt(infosContract[1].toString()) * 1000
-      )
-      infos.stakesMin = infosContract[2]
-      infos.stakesMax = infosContract[3]
-      infos.stakesTotal = infosContract[4]
-      infos.stakesCount = parseInt(infosContract[5].toString())
-      infos.curveReducer = infosContract[6].toString()
-      infos.stage = parseInt(infosContract[7].toString())
-      infos.stakeAmountMin = infosContract[8]
-      infos.stakeAmountMax = infosContract[10]
-      infos.minimumPrice = infosContract[9]
-      infos.maximumPrice = getUnitPrice(
-        new BN(infosContract[3]),
-        new BN(infosContract[3]),
-        new BN(infosContract[6]),
-        new BN(infosContract[9])
-      )
-      console.log(infos)
+      const infosBN = infosContract.map((i: string) => new BN(i))
+      const infos: LaunchPoolInterface = {
+        startTimestamp: new Date(parseInt(infosBN[0].toString()) * 1000),
+        endTimestamp: new Date(parseInt(infosBN[1].toString()) * 1000),
+        stakesMin: infosBN[2],
+        stakesMax: infosBN[3],
+        stakesTotal: infosBN[4],
+        stakesCount: parseInt(infosBN[5].toString()),
+        curveReducer: infosBN[6],
+        stage: parseInt(infosBN[7].toString()),
+        stakeAmountMin: infosBN[8],
+        stakeAmountMax: infosBN[10],
+        minimumPrice: infosBN[9],
+        maximumPrice: new BN(
+          getUnitPrice(infosBN[3], infosBN[3], infosBN[6], infosBN[9])
+        ),
+      }
+      setPoolInfo(infos)
+    } catch (err) {
+      setError('Not possible to load Pool info.')
+      console.error(err)
+    }
+  }
+
+  const fetchMetadata = async (infos: LaunchPoolInterface) => {
+    try {
       const metadata = await LaunchPoolContract.getContract(id)
         .methods.metadata()
         .call({ from: account })
-      console.log(metadata)
       const res: AxiosResponse = await axios.get(
         'https://cloudflare-ipfs.com/ipfs/' + metadata,
         options
       )
-      console.log('Axios response', res)
       infos.title = res.data.title
       infos.description = res.data.description
       setPoolInfo(infos)
-      const tokensList = await LaunchPoolContract.getContract(id)
+    } catch (err) {
+      setError('Not possible to load Pool info.')
+      console.error(err)
+    }
+  }
+
+  const fetchTokenAllowedList = async (poolId: string) => {
+    try {
+      const tokensList = await LaunchPoolContract.getContract(poolId)
         .methods.tokenList()
         .call({ from: account })
       const allowedList: TokensInterface[] = []
@@ -199,60 +200,46 @@ const LaunchPool: FC<Props> = ({ id, account }: Props) => {
       }
       setAllowedTokens(allowedList)
     } catch (err) {
-      setError('Not possible to load Launch pool.')
+      setError('Not possible to load Allowed Tokens.')
       console.error(err)
     }
   }
 
-  const fetchStakes = async () => {
-    if (!account) return
+  const mountStake = async (stakeEvent: EventData) => {
+    if (!stakes) return
     if (!poolInfo) return
+    if (!allowedTokens) return
+    const stake: StakeInterface = {
+      id: stakeEvent.returnValues[0],
+      token: allowedTokens.find((t) => t.address == stakeEvent.returnValues[2]),
+      amount: parseFloat(
+        Web3.utils.fromWei(stakes[parseInt(stakeEvent.returnValues[0])])
+      ),
+      price: 0,
+      shares: 0,
+      timestamp: new Date(),
+    }
     const web3: Web3 = window.web3
-    const stakesList = await LaunchPoolContract.getContract(id)
-      .methods.stakesList()
-      .call({ from: account })
-    setStakes(stakesList)
-    const stakesAccountList: EventData[] = await LaunchPoolContract.getContract(
-      id
-    ).getPastEvents('Staked', {
-      fromBlock: 0,
-      toBlock: 'latest',
-      filter: { investor: account },
-    })
-    const listStakes: StakeInterface[] = []
-    for (const stakeObject of stakesAccountList) {
-      const stake: StakeInterface = {
-        id: stakeObject.returnValues[0],
-        token: allowedTokens?.find(
-          (t) => t.address == stakeObject.returnValues[2]
-        ),
-        amount: parseFloat(
-          Web3.utils.fromWei(stakeObject.returnValues[3].toString())
-        ),
-        price: 0,
-        shares: 0,
-        timestamp: new Date(),
-      }
-      const block = await web3.eth.getBlock(stakeObject.blockNumber)
-      // Set stake timestamp
-      stake.timestamp = new Date(parseInt(block.timestamp.toString()) * 1000)
-      // Set stake price and shares to zero initially
-      stake.price = 0
-      stake.shares = 0
-      // If if unstaked return it zeroed
-      if (stake.amount == 0) return stake
+    const block = await web3.eth.getBlock(stakeEvent.blockNumber)
+    // Set stake timestamp
+    stake.timestamp = new Date(parseInt(block.timestamp.toString()) * 1000)
+    // Set stake price and shares to zero initially
+    stake.price = 0
+    stake.shares = 0
+    // If if unstaked return it zeroed
+    if (stake.amount > 0) {
       // Get pool balance until stake offer
-      const poolBalance: BN = stakesList
+      const poolBalance: BN = stakes
         .slice(0, stake.id)
-        .reduce((acc: BN, s: string) => acc.add(new BN(s)), new BN(0))
+        .reduce((acc: BN, s: BN) => acc.add(s), new BN(0))
       // Set stake current price for each share
       stake.price = parseFloat(
         Web3.utils.fromWei(
           getUnitPrice(
-            new BN(poolInfo.stakesMax),
-            new BN(poolBalance),
-            new BN(poolInfo.curveReducer),
-            new BN(poolInfo.minimumPrice)
+            poolInfo.stakesMax,
+            poolBalance,
+            poolInfo.curveReducer,
+            poolInfo.minimumPrice
           )
         )
       )
@@ -260,60 +247,135 @@ const LaunchPool: FC<Props> = ({ id, account }: Props) => {
       stake.shares = parseFloat(
         Web3.utils.fromWei(
           getShares(
-            new BN(poolInfo.stakesMax),
-            new BN(poolBalance),
-            new BN(stakeObject.returnValues[3]),
-            new BN(poolInfo.curveReducer),
-            new BN(poolInfo.minimumPrice)
+            poolInfo.stakesMax,
+            poolBalance,
+            stakes[parseInt(stakeEvent.returnValues[0])],
+            poolInfo.curveReducer,
+            poolInfo.minimumPrice
           )
         )
       )
-      listStakes.push(stake)
     }
-    setAccountStakes(listStakes)
+    return stake
   }
 
-  const handleUnstake = async (index: number) => {
-    if (!account) return
-    console.log('Index unstaked:', index)
-    const requestInfo = await TransactionUtils.getTransactionRequestInfo(
-      account,
-      '60000'
+  const registerStake = async (err: ErrorEvent, stakeEvent: EventData) => {
+    if (!stakes) return
+    if (!poolInfo) return
+    if (!allowedTokens) return
+    if (err) return console.log(err.message)
+    const listAccountStakes = accountStakes || []
+    if (stakeEvent.returnValues[3] == account) {
+      const stake: StakeInterface | undefined = await mountStake(stakeEvent)
+      if (!stake) return
+      listAccountStakes.push(stake)
+      setAccountStakes(listAccountStakes)
+    }
+    const info = poolInfo
+    info.stakesTotal = info.stakesTotal.add(new BN(stakeEvent.returnValues[3]))
+    info.stakesCount++
+    setPoolInfo(info)
+  }
+
+  const registerUnstake = (err: ErrorEvent, unstakeEvent: EventData) => {
+    if (!stakes) return
+    if (!poolInfo) return
+    if (!allowedTokens) return
+    if (err) return console.log(err.message)
+    const currentStakes: BN[] = stakes
+    currentStakes[unstakeEvent.returnValues[0]] = new BN(0)
+    setStakes(currentStakes)
+    const info = poolInfo
+    info.stakesTotal = info.stakesTotal.sub(
+      new BN(unstakeEvent.returnValues[3])
     )
-    try {
-      const hash: string = await new Promise((resolve, reject) => {
-        LaunchPoolContract.getContract(id)
-          .methods.unstake(index)
-          .send(requestInfo, (error: Error, hash: string) => {
-            if (error) reject(error.message)
-            else resolve(hash)
-          })
-      })
-      console.log(hash)
-    } catch (err) {
-      console.error('Staking error', err)
+    setPoolInfo(info)
+  }
+
+  const refreshPoolStakes = async () => {
+    const stakesList = await LaunchPoolContract.getContract(id)
+      .methods.stakesList()
+      .call({ from: account })
+    setStakes(stakesList.map((s: string) => new BN(s)))
+  }
+
+  const refreshAccountStakes = async () => {
+    if (!account) return
+    if (!allowedTokens) return
+    const stakesAccountEvents: EventData[] = await LaunchPoolContract.getContract(
+      id
+    ).getPastEvents('Staked', {
+      fromBlock: 0,
+      toBlock: 'latest',
+      filter: { investor: account },
+    })
+    LaunchPoolContract.getContract(id).events.Staked(
+      {
+        fromBlock: 'latest',
+        toBlock: 'latest',
+      },
+      registerStake
+    )
+    LaunchPoolContract.getContract(id).events.Unstaked(
+      {
+        fromBlock: 'latest',
+        toBlock: 'latest',
+      },
+      registerUnstake
+    )
+    const listAccountStakes: StakeInterface[] = []
+    for (const stakeEvent of stakesAccountEvents) {
+      const stake: StakeInterface | undefined = await mountStake(stakeEvent)
+      if (!stake) return
+      listAccountStakes.push(stake)
     }
+    setAccountStakes(listAccountStakes)
+  }
+
+  const calculateTotalShares = (
+    infos: LaunchPoolInterface,
+    currentStakes: BN[]
+  ) => {
+    let balance = new BN(0)
+    const total: BN = currentStakes.reduce(function (acc, s) {
+      const shares = getShares(
+        infos.stakesMax,
+        balance,
+        new BN(s),
+        infos.curveReducer,
+        infos.minimumPrice
+      )
+      balance = balance.add(new BN(s))
+      return acc.add(shares)
+    }, new BN(0))
+    return Web3.utils.fromWei(total.toString())
   }
 
   React.useEffect(() => {
     setTimeout(async () => {
-      setLoading(true)
-      if (account && id) {
+      if (account && !poolInfo) {
         await fetchGeneralInfo()
+        console.log('Fetched Pool Info')
       }
-      setLoading(false)
-    }, 0)
-  }, [account])
-
-  React.useEffect(() => {
-    setTimeout(async () => {
-      setLoading(true)
-      if (poolInfo) {
-        await fetchStakes()
+      if (poolInfo && !poolInfo?.title) {
+        await fetchMetadata(poolInfo)
+        console.log('Fetched Metadata')
       }
-      setLoading(false)
+      if (poolInfo && !allowedTokens) {
+        await fetchTokenAllowedList(id)
+        console.log('Fetched Tokens Allowed')
+      }
+      if (poolInfo && !stakes) {
+        await refreshPoolStakes()
+        console.log('Fetched Stakes')
+      }
+      if (poolInfo && stakes && !accountStakes) {
+        await refreshAccountStakes()
+        console.log('Fetched Account Stakes')
+        setLoading(false)
+      }
     }, 0)
-  }, [allowedTokens])
+  }, [account, poolInfo, stakes, accountStakes])
 
   return (
     <div className="container-sm limiter-md content">
@@ -341,7 +403,7 @@ const LaunchPool: FC<Props> = ({ id, account }: Props) => {
             Pool Balance: {Web3.utils.fromWei(poolInfo.stakesTotal.toString())}
           </div>
           <div className="col-12 text-left">
-            Curve Reducer: {poolInfo.curveReducer}
+            Curve Reducer: {poolInfo.curveReducer.toString()}
           </div>
           <div className="col-12 text-left">Stage: {poolInfo.stage}</div>
           <div className="col-12 text-left">
@@ -358,50 +420,28 @@ const LaunchPool: FC<Props> = ({ id, account }: Props) => {
           <div className="col-12 text-left">
             Max Price: {Web3.utils.fromWei(poolInfo.maximumPrice.toString())}
           </div>
-          <button className="btn btn-primary" onClick={openModal}>
-            Stake
-          </button>
-          <div className="col-12 text-left">
-            <h5>Allowed Tokens</h5>
-            <table className="table table-hover mb-5">
-              <thead>
-                <tr>
-                  <th scope="col">Address</th>
-                  <th scope="col">Symbol</th>
-                  <th scope="col">Decimals</th>
-                </tr>
-              </thead>
-              <tbody>
-                <TokensList tokens={allowedTokens}></TokensList>
-              </tbody>
-            </table>
-          </div>
-          <div className="col-12 text-left">
-            <h5>Account Stakes</h5>
-            <table className="table table-hover mb-5">
-              <thead>
-                <tr>
-                  <th scope="col">Queue</th>
-                  <th scope="col">Amount</th>
-                  <th scope="col">Current Price</th>
-                  <th scope="col">Shares</th>
-                  <th scope="col">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                <StakesList
-                  stakes={accountStakes}
-                  handleUnstake={handleUnstake}
-                ></StakesList>
-              </tbody>
-            </table>
+          <div className="d-flex row-cols-2 pt-4 gap-5 flex-row">
+            <button className="btn btn-primary" onClick={openUnstakeModal}>
+              Unstake
+            </button>
+            <button className="btn btn-primary" onClick={openStakeModal}>
+              Stake
+            </button>
           </div>
           <StakeWidget
-            opened={modalOpen}
+            opened={stakeModalOpen}
             poolId={id}
             tokens={allowedTokens}
-            closeModal={closeModal}
+            closeModal={closeModals}
           ></StakeWidget>
+          <UnstakeWidget
+            opened={unstakeModalOpen}
+            poolId={id}
+            stakes={stakes}
+            accountStakes={accountStakes}
+            refreshStakes={refreshAccountStakes}
+            closeModal={closeModals}
+          ></UnstakeWidget>
         </div>
       )}
       {!account && (

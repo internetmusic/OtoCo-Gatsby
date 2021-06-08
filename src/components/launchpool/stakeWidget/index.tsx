@@ -101,8 +101,9 @@ const StakeWidget: FC<Props> = ({
     setError('')
     const requestInfo = await TransactionUtils.getTransactionRequestInfo(
       account,
-      '60000'
+      '250000'
     )
+    console.log('STAKE INFO', selectedToken?.address, approved.toString())
     try {
       const hash: string = await new Promise((resolve, reject) => {
         LaunchPoolContract.getContract(poolId)
