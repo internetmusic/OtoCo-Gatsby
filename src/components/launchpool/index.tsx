@@ -11,13 +11,27 @@ import LaunchPoolContract from '../../smart-contracts/LaunchPool'
 import ERC20Contract from '../../smart-contracts/OtocoToken'
 import StakesList from './stakesList'
 import TokensList from './tokensList'
-
+import StakeWidget from './stakeWidget'
 import '../style.scss'
 
 const options = {
   headers: {
     'Content-Type': 'application/json',
   },
+}
+
+export const displayAmountConverter = (
+  amount: BN,
+  decimals: number
+): string => {
+  const conv = {
+    '18': 'ether',
+    '6': 'Mwei',
+    '4': 'kwei',
+  }
+  return parseFloat(
+    Web3.utils.fromWei(amount.toString(), conv[decimals.toString()])
+  ).toFixed(4)
 }
 
 export interface TokensInterface {
@@ -65,7 +79,7 @@ export function getCurve(supply: BN, pool: BN, reducer: BN): BN {
   return pool.mul(pool).div(supply.mul(new BN(100000)).mul(reducer))
 }
 
-interface LaunchPoolInterface {
+export interface LaunchPoolInterface {
   title?: string
   description?: string
   startTimestamp: Date
@@ -91,12 +105,39 @@ interface Props {
 const LaunchPool: FC<Props> = ({ id, account }: Props) => {
   const [loading, setLoading] = useState<boolean>(true)
   const [error, setError] = useState<string>('')
+  const [modalOpen, setModalOpen] = useState<boolean>(false)
   const [poolInfo, setPoolInfo] = useState<LaunchPoolInterface | undefined>(
     undefined
   )
   const [allowedTokens, setAllowedTokens] = useState<TokensInterface[]>()
   const [stakes, setStakes] = useState<BN[]>([])
   const [accountStakes, setAccountStakes] = useState<StakeInterface[]>([])
+
+  const openModal = () => {
+    console.log('SHOW MODAL')
+    setModalOpen(true)
+  }
+
+  const closeModal = () => {
+    setModalOpen(false)
+    fetchStakes()
+  }
+
+  const fetchTotalShares = (currentStakes: BN[]) => {
+    let balance = new BN(0)
+    const total: BN = currentStakes.reduce(function (acc, s) {
+      const shares = getShares(
+        new BN(poolInfo?.stakesMax),
+        balance,
+        new BN(s),
+        new BN(poolInfo?.curveReducer),
+        new BN(poolInfo?.minimumPrice)
+      )
+      balance = balance.add(new BN(s))
+      return acc.add(shares)
+    }, new BN(0))
+    return Web3.utils.fromWei(total.toString())
+  }
 
   // Fetch general Launch pool info and allowed tokens
   const fetchGeneralInfo = async () => {
@@ -178,7 +219,6 @@ const LaunchPool: FC<Props> = ({ id, account }: Props) => {
       toBlock: 'latest',
       filter: { investor: account },
     })
-    console.log('Stakes Fetched', stakesAccountList)
     const listStakes: StakeInterface[] = []
     for (const stakeObject of stakesAccountList) {
       const stake: StakeInterface = {
@@ -277,14 +317,11 @@ const LaunchPool: FC<Props> = ({ id, account }: Props) => {
 
   return (
     <div className="container-sm limiter-md content">
-      <Link
-        className="btn btn-back btn-primary-outline btn-sm"
-        to={`/dashpanel/`}
-      >
+      <Link className="btn btn-back btn-primary-outline btn-sm" to={`/`}>
         <ChevronLeft></ChevronLeft>
         <span style={{ paddingLeft: '10px' }}>Back</span>
       </Link>
-      {!error && account && !loading && poolInfo && (
+      {!error && account && !loading && poolInfo && allowedTokens && (
         <div className="row">
           <h1 className="col-12 text-left">{poolInfo.title}</h1>
           <h2 className="col-12 text-left">{poolInfo.description}</h2>
@@ -321,6 +358,9 @@ const LaunchPool: FC<Props> = ({ id, account }: Props) => {
           <div className="col-12 text-left">
             Max Price: {Web3.utils.fromWei(poolInfo.maximumPrice.toString())}
           </div>
+          <button className="btn btn-primary" onClick={openModal}>
+            Stake
+          </button>
           <div className="col-12 text-left">
             <h5>Allowed Tokens</h5>
             <table className="table table-hover mb-5">
@@ -332,7 +372,7 @@ const LaunchPool: FC<Props> = ({ id, account }: Props) => {
                 </tr>
               </thead>
               <tbody>
-                <TokensList tokens={allowedTokens} poolId={id}></TokensList>
+                <TokensList tokens={allowedTokens}></TokensList>
               </tbody>
             </table>
           </div>
@@ -356,6 +396,12 @@ const LaunchPool: FC<Props> = ({ id, account }: Props) => {
               </tbody>
             </table>
           </div>
+          <StakeWidget
+            opened={modalOpen}
+            poolId={id}
+            tokens={allowedTokens}
+            closeModal={closeModal}
+          ></StakeWidget>
         </div>
       )}
       {!account && (

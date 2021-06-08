@@ -1,4 +1,4 @@
-@import '../../scss/colors.scss';
+@import '../../../scss/colors.scss';
 
 .modal-widget {
   display: block; /* Hidden by default */
@@ -64,5 +64,22 @@
     text-decoration: none;
     cursor: pointer;
     transform: scale(1.1);
+  }
+}
+
+.list-group {
+  border-radius: 0px;
+  text-align: right;
+
+  .list-group-item {
+    border: none;
+    background-color: $gray-900;
+    color: $white;
+    border-right: 2px solid $gray-300;
+  }
+
+  .active {
+    color: $cyan;
+    border-right: 2px solid $cyan;
   }
 }
