@@ -14,7 +14,7 @@
   .content-container {
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
+    justify-content: center;
     align-items: center;
 
     //border: 10px solid #000000;
@@ -101,13 +101,12 @@
 }
 
 @media screen and (max-width: 900px) {
-  .home-page {
+  .stake-display {
     .content-container {
       height: 99%;
       width: 99%;
 
       flex-direction: column;
-      border: 2px solid #000000;
 
       border-radius: 5px;
 
@@ -126,7 +125,7 @@
 
         flex-wrap: nowrap;
 
-        padding-top: 12.5vh;
+        padding-top: 10vh;
 
         justify-content: center;
         align-items: center;
@@ -134,14 +133,13 @@
 
       .stake-container {
         min-width: 95vw;
-        height: 100vh;
+        height: 80vh;
         align-items: center;
+        justify-content: center;
 
         .title {
           font-size: 1.5rem;
           text-align: center;
-
-          padding: 1vh 0;
 
           height: 10vh;
           width: 100%;
@@ -163,7 +161,7 @@
 }
 
 @media screen and (max-width: 460px) {
-  .home-page {
+  .stake-display {
     .content-container {
       .info-container {
         height: 33%;
@@ -174,7 +172,17 @@
         .title {
           font-size: 1.5rem;
         }
+        .button-container {
+          margin-top: 7vh;
+        }
       }
     }
   }
 }
+
+// @media and (orientation: landscape) {
+//   .stake-display {
+//     transform: rotate(-90deg);
+//     transform-origin: left top;
+//   }
+// }

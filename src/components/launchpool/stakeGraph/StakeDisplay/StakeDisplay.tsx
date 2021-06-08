@@ -153,14 +153,14 @@ const StakeDisplay = ({
               symbol: '',
               precision: 0,
             })}`}
-            infoText={`Tokens pre-ordered, out of total {PLACEHOLDER}mm`}
+            infoText={`Tokens pre-ordered, out of total 123mm`}
             useGraidentText={true}
           />
           <InfoCard
             titleText={
               timeLeft.hours > 0
                 ? `${timeLeft.days} days ${timeLeft.hours} hours`
-                : `${timeLeft.minutes} minutes ${timeLeft.seconds} seconds`
+                : `${timeLeft.minutes} min ${timeLeft.seconds} sec`
             }
             infoText={`Pre-order window ends
                  ${format(fromUnixTime(closeTime), 'MMM do, h:mmaaa O')}`}

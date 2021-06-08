@@ -278,7 +278,7 @@ const LaunchPool: FC<Props> = ({ id, account }: Props) => {
   }, [allowedTokens])
 
   return (
-    <div className="container-sm limiter-md content container-sg">
+    <div className="container-sm content container-sg">
       <Link
         className="btn btn-back btn-primary-outline btn-sm"
         to={`/dashpanel/`}
