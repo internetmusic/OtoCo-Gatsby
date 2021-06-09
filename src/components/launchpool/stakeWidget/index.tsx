@@ -9,6 +9,7 @@ import LaunchPoolContract from '../../../smart-contracts/LaunchPool'
 import TransactionUtils from '../../../services/transactionUtils'
 import TransactionMonitor from '../../transactionMonitor/transactionMonitor'
 import { TokensInterface, displayAmountConverter } from '../index'
+import accounting from 'accounting'
 
 import './style.scss'
 import TokenSelector from './tokenSelector'
@@ -73,12 +74,13 @@ const StakeWidget: FC<Props> = ({
       '200000'
     )
     try {
-      if (!amountInput) throw 'No amount defined'
+      if (!amountInput) throw { message: 'No amount defined.' }
       const amountToWei: BN = new BN(Web3.utils.toWei(amountInput))
       const decimalsToRemove = new BN(10).pow(
         new BN(18 - selectedToken?.decimals)
       )
-
+      if (amountToWei.div(decimalsToRemove).gt(balance))
+        throw { message: 'Not enough balance to approve specified amount.' }
       const hash: string = await new Promise((resolve, reject) => {
         ERC20Contract.getContract(selectedToken?.address)
           .methods.approve(poolId, amountToWei.div(decimalsToRemove).toString())
@@ -92,7 +94,7 @@ const StakeWidget: FC<Props> = ({
       setCloseAfterConfirm(false)
     } catch (err) {
       console.log(err)
-      setError(err.message)
+      setError('Error Approving: ' + err.message)
     }
   }
 
@@ -199,15 +201,24 @@ const StakeWidget: FC<Props> = ({
                   <div className="row my-2">
                     <div className="col-12 col-md-6 small">
                       Approved:{' '}
-                      {displayAmountConverter(
-                        approved,
-                        selectedToken?.decimals
+                      {accounting.formatMoney(
+                        displayAmountConverter(
+                          approved,
+                          selectedToken?.decimals
+                        ),
+                        ''
                       )}{' '}
                       {selectedToken?.symbol}
                     </div>
                     <div className="col-12 col-md-6 small">
                       Balance:{' '}
-                      {displayAmountConverter(balance, selectedToken?.decimals)}{' '}
+                      {accounting.formatMoney(
+                        displayAmountConverter(
+                          balance,
+                          selectedToken?.decimals
+                        ),
+                        ''
+                      )}{' '}
                       {selectedToken?.symbol}
                     </div>
                   </div>
@@ -226,9 +237,12 @@ const StakeWidget: FC<Props> = ({
                     <div className="row p-3">
                       <button className="btn btn-primary" onClick={handleStake}>
                         Stake{' '}
-                        {displayAmountConverter(
-                          approved,
-                          selectedToken?.decimals
+                        {accounting.formatMoney(
+                          displayAmountConverter(
+                            approved,
+                            selectedToken?.decimals
+                          ),
+                          ''
                         )}{' '}
                         {selectedToken?.symbol}
                       </button>

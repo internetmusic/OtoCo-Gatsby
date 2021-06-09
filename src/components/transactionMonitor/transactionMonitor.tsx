@@ -69,7 +69,7 @@ const TransactionMonitor: FC<Props> = ({
         if (receipt) {
           setBlockNumber(receipt.blockNumber)
           web3.eth.getBlockNumber((error, blockNum) => {
-            console.log(blockNum)
+            //console.log(blockNum)
             setConfirmations(Math.max(0, blockNum - receipt.blockNumber))
             setReceipt(receipt)
             if (blockNum - receipt.blockNumber <= 0)
@@ -89,7 +89,7 @@ const TransactionMonitor: FC<Props> = ({
       }
       setCounter(counter + 2)
     }, 2000)
-  })
+  }, [counter])
 
   return (
     <div className="transaction-card">

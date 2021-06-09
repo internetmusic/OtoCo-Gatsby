@@ -20,7 +20,6 @@ interface Props {
   poolId: string
   stakes: BN[]
   accountStakes: StakeInterface[]
-  refreshStakes: () => void
   closeModal: () => void
 }
 
@@ -29,7 +28,6 @@ const UnstakeWidget: FC<Props> = ({
   opened,
   poolId,
   accountStakes,
-  refreshStakes,
   closeModal,
 }: Props) => {
   const [countdown, setCountdown] = useState<boolean>(false)
@@ -68,7 +66,6 @@ const UnstakeWidget: FC<Props> = ({
 
   const transactionFinished = async () => {
     setHash(null)
-    refreshStakes()
   }
 
   React.useEffect(() => {
