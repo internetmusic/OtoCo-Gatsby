@@ -5,7 +5,7 @@ import accounting from 'accounting'
 import { VictoryArea, VictoryGroup, VictoryLine, VictoryLabel } from 'victory'
 
 //components
-import PulsePoint from '../../../../../public/img/PulsePoint.inline.svg'
+import PulsePoint from '../../../../../static/img/PulsePoint.inline.svg'
 
 //style
 import './Graph.scss'
