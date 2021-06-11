@@ -30,16 +30,7 @@ const StakeDisplay: FC<Props> = ({
   onStake,
   onUnstake,
 }: Props) => {
-  // startTimestamp = new Date('August 19, 2021 23:15:30')
-  // endTimestamp = new Date('December 19 2021 23:15:30')
-
   const [currentIdx, setCurrentIdx] = useState(0)
-
-  const getTimePeriod = () => {
-    if (Date.now() < infos.startTimestamp.getTime()) return 'before'
-    else if (Date.now() < infos.endTimestamp.getTime()) return 'during'
-    else if (infos.endTimestamp.getTime() < Date.now()) return 'after'
-  }
   const [countdownTime, setCountdownTime] = useState<number>(0)
   const [currentPrice, setCurrentPrice] = useState<number>(0)
   const [timeDisplay, setTimeDisplay] = useState('loading...')
@@ -52,6 +43,12 @@ const StakeDisplay: FC<Props> = ({
     seconds: 0,
     isOver: false,
   })
+
+  const getTimePeriod = () => {
+    if (Date.now() < infos.startTimestamp.getTime()) return 'before'
+    else if (Date.now() < infos.endTimestamp.getTime()) return 'during'
+    else if (infos.endTimestamp.getTime() < Date.now()) return 'after'
+  }
 
   const specs = () => {
     const max: number = parseFloat(Web3.utils.fromWei(infos.stakesMax))
@@ -68,7 +65,7 @@ const StakeDisplay: FC<Props> = ({
   useEffect(() => {
     const total = parseInt(Web3.utils.fromWei(stakesTotal))
     const max = parseInt(Web3.utils.fromWei(infos.stakesMax))
-    setCurrentIdx(total < max / 100 ? 0 : Math.floor(max / total) * 100 - 1)
+    setCurrentIdx(total < max / 100 ? 0 : Math.floor((total / max) * 100) - 1)
     setCurrentPrice(
       parseFloat(
         Web3.utils.fromWei(
@@ -84,8 +81,6 @@ const StakeDisplay: FC<Props> = ({
   }, [stakesCount, stakesTotal])
 
   const getTimeLeft = () => {
-    const year = new Date().getFullYear
-
     const difference = +new Date(countdownTime * 1000) - +new Date()
 
     const timeLeft =
@@ -175,10 +170,7 @@ const StakeDisplay: FC<Props> = ({
           <InfoCard
             titleText={timeDisplay}
             infoText={`Pre-order window ${timeText}
-                 ${format(
-                   fromUnixTime(countdownTime),
-                   'EEE d MMM, h:mmaaa O'
-                 )}`}
+                 ${format(fromUnixTime(countdownTime), 'd MMM, h:mmaaa O')}`}
             useGraidentText={true}
           />
         </div>
@@ -187,7 +179,7 @@ const StakeDisplay: FC<Props> = ({
             {`Token pre-order book ${titleText}`}
             <br />
             <a
-              href={'https://github.com/otoco-io/OtoGo-SmartContracts'}
+              href={'https://otonomos.gitbook.io/otoco/'}
               rel="noopener noreferrer"
               target="_blank"
             >
@@ -206,8 +198,8 @@ const StakeDisplay: FC<Props> = ({
                   ? 'unstake'
                   : 'unstake disabled'
               }
-              disabled={infos.stage === 1 && getTimePeriod() === 'during'}
-              onClick={onStake}
+              disabled={infos.stage === 1}
+              onClick={onUnstake}
             >
               Unstake
             </button>
@@ -217,8 +209,8 @@ const StakeDisplay: FC<Props> = ({
                   ? 'stake'
                   : 'stake disabled'
               }
-              disabled={infos.stage === 1 && getTimePeriod() === 'during'}
-              onClick={onUnstake}
+              disabled={infos.stage === 1}
+              onClick={onStake}
             >
               Stake Now!
             </button>
