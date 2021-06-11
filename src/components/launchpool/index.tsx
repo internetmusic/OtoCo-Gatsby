@@ -10,6 +10,10 @@ import { ChevronLeft } from 'react-bootstrap-icons'
 import LaunchPoolContract from '../../smart-contracts/LaunchPool'
 import ERC20Contract from '../../smart-contracts/OtocoToken'
 import TokensList from './tokensList'
+import StakesList from './stakesList'
+
+import StakeDisplay from './stakeGraph/StakeDisplay/StakeDisplay'
+
 import '../style.scss'
 
 import StakeWidget from './stakeWidget'
@@ -349,6 +353,28 @@ const LaunchPool: FC<Props> = ({ id, account }: Props) => {
     return Web3.utils.fromWei(total.toString())
   }
 
+  const handleUnstake = async (index: number) => {
+    if (!account) return
+    console.log('Index unstaked:', index)
+    const requestInfo = await TransactionUtils.getTransactionRequestInfo(
+      account,
+      '60000'
+    )
+    try {
+      const hash: string = await new Promise((resolve, reject) => {
+        LaunchPoolContract.getContract(id)
+          .methods.unstake(index)
+          .send(requestInfo, (error: Error, hash: string) => {
+            if (error) reject(error.message)
+            else resolve(hash)
+          })
+      })
+      console.log(hash)
+    } catch (err) {
+      console.error('Staking error', err)
+    }
+  }
+
   React.useEffect(() => {
     setTimeout(async () => {
       if (account && !poolInfo) {
@@ -390,70 +416,100 @@ const LaunchPool: FC<Props> = ({ id, account }: Props) => {
   }, [account, poolInfo, stakes, accountStakes])
 
   return (
-    <div className="container-sm limiter-md content">
-      <Link className="btn btn-back btn-primary-outline btn-sm" to={`/`}>
-        <ChevronLeft></ChevronLeft>
+    <div className="container-sm content container-sg">
+      <Link
+        className="btn btn-back btn-primary-outline btn-sm"
+        to={`/dashpanel/`}
+      >
+        <ChevronLeft />
         <span style={{ paddingLeft: '10px' }}>Back</span>
       </Link>
-      {!error && account && !loading && poolInfo && allowedTokens && (
-        <div className="row">
-          <h1 className="col-12 text-left">{poolInfo.title}</h1>
-          <h2 className="col-12 text-left">{poolInfo.description}</h2>
-          <div className="col-12 text-left">
-            Start Date: {poolInfo.startTimestamp.toISOString()}
-          </div>
-          <div className="col-12 text-left">
-            End Date: {poolInfo.endTimestamp.toISOString()}
-          </div>
-          <div className="col-12 text-left">
-            Stakes Min: {Web3.utils.fromWei(poolInfo.stakesMin.toString())}
-          </div>
-          <div className="col-12 text-left">
-            Stakes Max: {Web3.utils.fromWei(poolInfo.stakesMax.toString())}
-          </div>
-          <div className="col-12 text-left">
-            Pool Balance: {Web3.utils.fromWei(stakesTotal.toString())}
-          </div>
-          <div className="col-12 text-left">
-            Curve Reducer: {poolInfo.curveReducer.toString()}
-          </div>
-          <div className="col-12 text-left">Stage: {poolInfo.stage}</div>
-          <div className="col-12 text-left">
-            Stake Amount Min allowed:{' '}
-            {Web3.utils.fromWei(poolInfo.stakeAmountMin)}
-          </div>
-          <div className="col-12 text-left">
-            Stake Amount Max allowed:{' '}
-            {Web3.utils.fromWei(poolInfo.stakeAmountMax)}
-          </div>
-          <div className="col-12 text-left">
-            Min Price: {Web3.utils.fromWei(poolInfo.minimumPrice.toString())}
-          </div>
-          <div className="col-12 text-left">
-            Max Price: {Web3.utils.fromWei(poolInfo.maximumPrice.toString())}
-          </div>
-          <div className="d-flex row-cols-2 pt-4 gap-5 flex-row">
-            <button className="btn btn-primary" onClick={openUnstakeModal}>
-              Unstake
-            </button>
-            <button className="btn btn-primary" onClick={openStakeModal}>
-              Stake
-            </button>
-          </div>
-          <StakeWidget
-            opened={stakeModalOpen}
-            poolId={id}
-            tokens={allowedTokens}
-            closeModal={closeModals}
-          ></StakeWidget>
-          <UnstakeWidget
-            opened={unstakeModalOpen}
-            poolId={id}
-            stakes={stakes}
-            accountStakes={accountStakes}
-            closeModal={closeModals}
-          ></UnstakeWidget>
-        </div>
+
+      {!error && account && !loading && poolInfo && (
+        <>
+          <StakeDisplay
+            poolInfo={poolInfo}
+            getUnitPrice={getUnitPrice}
+            tokenSum={20234000}
+            onStake={() => {}}
+            onUnstake={() => {}}
+          />
+
+          {console.log({ poolInfo })}
+          {/* <div className="row">
+            <h1 className="col-12 text-left">{poolInfo.title}</h1>
+            <h2 className="col-12 text-left">{poolInfo.description}</h2>
+            <div className="col-12 text-left">
+              Start Date: {poolInfo.startTimestamp.toISOString()}
+            </div>
+            <div className="col-12 text-left">
+              End Date: {poolInfo.endTimestamp.toISOString()}
+            </div>
+            <div className="col-12 text-left">
+              Stakes Min: {Web3.utils.fromWei(poolInfo.stakesMin.toString())}
+            </div>
+            <div className="col-12 text-left">
+              Stakes Max: {Web3.utils.fromWei(poolInfo.stakesMax.toString())}
+            </div>
+            <div className="col-12 text-left">
+              Pool Balance:{' '}
+              {Web3.utils.fromWei(poolInfo.stakesTotal.toString())}
+            </div>
+            <div className="col-12 text-left">
+              Curve Reducer: {poolInfo.curveReducer}
+            </div>
+            <div className="col-12 text-left">Stage: {poolInfo.stage}</div>
+            <div className="col-12 text-left">
+              Stake Amount Min allowed:{' '}
+              {Web3.utils.fromWei(poolInfo.stakeAmountMin)}
+            </div>
+            <div className="col-12 text-left">
+              Stake Amount Max allowed:{' '}
+              {Web3.utils.fromWei(poolInfo.stakeAmountMax)}
+            </div>
+            <div className="col-12 text-left">
+              Min Price: {Web3.utils.fromWei(poolInfo.minimumPrice.toString())}
+            </div>
+            <div className="col-12 text-left">
+              Max Price: {Web3.utils.fromWei(poolInfo.maximumPrice.toString())}
+            </div>
+            <div className="col-12 text-left">
+              <h5>Allowed Tokens</h5>
+              <table className="table table-hover mb-5">
+                <thead>
+                  <tr>
+                    <th scope="col">Address</th>
+                    <th scope="col">Symbol</th>
+                    <th scope="col">Decimals</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <TokensList tokens={allowedTokens} poolId={id}></TokensList>
+                </tbody>
+              </table>
+            </div>
+            <div className="col-12 text-left">
+              <h5>Account Stakes</h5>
+              <table className="table table-hover mb-5">
+                <thead>
+                  <tr>
+                    <th scope="col">Queue</th>
+                    <th scope="col">Amount</th>
+                    <th scope="col">Current Price</th>
+                    <th scope="col">Shares</th>
+                    <th scope="col">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <StakesList
+                    stakes={accountStakes}
+                    handleUnstake={handleUnstake}
+                  ></StakesList>
+                </tbody>
+              </table>
+            </div>
+          </div> */}
+        </>
       )}
       {!account && (
         <div className="d-flex justify-content-center">

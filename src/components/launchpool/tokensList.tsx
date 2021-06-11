@@ -5,10 +5,16 @@ import { TokensInterface } from './index'
 
 interface ListTokensProps {
   tokens: TokensInterface[]
+  handleApprove: (index: number) => void
+  handleStake: (index: number) => void
 }
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-const TokensList = ({ tokens }: ListTokensProps) => {
+const TokensList = ({
+  tokens,
+  handleApprove,
+  handleStake,
+}: ListTokensProps) => {
   return (
     <>
       {tokens.map((t: TokensInterface) => (
