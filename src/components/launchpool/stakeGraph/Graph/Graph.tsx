@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import accounting from 'accounting'
 
 //plugins
@@ -16,7 +16,7 @@ type Props = {
   specs: { x: number; y: number }[]
 }
 
-const Graph = ({ currentIdx, currentPrice, specs }: Props) => {
+const Graph: FC<Props> = ({ currentIdx, currentPrice, specs }: Props) => {
   const [pathTransform, setPathTransform] = useState('')
   const [textTransform, setTextTransform] = useState('')
   const [priceLableDy, setPriceLableDy] = useState(0)
@@ -156,7 +156,7 @@ const Graph = ({ currentIdx, currentPrice, specs }: Props) => {
         <VictoryLabel
           className={''}
           text={''}
-          backgroundComponent={<PulsePoint />}
+          backgroundComponent={<PulsePoint></PulsePoint>}
           backgroundStyle={{ fill: 'null' }}
           backgroundPadding={50}
           dy={-43.5}

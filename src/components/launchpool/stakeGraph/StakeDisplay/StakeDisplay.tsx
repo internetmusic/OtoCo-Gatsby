@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import Web3 from 'web3'
 import BN from 'bn.js'
-import times from 'lodash/fp/times'
 import accounting from 'accounting'
-import { format, fromUnixTime, isBefore } from 'date-fns'
+import { format, fromUnixTime } from 'date-fns'
+
+import { LaunchPoolInterface, getUnitPrice } from '../../index'
 
 //style
 import './StakeDisplay.scss'
@@ -11,111 +12,76 @@ import './StakeDisplay.scss'
 //components
 import Graph from '../Graph/Graph'
 import InfoCard from '../InfoCard/InfoCard'
-import { start } from 'repl'
-import { startCase } from 'lodash'
 
 type Props = {
-  poolInfo: {
-    curveReducer: string
-    description: string
-    endTimestamp: Date
-    maximumPrice: BN
-    minimumPrice: string
-    stage: number
-    stakeAmountMax: string
-    stakeAmountMin: string
-    stakesCount: number
-    stakesMax: string
-    stakesMin: string
-    stakesTotal: string
-    startTimestamp: Date
-    title: string
-  }
-
-  getUnitPrice: (
-    maxStake: BN,
-    currentVal: BN,
-    curveReducer: BN,
-    minPrice: BN
-  ) => BN
-  tokenSum: number
+  infos: LaunchPoolInterface
+  tokenSum: BN
+  stakesTotal: BN
+  stakesCount: number
   onStake: () => void
   onUnstake: () => void
 }
 
-const StakeDisplay = ({
-  poolInfo,
+const StakeDisplay: FC<Props> = ({
+  infos,
   tokenSum,
-  getUnitPrice,
+  stakesTotal,
+  stakesCount,
   onStake,
   onUnstake,
 }: Props) => {
-  const {
-    curveReducer,
-    endTimestamp,
-    minimumPrice,
-    stakesMax,
-    stakesTotal,
-    stakesCount,
-    stage,
-    startTimestamp,
-  } = poolInfo
-
   // startTimestamp = new Date('August 19, 2021 23:15:30')
   // endTimestamp = new Date('December 19 2021 23:15:30')
 
-  const [currentIdx, setCurrentIdx] = useState(49)
+  const [currentIdx, setCurrentIdx] = useState(0)
 
   const getTimePeriod = () => {
-    if (isBefore(new Date(), new Date(startTimestamp))) return 'before'
-    else if (isBefore(new Date(), new Date(endTimestamp))) return 'during'
-    else if (isBefore(new Date(endTimestamp), new Date())) return 'after'
+    if (Date.now() < infos.startTimestamp.getTime()) return 'before'
+    else if (Date.now() < infos.endTimestamp.getTime()) return 'during'
+    else if (infos.endTimestamp.getTime() < Date.now()) return 'after'
+  }
+  const [countdownTime, setCountdownTime] = useState<number>(0)
+  const [currentPrice, setCurrentPrice] = useState<number>(0)
+  const [timeDisplay, setTimeDisplay] = useState('loading...')
+  const [timeText, setTimeText] = useState('')
+  const [titleText, setTitleText] = useState('LIVE!')
+  const [timeLeft, setTimeLeft] = useState({
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+    isOver: false,
+  })
+
+  const specs = () => {
+    const max: number = parseFloat(Web3.utils.fromWei(infos.stakesMax))
+    return new Array(100).fill(0).map((val, idx) => {
+      const currentX = (idx + 1) * (max / 100)
+      const currentY = currentX ** 2 / max
+      return {
+        x: currentX,
+        y: currentY,
+      }
+    })
   }
 
-  const [countdownTime, setCountdownTime] = useState(
-    isBefore(new Date(), new Date(startTimestamp))
-      ? Math.round(new Date(startTimestamp).getTime() / 1000)
-      : Math.round(new Date(endTimestamp).getTime() / 1000)
-  )
-
-  const [currentPrice, setCurrentPrice] = useState(
-    Web3.utils.fromWei(
-      getUnitPrice(
-        new BN(stakesMax),
-        new BN(stakesTotal),
-        new BN(curveReducer),
-        new BN(minimumPrice)
-      )
-    )
-  )
-
-  const specs = times((idx) => {
-    let currentX = (idx + 1) * (parseInt(stakesMax) / 10 ** 18 / 100)
-    let currentY = currentX ** 2 / (parseInt(stakesMax) / 10 ** 18)
-
-    return {
-      x: currentX,
-      y: currentY,
-    }
-  })(100)
-
   useEffect(() => {
-    setCurrentIdx(
-      parseInt(stakesTotal) < parseInt(stakesMax) / 100
-        ? 0
-        : Math.floor((parseInt(stakesTotal) / parseInt(stakesMax)) * 100 - 1)
-    )
+    const total = parseInt(Web3.utils.fromWei(stakesTotal))
+    const max = parseInt(Web3.utils.fromWei(infos.stakesMax))
+    setCurrentIdx(total < max / 100 ? 0 : Math.floor(max / total) * 100 - 1)
     setCurrentPrice(
-      Web3.utils.fromWei(
-        getUnitPrice(
-          new BN(stakesMax),
-          new BN(stakesTotal),
-          new BN(curveReducer),
-          new BN(minimumPrice)
+      parseFloat(
+        Web3.utils.fromWei(
+          getUnitPrice(
+            infos.stakesMax,
+            new BN(stakesTotal),
+            infos.curveReducer,
+            infos.minimumPrice
+          )
         )
       )
     )
-  }, [stakesTotal])
+  }, [stakesCount, stakesTotal])
 
   const getTimeLeft = () => {
     const year = new Date().getFullYear
@@ -136,27 +102,21 @@ const StakeDisplay = ({
     return timeLeft
   }
 
-  const [timeLeft, setTimeLeft] = useState(getTimeLeft())
-
   useEffect(() => {
     const timer = setTimeout(() => {
       if (
-        countdownTime ===
-          Math.round(new Date(startTimestamp).getTime() / 1000) &&
-        !isBefore(new Date(), new Date(startTimestamp))
+        countdownTime === Math.round(infos.startTimestamp.getTime() / 1000) &&
+        !(Date.now() < infos.startTimestamp.getTime())
       )
-        setCountdownTime(Math.round(new Date(endTimestamp).getTime() / 1000))
+        setCountdownTime(
+          Math.round(new Date(infos.endTimestamp).getTime() / 1000)
+        )
 
       setTimeLeft(getTimeLeft())
     }, 1000)
 
     return () => clearTimeout(timer)
   })
-
-  const [timeDisplay, setTimeDisplay] = useState('loading...')
-
-  const [timeText, setTimeText] = useState('')
-  const [titleText, setTitleText] = useState('LIVE!')
 
   useEffect(() => {
     if (!timeLeft.isOver) {
@@ -181,10 +141,8 @@ const StakeDisplay = ({
         setTitleText('is over.')
         break
       default:
-        if (isBefore(new Date(), new Date(startTimestamp)))
-          setTimeText('starts')
-        else if (isBefore(new Date(), new Date(endTimestamp)))
-          setTimeText('ends')
+        if (Date.now() < infos.startTimestamp.getTime()) setTimeText('starts')
+        else if (Date.now() < infos.endTimestamp.getTime()) setTimeText('ends')
         break
     }
   }, [timeLeft])
@@ -195,19 +153,19 @@ const StakeDisplay = ({
         <div className="info-container">
           <InfoCard
             titleText={`US$ ${accounting.formatMoney(
-              Web3.utils.fromWei(poolInfo.stakesTotal.toString()),
+              Web3.utils.fromWei(stakesTotal),
               {
                 symbol: '',
                 precision: 0,
               }
             )}`}
             infoText={`total currently staked, out of US$${
-              parseInt(Web3.utils.fromWei(stakesMax)) / 1000000
+              parseInt(Web3.utils.fromWei(infos.stakesMax)) / 1000000
             } million hard cap`}
             useGraidentBackground={true}
           />
           <InfoCard
-            titleText={`${accounting.formatMoney(tokenSum, {
+            titleText={`${accounting.formatMoney(Web3.utils.fromWei(tokenSum), {
               symbol: '',
               precision: 0,
             })}`}
@@ -238,29 +196,29 @@ const StakeDisplay = ({
           </div>
           <Graph
             currentIdx={currentIdx}
-            currentPrice={parseInt(currentPrice)}
-            specs={specs}
+            currentPrice={currentPrice}
+            specs={specs()}
           />
           <div className="button-container">
             <button
               className={
-                stage === 1 && getTimePeriod() === 'during'
+                infos.stage === 1 && getTimePeriod() === 'during'
                   ? 'unstake'
                   : 'unstake disabled'
               }
-              disabled={stage === 1 && getTimePeriod() === 'during'}
-              onClick={() => onStake}
+              disabled={infos.stage === 1 && getTimePeriod() === 'during'}
+              onClick={onStake}
             >
               Unstake
             </button>
             <button
               className={
-                stage === 1 && getTimePeriod() === 'during'
+                infos.stage === 1 && getTimePeriod() === 'during'
                   ? 'stake'
                   : 'stake disabled'
               }
-              disabled={stage === 1 && getTimePeriod() === 'during'}
-              onClick={() => onUnstake}
+              disabled={infos.stage === 1 && getTimePeriod() === 'during'}
+              onClick={onUnstake}
             >
               Stake Now!
             </button>
