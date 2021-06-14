@@ -205,7 +205,7 @@ const StakeDisplay: FC<Props> = ({
             </button>
             <button
               className={
-                infos.stage === 1 && getTimePeriod() === 'during'
+                infos.stage === 1 && getTimePeriod() !== 'before'
                   ? 'stake'
                   : 'stake disabled'
               }
