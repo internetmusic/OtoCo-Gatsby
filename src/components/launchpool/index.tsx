@@ -107,8 +107,10 @@ const LaunchPool: FC<Props> = ({ id, account }: Props) => {
   const [poolInfo, setPoolInfo] = useState<LaunchPoolInterface | undefined>(
     undefined
   )
+  const [registeredStakes, setRegisteredStakes] = useState<number[]>([])
   const [stakesTotal, setStakesTotal] = useState<BN>(new BN(0))
   const [stakesCount, setStakesCount] = useState<number>(0)
+  const [sharesTotal, setSharesTotal] = useState<BN>(new BN(0))
   const [allowedTokens, setAllowedTokens] = useState<TokensInterface[]>()
   const [stakes, setStakes] = useState<BN[] | undefined>()
   const [accountStakes, setAccountStakes] = useState<
@@ -151,6 +153,11 @@ const LaunchPool: FC<Props> = ({ id, account }: Props) => {
           getUnitPrice(infosBN[3], infosBN[3], infosBN[6], infosBN[9])
         ),
       }
+      console.log(
+        infos.startTimestamp.getTime() / 1000,
+        infos.endTimestamp.getTime() / 1000,
+        Date.now() / 1000
+      )
       setStakesTotal(infosBN[4])
       setStakesCount(parseInt(infosBN[5].toString()))
       setPoolInfo(infos)
@@ -252,6 +259,7 @@ const LaunchPool: FC<Props> = ({ id, account }: Props) => {
     if (!stakes) return
     if (!poolInfo) return
     if (!allowedTokens) return
+    if (registeredStakes.indexOf(stakeEvent.returnValues[0]) >= 0) return
     if (err) return console.log(err.message)
     const token = allowedTokens.find(
       (t) => t.address == stakeEvent.returnValues[2]
@@ -272,6 +280,11 @@ const LaunchPool: FC<Props> = ({ id, account }: Props) => {
         setAccountStakes(listAccountStakes)
       }
     }
+    setRegisteredStakes((prevState) => {
+      console.log(prevState)
+      return prevState.concat(stakeEvent.returnValues[0])
+    })
+    setStakes((prevState) => prevState.concat(new BN(normalizedStake)))
     setStakesTotal((prevState) => new BN(prevState).add(normalizedStake))
     setStakesCount((prevState) => prevState + 1)
   }
@@ -284,6 +297,7 @@ const LaunchPool: FC<Props> = ({ id, account }: Props) => {
     const currentStakes: BN[] = stakes
     currentStakes[unstakeEvent.returnValues[0]] = new BN(0)
     setStakes(currentStakes)
+    setSharesTotal(calculateTotalShares(currentStakes))
     if (unstakeEvent.returnValues[1] == account) {
       setAccountStakes((prevState) => {
         const currentState = prevState
@@ -308,7 +322,9 @@ const LaunchPool: FC<Props> = ({ id, account }: Props) => {
     const stakesList = await LaunchPoolContract.getContract(id)
       .methods.stakesList()
       .call({ from: account })
-    setStakes(stakesList.map((s: string) => new BN(s)))
+    const stks = stakesList.map((s: string) => new BN(s))
+    setSharesTotal(calculateTotalShares(stks))
+    setStakes(stks)
   }
 
   const refreshAccountStakes = async () => {
@@ -330,11 +346,11 @@ const LaunchPool: FC<Props> = ({ id, account }: Props) => {
     setAccountStakes(listAccountStakes)
   }
 
-  const calculateTotalShares = () => {
-    if (!stakes) return new BN(0)
+  const calculateTotalShares = (stks: BN[]) => {
+    if (!stks) return new BN(0)
     if (!poolInfo) return new BN(0)
     let balance = new BN(0)
-    return stakes.reduce(function (acc, s) {
+    return stks.reduce(function (acc, s) {
       const shares = getShares(
         poolInfo.stakesMax,
         balance,
@@ -382,6 +398,7 @@ const LaunchPool: FC<Props> = ({ id, account }: Props) => {
           },
           registerUnstake
         )
+        console.log('PASSED')
         setLoading(false)
       }
     }, 0)
@@ -396,7 +413,7 @@ const LaunchPool: FC<Props> = ({ id, account }: Props) => {
       {!error && account && !loading && poolInfo && allowedTokens && (
         <StakeDisplay
           infos={poolInfo}
-          tokenSum={calculateTotalShares()}
+          tokenSum={sharesTotal}
           stakesTotal={stakesTotal}
           stakesCount={stakesCount}
           onStake={openStakeModal}
