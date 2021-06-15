@@ -100,10 +100,7 @@ const StakeDisplay: FC<Props> = ({
             {`Token pre-order book is ${titleText}`}
             <br />
             <a
-              href={
-                process.env.GATSBY_LAUNCHPOOL_HELP_LINK ||
-                'https://otonomos.gitbook.io/otoco/'
-              }
+              href={'https://otonomos.gitbook.io/otoco/'}
               rel="noopener noreferrer"
               target="_blank"
             >
