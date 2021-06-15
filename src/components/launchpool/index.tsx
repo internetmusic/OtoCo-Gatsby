@@ -393,22 +393,16 @@ const LaunchPool: FC<Props> = ({ id, account }: Props) => {
         <ChevronLeft></ChevronLeft>
         <span style={{ paddingLeft: '10px' }}>Back</span>
       </Link>
-      {!error &&
-        account &&
-        !loading &&
-        poolInfo &&
-        allowedTokens &&
-        stakesCount &&
-        stakesTotal && (
-          <StakeDisplay
-            infos={poolInfo}
-            tokenSum={calculateTotalShares()}
-            stakesTotal={stakesTotal}
-            stakesCount={stakesCount}
-            onStake={openStakeModal}
-            onUnstake={openUnstakeModal}
-          />
-        )}
+      {!error && account && !loading && poolInfo && allowedTokens && (
+        <StakeDisplay
+          infos={poolInfo}
+          tokenSum={calculateTotalShares()}
+          stakesTotal={stakesTotal}
+          stakesCount={stakesCount}
+          onStake={openStakeModal}
+          onUnstake={openUnstakeModal}
+        />
+      )}
       <StakeWidget
         opened={stakeModalOpen}
         poolId={id}

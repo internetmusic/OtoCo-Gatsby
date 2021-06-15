@@ -31,7 +31,6 @@ const StakeDisplay: FC<Props> = ({
   onUnstake,
 }: Props) => {
   const [currentIdx, setCurrentIdx] = useState(0)
-  const [countdownTime, setCountdownTime] = useState<number>(0)
   const [currentPrice, setCurrentPrice] = useState<number>(0)
   const [timeDisplay, setTimeDisplay] = useState('loading...')
   const [timeText, setTimeText] = useState('')
@@ -45,10 +44,16 @@ const StakeDisplay: FC<Props> = ({
   })
 
   const getTimePeriod = () => {
-    if (Date.now() < infos.startTimestamp.getTime()) return 'before'
-    else if (Date.now() < infos.endTimestamp.getTime()) return 'during'
-    else if (infos.endTimestamp.getTime() < Date.now()) return 'after'
+    if (Date.now() < infos?.startTimestamp.getTime()) return 'before'
+    else if (Date.now() < infos?.endTimestamp.getTime()) return 'during'
+    else if (infos?.endTimestamp.getTime() < Date.now()) return 'after'
   }
+
+  const [countdownTime, setCountdownTime] = useState(
+    getTimePeriod() === 'before'
+      ? Math.round(new Date(infos.startTimestamp).getTime() / 1000)
+      : Math.round(new Date(infos.endTimestamp).getTime() / 1000)
+  )
 
   const specs = () => {
     const max: number = parseFloat(Web3.utils.fromWei(infos.stakesMax))
@@ -84,7 +89,7 @@ const StakeDisplay: FC<Props> = ({
     const difference = +new Date(countdownTime * 1000) - +new Date()
 
     const timeLeft =
-      difference < 0
+      difference < 0 && getTimePeriod() === 'after'
         ? { days: 0, hours: 0, minutes: 0, seconds: 0, isOver: true }
         : {
             days: Math.floor(difference / (1000 * 60 * 60 * 24)),
@@ -115,9 +120,11 @@ const StakeDisplay: FC<Props> = ({
 
   useEffect(() => {
     if (!timeLeft.isOver) {
-      setTimeDisplay(
-        `${timeLeft.days}d ${timeLeft.hours}h ${timeLeft.minutes}m ${timeLeft.seconds}s`
-      )
+      timeLeft.seconds === -1
+        ? setTimeDisplay('Loading...')
+        : setTimeDisplay(
+            `${timeLeft.days}d ${timeLeft.hours}h ${timeLeft.minutes}m ${timeLeft.seconds}s`
+          )
     } else if (timeLeft.isOver) {
       setTimeDisplay('Staking is over')
     }
@@ -198,18 +205,18 @@ const StakeDisplay: FC<Props> = ({
                   ? 'unstake'
                   : 'unstake disabled'
               }
-              disabled={infos.stage === 1}
+              disabled={!(infos.stage === 1 && getTimePeriod() === 'during')}
               onClick={onUnstake}
             >
               Unstake
             </button>
             <button
               className={
-                infos.stage === 1 && getTimePeriod() === 'during'
+                infos.stage === 1 && getTimePeriod() !== 'before'
                   ? 'stake'
                   : 'stake disabled'
               }
-              disabled={infos.stage === 1}
+              disabled={!(infos.stage === 1 && getTimePeriod() !== 'before')}
               onClick={onStake}
             >
               Stake Now!
