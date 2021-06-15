@@ -2,9 +2,8 @@ import React, { FC, useEffect, useState } from 'react'
 import Web3 from 'web3'
 import BN from 'bn.js'
 import accounting from 'accounting'
-import { format, fromUnixTime } from 'date-fns'
 
-import { LaunchPoolInterface, getUnitPrice } from '../../index'
+import { LaunchPoolInterface, getUnitPrice, getTimePeriod } from '../../index'
 
 //style
 import './StakeDisplay.scss'
@@ -12,6 +11,7 @@ import './StakeDisplay.scss'
 //components
 import Graph from '../Graph/Graph'
 import InfoCard from '../InfoCard/InfoCard'
+import TimerCard from '../TimerCard/TimerCard'
 
 type Props = {
   infos: LaunchPoolInterface
@@ -32,28 +32,7 @@ const StakeDisplay: FC<Props> = ({
 }: Props) => {
   const [currentIdx, setCurrentIdx] = useState(0)
   const [currentPrice, setCurrentPrice] = useState<number>(0)
-  const [timeDisplay, setTimeDisplay] = useState('loading...')
-  const [timeText, setTimeText] = useState('')
   const [titleText, setTitleText] = useState('LIVE!')
-  const [timeLeft, setTimeLeft] = useState({
-    days: 0,
-    hours: 0,
-    minutes: 0,
-    seconds: 0,
-    isOver: false,
-  })
-
-  const getTimePeriod = () => {
-    if (Date.now() < infos?.startTimestamp.getTime()) return 'before'
-    else if (Date.now() < infos?.endTimestamp.getTime()) return 'during'
-    else if (infos?.endTimestamp.getTime() < Date.now()) return 'after'
-  }
-
-  const [countdownTime, setCountdownTime] = useState(
-    getTimePeriod() === 'before'
-      ? Math.round(new Date(infos.startTimestamp).getTime() / 1000)
-      : Math.round(new Date(infos.endTimestamp).getTime() / 1000)
-  )
 
   const specs = () => {
     const max: number = parseFloat(Web3.utils.fromWei(infos.stakesMax))
@@ -85,70 +64,6 @@ const StakeDisplay: FC<Props> = ({
     )
   }, [stakesCount, stakesTotal])
 
-  const getTimeLeft = () => {
-    const difference = +new Date(countdownTime * 1000) - +new Date()
-
-    const timeLeft =
-      difference < 0 && getTimePeriod() === 'after'
-        ? { days: 0, hours: 0, minutes: 0, seconds: 0, isOver: true }
-        : {
-            days: Math.floor(difference / (1000 * 60 * 60 * 24)),
-            hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
-            minutes: Math.floor((difference / 1000 / 60) % 60),
-            seconds: Math.floor((difference / 1000) % 60),
-            isOver: false,
-          }
-
-    return timeLeft
-  }
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (
-        countdownTime === Math.round(infos.startTimestamp.getTime() / 1000) &&
-        !(Date.now() < infos.startTimestamp.getTime())
-      )
-        setCountdownTime(
-          Math.round(new Date(infos.endTimestamp).getTime() / 1000)
-        )
-
-      setTimeLeft(getTimeLeft())
-    }, 1000)
-
-    return () => clearTimeout(timer)
-  })
-
-  useEffect(() => {
-    if (!timeLeft.isOver) {
-      timeLeft.seconds === -1
-        ? setTimeDisplay('Loading...')
-        : setTimeDisplay(
-            `${timeLeft.days}d ${timeLeft.hours}h ${timeLeft.minutes}m ${timeLeft.seconds}s`
-          )
-    } else if (timeLeft.isOver) {
-      setTimeDisplay('Staking is over')
-    }
-
-    switch (getTimePeriod()) {
-      case 'before':
-        setTimeText('starts')
-        setTitleText('is coming...')
-        break
-      case 'during':
-        setTimeText('ends')
-        setTitleText('is LIVE!')
-        break
-      case 'after':
-        setTimeText('closed')
-        setTitleText('is over.')
-        break
-      default:
-        if (Date.now() < infos.startTimestamp.getTime()) setTimeText('starts')
-        else if (Date.now() < infos.endTimestamp.getTime()) setTimeText('ends')
-        break
-    }
-  }, [timeLeft])
-
   return (
     <div className="stake-display">
       <div className="content-container">
@@ -164,7 +79,7 @@ const StakeDisplay: FC<Props> = ({
             infoText={`total currently staked, out of US$${
               parseInt(Web3.utils.fromWei(infos.stakesMax)) / 1000000
             } million hard cap`}
-            useGraidentBackground={true}
+            classProp={'graident-background'}
           />
           <InfoCard
             titleText={`${accounting.formatMoney(Web3.utils.fromWei(tokenSum), {
@@ -174,23 +89,25 @@ const StakeDisplay: FC<Props> = ({
             infoText={`tokens currently pre-ordered by ${stakesCount} stakers`}
             useGraidentText={true}
           />
-          <InfoCard
-            titleText={timeDisplay}
-            infoText={`Pre-order window ${timeText}
-                 ${format(fromUnixTime(countdownTime), 'd MMM, h:mmaaa O')}`}
-            useGraidentText={true}
+          <TimerCard
+            startDate={infos.startTimestamp}
+            endDate={infos.endTimestamp}
+            setTitleText={setTitleText}
           />
         </div>
         <div className="stake-container">
           <div className="title">
-            {`Token pre-order book ${titleText}`}
+            {`Token pre-order book is ${titleText}`}
             <br />
             <a
-              href={'https://otonomos.gitbook.io/otoco/'}
+              href={
+                process.env.GATSBY_LAUNCHPOOL_HELP_LINK ||
+                'https://otonomos.gitbook.io/otoco/'
+              }
               rel="noopener noreferrer"
               target="_blank"
             >
-              {'>Learn how to stake here.'}
+              {'Learn how to stake here'}
             </a>
           </div>
           <Graph
@@ -201,22 +118,38 @@ const StakeDisplay: FC<Props> = ({
           <div className="button-container">
             <button
               className={
-                infos.stage === 1 && getTimePeriod() === 'during'
+                infos.stage === 1 &&
+                getTimePeriod(infos.startTimestamp, infos.endTimestamp) ===
+                  'during'
                   ? 'unstake'
                   : 'unstake disabled'
               }
-              disabled={!(infos.stage === 1 && getTimePeriod() === 'during')}
+              disabled={
+                !(
+                  infos.stage === 1 &&
+                  getTimePeriod(infos.startTimestamp, infos.endTimestamp) ===
+                    'during'
+                )
+              }
               onClick={onUnstake}
             >
               Unstake
             </button>
             <button
               className={
-                infos.stage === 1 && getTimePeriod() !== 'before'
+                infos.stage === 1 &&
+                getTimePeriod(infos.startTimestamp, infos.endTimestamp) !==
+                  'before'
                   ? 'stake'
                   : 'stake disabled'
               }
-              disabled={!(infos.stage === 1 && getTimePeriod() !== 'before')}
+              disabled={
+                !(
+                  infos.stage === 1 &&
+                  getTimePeriod(infos.startTimestamp, infos.endTimestamp) !==
+                    'before'
+                )
+              }
               onClick={onStake}
             >
               Stake Now!

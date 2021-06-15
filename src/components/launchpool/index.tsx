@@ -11,6 +11,7 @@ import ERC20Contract from '../../smart-contracts/OtocoToken'
 import '../style.scss'
 
 import StakeDisplay from './stakeGraph/StakeDisplay/StakeDisplay'
+import TimerCard from './stakeGraph/TimerCard/TimerCard'
 
 import StakeWidget from './stakeWidget'
 import UnstakeWidget from './unstakeWidget'
@@ -73,6 +74,16 @@ export function getUnitPrice(
   return curve.add(minPrice)
 }
 
+// Checks whether the current date is before, during or after the timeframe provided
+export const getTimePeriod = (
+  startTime: Date,
+  endTime: Date
+): string | undefined => {
+  if (Date.now() < startTime.getTime()) return 'before'
+  else if (Date.now() < endTime.getTime()) return 'during'
+  else if (endTime.getTime() < Date.now()) return 'after'
+}
+
 // Ignore minimum price amount, just the increment is returned
 export function getCurve(supply: BN, pool: BN, reducer: BN): BN {
   return pool.mul(pool).div(supply.mul(new BN(100000)).mul(reducer))
@@ -116,6 +127,7 @@ const LaunchPool: FC<Props> = ({ id, account }: Props) => {
   const [accountStakes, setAccountStakes] = useState<
     StakeInterface[] | undefined
   >()
+  const [titleText, setTitleText] = useState<string>('')
 
   const openStakeModal = () => {
     console.log('SHOW MODAL')
@@ -420,6 +432,7 @@ const LaunchPool: FC<Props> = ({ id, account }: Props) => {
           onUnstake={openUnstakeModal}
         />
       )}
+
       <StakeWidget
         opened={stakeModalOpen}
         poolId={id}
@@ -433,14 +446,46 @@ const LaunchPool: FC<Props> = ({ id, account }: Props) => {
         accountStakes={accountStakes}
         closeModal={closeModals}
       ></UnstakeWidget>
+
       {!account && (
-        <div className="d-flex justify-content-center">
-          <div className="row">
-            <div className="col-12 text-center">No account connected.</div>
+        <div className="no-account-display">
+          <div className="d-flex justify-content-center">
+            <div className="column">
+              <div className="col-12 text-center">
+                <div className="title">
+                  {`Token pre-order book is ${titleText}`}
+                  <br />
+                  <a
+                    href={'https://otonomos.gitbook.io/otoco/'}
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
+                    {'Learn how to stake here'}
+                  </a>
+                </div>
+                <TimerCard
+                  classProp="timer"
+                  startDate={
+                    new Date(
+                      process.env.GATSBY_LAUNCHPOOL_NO_WALLET_START_DATE ||
+                        1623716907000
+                    )
+                  }
+                  endDate={
+                    new Date(
+                      process.env.GATSBY_LAUNCHPOOL_NO_WALLET_END_DATE ||
+                        1623889707000
+                    )
+                  }
+                  setTitleText={setTitleText}
+                />
+                No wallet connected. Please connect your wallet to stake.
+              </div>
+            </div>
           </div>
         </div>
       )}
-      {loading && (
+      {loading && titleText === '' && (
         <div className="d-flex justify-content-center">
           <div className="row">
             <div className="col-12 text-center">Loading</div>

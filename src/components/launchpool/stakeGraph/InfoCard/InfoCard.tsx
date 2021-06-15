@@ -4,23 +4,19 @@ import React from 'react'
 import './InfoCard.scss'
 
 type Props = {
+  classProp?: string
   titleText: string
   infoText: string
   useGraidentText?: boolean
-  useGraidentBackground?: boolean
 }
 
 const InfoCard = ({
+  classProp = '',
   titleText,
   infoText,
   useGraidentText = false,
-  useGraidentBackground = false,
 }: Props) => (
-  <div
-    className={
-      useGraidentBackground ? 'info-card graident-background' : 'info-card'
-    }
-  >
+  <div className={`info-card ${classProp}`}>
     <div className={'text-wrapper'}>
       <span
         className={

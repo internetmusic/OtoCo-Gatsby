@@ -75,6 +75,7 @@
         z-index: 1003;
 
         a {
+          padding-top: 10px;
           display: block;
           font-size: 1rem;
           line-height: 0;
@@ -82,6 +83,11 @@
           background-clip: text;
           -webkit-background-clip: text;
           -webkit-text-fill-color: white;
+
+          -webkit-animation: glow 1s ease-in-out infinite alternate;
+          -moz-animation: glow 1s ease-in-out infinite alternate;
+          animation: glow 1s ease-in-out infinite alternate;
+
           margin-top: 7px;
         }
 
@@ -211,9 +217,6 @@
       .stake-container {
         .title {
           font-size: 1.5rem;
-          a {
-            margin-top: 15px;
-          }
         }
         .button-container {
           margin-top: 7vh;
@@ -222,10 +225,3 @@
     }
   }
 }
-
-// @media and (orientation: landscape) {
-//   .stake-display {
-//     transform: rotate(-90deg);
-//     transform-origin: left top;
-//   }
-// }
