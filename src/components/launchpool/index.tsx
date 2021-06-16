@@ -118,7 +118,6 @@ const LaunchPool: FC<Props> = ({ id, account }: Props) => {
   const [poolInfo, setPoolInfo] = useState<LaunchPoolInterface | undefined>(
     undefined
   )
-  const [registeredStakes, setRegisteredStakes] = useState<number[]>([])
   const [stakesTotal, setStakesTotal] = useState<BN>(new BN(0))
   const [stakesCount, setStakesCount] = useState<number>(0)
   const [sharesTotal, setSharesTotal] = useState<BN>(new BN(0))
@@ -130,12 +129,10 @@ const LaunchPool: FC<Props> = ({ id, account }: Props) => {
   const [titleText, setTitleText] = useState<string>('')
 
   const openStakeModal = () => {
-    console.log('SHOW MODAL')
     setStakeModalOpen(true)
   }
 
   const openUnstakeModal = () => {
-    console.log('SHOW MODAL')
     setUnstakeModalOpen(true)
   }
 
@@ -271,8 +268,9 @@ const LaunchPool: FC<Props> = ({ id, account }: Props) => {
     if (!stakes) return
     if (!poolInfo) return
     if (!allowedTokens) return
-    if (registeredStakes.indexOf(stakeEvent.returnValues[0]) >= 0) return
     if (err) return console.log(err.message)
+    // In case of duplicated events
+    if (parseInt(stakeEvent.returnValues[0]) < stakes.length) return
     const token = allowedTokens.find(
       (t) => t.address == stakeEvent.returnValues[2]
     )
@@ -292,12 +290,12 @@ const LaunchPool: FC<Props> = ({ id, account }: Props) => {
         setAccountStakes(listAccountStakes)
       }
     }
-    setRegisteredStakes((prevState) => {
-      console.log(prevState)
-      return prevState.concat(stakeEvent.returnValues[0])
+    setStakes((prevState) => {
+      if (!prevState) return [new BN(normalizedStake)]
+      prevState[parseInt(stakeEvent.returnValues[0])] = new BN(normalizedStake)
     })
-    setStakes((prevState) => prevState.concat(new BN(normalizedStake)))
     setStakesTotal((prevState) => new BN(prevState).add(normalizedStake))
+    setSharesTotal(calculateTotalShares(stakes))
     setStakesCount((prevState) => prevState + 1)
   }
 
@@ -306,10 +304,12 @@ const LaunchPool: FC<Props> = ({ id, account }: Props) => {
     if (!poolInfo) return
     if (!allowedTokens) return
     if (err) return console.log(err.message)
-    const currentStakes: BN[] = stakes
-    currentStakes[unstakeEvent.returnValues[0]] = new BN(0)
-    setStakes(currentStakes)
-    setSharesTotal(calculateTotalShares(currentStakes))
+    if (stakes[parseInt(unstakeEvent.returnValues[0])].eq(new BN(0))) return
+    setStakes((prevState) => {
+      if (!prevState) return []
+      prevState[unstakeEvent.returnValues[0]] = new BN(0)
+      return prevState
+    })
     if (unstakeEvent.returnValues[1] == account) {
       setAccountStakes((prevState) => {
         const currentState = prevState
@@ -317,7 +317,7 @@ const LaunchPool: FC<Props> = ({ id, account }: Props) => {
         const stakeIdx: number = currentState.findIndex(
           (s) => s.id == parseInt(unstakeEvent.returnValues[0])
         )
-        console.log(currentStakes.length, stakeIdx)
+        console.log(stakes.length, stakeIdx)
         currentState[stakeIdx].price = new BN(0)
         currentState[stakeIdx].amount = new BN(0)
         currentState[stakeIdx].shares = new BN(0)
@@ -327,7 +327,7 @@ const LaunchPool: FC<Props> = ({ id, account }: Props) => {
     setStakesTotal((prevState) =>
       new BN(prevState).sub(new BN(unstakeEvent.returnValues[3]))
     )
-    setStakesCount((prevState) => prevState - 1)
+    setSharesTotal(calculateTotalShares(stakes))
   }
 
   const refreshPoolStakes = async () => {
@@ -398,19 +398,17 @@ const LaunchPool: FC<Props> = ({ id, account }: Props) => {
         console.log('Fetched Account Stakes')
       }
       if (poolInfo && accountStakes && loading) {
-        LaunchPoolContract.getContract(id).events.Staked(
+        LaunchPoolContract.getContract(id).events.allEvents(
           {
             fromBlock: 'latest',
           },
-          registerStake
+          (err: Error, event: EventData) => {
+            if (err) return console.log(err)
+            console.log(event)
+            if (event.event === 'Staked') registerStake(null, event)
+            if (event.event === 'Unstaked') registerUnstake(null, event)
+          }
         )
-        LaunchPoolContract.getContract(id).events.Unstaked(
-          {
-            fromBlock: 'latest',
-          },
-          registerUnstake
-        )
-        console.log('PASSED')
         setLoading(false)
       }
     }, 0)
