@@ -10,6 +10,9 @@ const Header: React.FC<unknown> = () => {
     <div>
       <Logo></Logo>
       <div className="quick-links">
+        <Link className="styled-link launchpool-link" to="/launchpool/">
+          Stake OtoCo Here
+        </Link>
         <Link className="styled-link" to="/dashpanel/">
           Connect Wallet
         </Link>
