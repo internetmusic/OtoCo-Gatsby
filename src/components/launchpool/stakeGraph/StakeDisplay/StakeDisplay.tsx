@@ -115,7 +115,7 @@ const StakeDisplay: FC<Props> = ({
           <div className="button-container">
             <button
               className={
-                infos.stage === 1 &&
+                (infos.stage === 1 || infos.stage === 2) &&
                 getTimePeriod(infos.startTimestamp, infos.endTimestamp) ===
                   'during'
                   ? 'unstake'
@@ -123,7 +123,7 @@ const StakeDisplay: FC<Props> = ({
               }
               disabled={
                 !(
-                  infos.stage === 1 &&
+                  (infos.stage === 1 || infos.stage === 2) &&
                   getTimePeriod(infos.startTimestamp, infos.endTimestamp) ===
                     'during'
                 )
