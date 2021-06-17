@@ -10,10 +10,6 @@ interface Props {
 }
 
 const Index: React.FC<Props> = ({ location }: Props) => {
-  React.useEffect(() => {
-    console.log('Current updates: 17/06/2020 12:00')
-  }, [])
-
   return (
     <div className="features-bg">
       <Helmet

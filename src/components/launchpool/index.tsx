@@ -452,15 +452,15 @@ const LaunchPool: FC<Props> = ({ id, account }: Props) => {
             <div className="column">
               <div className="col-12 text-center">
                 <div className="title">
-                  {`Token pre-order book is ${titleText}`}
+                  {`Our Token pre-order window is ${titleText}`}
                   <br />
-                  <a
+                  {/* <a
                     href={'https://otonomos.gitbook.io/otoco/'}
                     rel="noopener noreferrer"
                     target="_blank"
                   >
                     {'Learn how to stake here'}
-                  </a>
+                  </a> */}
                 </div>
                 <TimerCard
                   classProp="timer"

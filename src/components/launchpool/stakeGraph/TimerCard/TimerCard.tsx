@@ -82,7 +82,7 @@ const TimerCard: FC<Props> = ({
     switch (getTimePeriod(startDate, endDate)) {
       case 'before':
         setTimeText('starts')
-        setTitleText && setTitleText('coming...')
+        setTitleText && setTitleText('coming soon...')
 
         break
       case 'during':
