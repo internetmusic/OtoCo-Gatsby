@@ -7,8 +7,8 @@ import {
   Check,
   Check2,
   Exclamation,
-  Envelope,
-  EnvelopeOpen,
+  HourglassSplit,
+  HourglassTop,
   Clock,
 } from 'react-bootstrap-icons'
 
@@ -97,12 +97,12 @@ const TransactionMonitor: FC<Props> = ({
         <div className="row">
           <div className="col-4 text-center align-items-center">
             {/* <i className="file outline massive icon align-self-center"></i> */}
-            {error && <Exclamation size={32}></Exclamation>}
-            {!exists && !error && <EnvelopeOpen size={32}></EnvelopeOpen>}
+            {error && <Exclamation size={48}></Exclamation>}
+            {!exists && !error && <HourglassTop size={48}></HourglassTop>}
             {exists && !confirmations && !error && (
-              <Envelope size={32}></Envelope>
+              <HourglassSplit size={48}></HourglassSplit>
             )}
-            {confirmations > 0 && !error && <Check size={32}></Check>}
+            {confirmations > 0 && !error && <Check size={48}></Check>}
           </div>
           <div className="col-8">
             <div className="small">

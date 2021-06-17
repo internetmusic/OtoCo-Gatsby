@@ -23,7 +23,7 @@ const StakeList = ({ stakes, handleUnstake }: ListMessagesProps) => {
             {m.token.symbol}
           </td>
           <td className="text-end">
-            {accounting.formatMoney(Web3.utils.fromWei(m.price), '')} USD
+            {accounting.formatMoney(Web3.utils.fromWei(m.price), '', 4)} USD
           </td>
           <td className="text-end">
             {accounting.formatMoney(Web3.utils.fromWei(m.shares), '')}

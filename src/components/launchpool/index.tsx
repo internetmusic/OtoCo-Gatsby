@@ -264,7 +264,7 @@ const LaunchPool: FC<Props> = ({ id, account }: Props) => {
     return stake
   }
 
-  const registerStake = async (err: ErrorEvent, stakeEvent: EventData) => {
+  const registerStake = async (stakeEvent: EventData) => {
     if (!stakes) return
     if (!poolInfo) return
     if (!allowedTokens) return
@@ -299,7 +299,7 @@ const LaunchPool: FC<Props> = ({ id, account }: Props) => {
     setStakesCount((prevState) => prevState + 1)
   }
 
-  const registerUnstake = (err: ErrorEvent, unstakeEvent: EventData) => {
+  const registerUnstake = (unstakeEvent: EventData) => {
     if (!stakes) return
     if (!poolInfo) return
     if (!allowedTokens) return
@@ -376,6 +376,7 @@ const LaunchPool: FC<Props> = ({ id, account }: Props) => {
   }
 
   React.useEffect(() => {
+    if (!id) return
     setTimeout(async () => {
       if (account && !poolInfo) {
         await fetchGeneralInfo()
@@ -405,8 +406,8 @@ const LaunchPool: FC<Props> = ({ id, account }: Props) => {
           (err: Error, event: EventData) => {
             if (err) return console.log(err)
             console.log(event)
-            if (event.event === 'Staked') registerStake(null, event)
-            if (event.event === 'Unstaked') registerUnstake(null, event)
+            if (event.event === 'Staked') registerStake(event)
+            if (event.event === 'Unstaked') registerUnstake(event)
           }
         )
         setLoading(false)
@@ -445,7 +446,7 @@ const LaunchPool: FC<Props> = ({ id, account }: Props) => {
         closeModal={closeModals}
       ></UnstakeWidget>
 
-      {!account && (
+      {(!account || !id) && (
         <div className="no-account-display">
           <div className="d-flex justify-content-center">
             <div className="column">
@@ -463,21 +464,15 @@ const LaunchPool: FC<Props> = ({ id, account }: Props) => {
                 </div>
                 <TimerCard
                   classProp="timer"
-                  startDate={
-                    new Date(
-                      process.env.GATSBY_LAUNCHPOOL_NO_WALLET_START_DATE ||
-                        1623716907000
-                    )
-                  }
-                  endDate={
-                    new Date(
-                      process.env.GATSBY_LAUNCHPOOL_NO_WALLET_END_DATE ||
-                        1623889707000
-                    )
-                  }
+                  startDate={new Date(1624550400000)}
+                  endDate={new Date(1632499200000)}
                   setTitleText={setTitleText}
                 />
-                No wallet connected. Please connect your wallet to stake.
+                {id && (
+                  <p>
+                    No wallet connected. Please connect your wallet to stake.
+                  </p>
+                )}
               </div>
             </div>
           </div>

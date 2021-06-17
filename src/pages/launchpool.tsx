@@ -16,6 +16,7 @@ const LaunchPoolIndex: React.FC<Props> = ({ location }: Props) => {
       <Helmet title="Otoco - Launch Pool" defer={false} />
       <Router>
         <LaunchPool path="/launchpool/:id" />
+        <LaunchPool path="/launchpool/" />
       </Router>
     </Layout>
   )

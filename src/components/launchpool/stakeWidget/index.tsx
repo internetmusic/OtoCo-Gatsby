@@ -165,8 +165,8 @@ const StakeWidget: FC<Props> = ({
               <div className="close" onClick={handleCloseModal}>
                 &times;
               </div>
-              <h3>Stake Tokens</h3>
-              <p className="small">Approve some tokens to be staked.</p>
+              <h3>Stake</h3>
+              <p className="small">Approve some funds to be staked.</p>
               <div>
                 <div className="row justify-content-center">
                   <TokenSelector
