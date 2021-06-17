@@ -436,6 +436,7 @@ const LaunchPool: FC<Props> = ({ id, account }: Props) => {
         opened={stakeModalOpen}
         poolId={id}
         tokens={allowedTokens}
+        infos={poolInfo}
         closeModal={closeModals}
       ></StakeWidget>
       <UnstakeWidget

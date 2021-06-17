@@ -8,18 +8,30 @@ import ERC20Contract from '../../../smart-contracts/OtocoToken'
 import LaunchPoolContract from '../../../smart-contracts/LaunchPool'
 import TransactionUtils from '../../../services/transactionUtils'
 import TransactionMonitor from '../../transactionMonitor/transactionMonitor'
-import { TokensInterface, displayAmountConverter } from '../index'
+import {
+  TokensInterface,
+  displayAmountConverter,
+  LaunchPoolInterface,
+  StakeInterface,
+} from '../index'
 import accounting from 'accounting'
 
 import './style.scss'
 import TokenSelector from './tokenSelector'
+import StakesList from './stakesList'
 
 interface Props {
   account?: string
   opened: boolean
   poolId: string
   tokens: TokensInterface[]
+  accountStakes: StakeInterface[]
+  infos: LaunchPoolInterface
   closeModal: () => void
+}
+
+const normalizeAmount = (amount: BN, decimals: number): BN => {
+  return amount.mul(new BN(10).pow(new BN(18 - decimals)))
 }
 
 const StakeWidget: FC<Props> = ({
@@ -27,6 +39,7 @@ const StakeWidget: FC<Props> = ({
   opened,
   poolId,
   tokens,
+  infos,
   closeModal,
 }: Props) => {
   const [countdown, setCountdown] = useState<boolean>(false)
@@ -41,7 +54,42 @@ const StakeWidget: FC<Props> = ({
   const [closeAfterConfirm, setCloseAfterConfirm] = useState<boolean>(false)
 
   const handleSetAmountInput = (event) => {
-    setAmountInput(event.target.value)
+    if (!selectedToken) return
+    setAmountInput(event.target.value.trim())
+    setError('')
+    if (event.target.value == '') return
+    try {
+      const selectedAmount = new BN(Web3.utils.toWei(event.target.value.trim()))
+      if (normalizeAmount(balance, selectedToken.decimals).lt(selectedAmount)) {
+        setError(
+          'Not enough balance to approve ' +
+            event.target.value +
+            ' ' +
+            selectedToken?.symbol
+        )
+        return
+      }
+      if (infos.stakeAmountMin.gt(selectedAmount)) {
+        setError(
+          'Stake should be bigger than ' +
+            Web3.utils.fromWei(infos.stakeAmountMin) +
+            ' ' +
+            selectedToken?.symbol
+        )
+        return
+      }
+      if (infos.stakeAmountMax.lt(selectedAmount)) {
+        setError(
+          'Stake should be smaller than ' +
+            Web3.utils.fromWei(infos.stakeAmountMax) +
+            ' ' +
+            selectedToken?.symbol
+        )
+        return
+      }
+    } catch (err) {
+      setError('Not a valid stake amount')
+    }
   }
 
   const refreshBalanceAndApproval = async (token: TokensInterface) => {
@@ -105,7 +153,7 @@ const StakeWidget: FC<Props> = ({
       account,
       '250000'
     )
-    console.log('STAKE INFO', selectedToken?.address, approved.toString())
+    // console.log('STAKE INFO', selectedToken?.address, approved.toString())
     try {
       const hash: string = await new Promise((resolve, reject) => {
         LaunchPoolContract.getContract(poolId)
@@ -115,7 +163,7 @@ const StakeWidget: FC<Props> = ({
             else resolve(hash)
           })
       })
-      console.log(hash)
+      // console.log(hash)
       setHash(hash)
       setCloseAfterConfirm(true)
     } catch (err) {
@@ -188,7 +236,10 @@ const StakeWidget: FC<Props> = ({
                     <div className="input-group-append">
                       <button
                         className={
-                          'btn btn-primary ' + (transaction ? 'disabled' : '')
+                          'btn btn-primary ' +
+                          (transaction || error || !amountInput
+                            ? 'disabled'
+                            : '')
                         }
                         onClick={handleApprove}
                       >
@@ -251,6 +302,7 @@ const StakeWidget: FC<Props> = ({
                 </div>
               )}
               {error && <p className="small text-warning">{error}</p>}
+              {!error && <p className="small">&nbsp;</p>}
             </div>
           </CSSTransition>
         </div>
