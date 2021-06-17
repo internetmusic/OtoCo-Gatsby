@@ -106,7 +106,7 @@ const TimerCard: FC<Props> = ({
     <InfoCard
       classProp={classProp}
       titleText={timeDisplay}
-      infoText={`Order process starting ${timeText} ${format(
+      infoText={`Order process ${timeText} ${format(
         fromUnixTime(countdownTime),
         'd MMM, h:mmaaa O'
       )}`}
