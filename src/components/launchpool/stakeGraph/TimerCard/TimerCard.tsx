@@ -81,12 +81,12 @@ const TimerCard: FC<Props> = ({
 
     switch (getTimePeriod(startDate, endDate)) {
       case 'before':
-        setTimeText('starts')
-        setTitleText && setTitleText('coming soon...')
+        setTimeText('starting')
+        setTitleText && setTitleText('opening soon...')
 
         break
       case 'during':
-        setTimeText('ends')
+        setTimeText('ending')
         setTitleText && setTitleText('LIVE!')
 
         break
@@ -96,8 +96,8 @@ const TimerCard: FC<Props> = ({
 
         break
       default:
-        if (Date.now() < startDate.getTime()) setTimeText('starts')
-        else if (Date.now() < endDate.getTime()) setTimeText('ends')
+        if (Date.now() < startDate.getTime()) setTimeText('starting')
+        else if (Date.now() < endDate.getTime()) setTimeText('ending')
         break
     }
   }, [timeLeft])
@@ -106,7 +106,7 @@ const TimerCard: FC<Props> = ({
     <InfoCard
       classProp={classProp}
       titleText={timeDisplay}
-      infoText={`Pre-order window ${timeText} ${format(
+      infoText={`Order process window ${timeText} ${format(
         fromUnixTime(countdownTime),
         'd MMM, h:mmaaa O'
       )}`}
