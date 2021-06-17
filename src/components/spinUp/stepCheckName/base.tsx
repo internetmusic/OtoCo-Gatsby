@@ -5,7 +5,7 @@ import Icon from '../../icon/icon'
 import axios, { AxiosResponse } from 'axios'
 import { connect } from 'react-redux'
 import { IState } from '../../../state/types'
-import { faCheckCircle, faTimesCircle } from '@fortawesome/free-solid-svg-icons'
+import { XCircleFill, CheckCircleFill } from 'react-bootstrap-icons'
 import {
   SET_CURRENT_STEP,
   SET_COMPANY_NAME,
@@ -157,7 +157,7 @@ const StepCheckName: FC<Props> = ({
           {availableName && (
             <div className="mt-4">
               <div className="text-success">
-                <Icon icon={faCheckCircle}></Icon>{' '}
+                <CheckCircleFill />{' '}
                 <span className="mx-2">Available Name.</span>
               </div>
             </div>
@@ -165,7 +165,7 @@ const StepCheckName: FC<Props> = ({
           {error === 'taken' && (
             <div className="mt-4">
               <div className="text-danger">
-                <Icon icon={faTimesCircle}></Icon>{' '}
+                <XCircleFill></XCircleFill>{' '}
                 <span className="mx-2">This name has been used.</span>
               </div>
             </div>
@@ -173,7 +173,7 @@ const StepCheckName: FC<Props> = ({
           {error === 'unavailable' && (
             <div className="mt-4">
               <div className="text-danger">
-                <Icon icon={faTimesCircle}></Icon>{' '}
+                <XCircleFill></XCircleFill>{' '}
                 <span className="mx-2">Search service is busy.</span>
                 <div>Try again later.</div>
               </div>

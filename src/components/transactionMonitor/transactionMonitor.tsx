@@ -3,15 +3,14 @@ import Web3 from 'web3'
 import { TransactionReceipt } from 'web3-core'
 import { connect } from 'react-redux'
 import { IState } from '../../state/types'
-import Icon from '../icon/icon'
 import {
-  faCheck,
-  faCheckDouble,
-  faExclamation,
-  faEnvelopeOpen,
-  faEnvelope,
-  faClock,
-} from '@fortawesome/free-solid-svg-icons'
+  Check,
+  Check2,
+  Exclamation,
+  HourglassSplit,
+  HourglassTop,
+  Clock,
+} from 'react-bootstrap-icons'
 
 import './style.scss'
 
@@ -70,7 +69,7 @@ const TransactionMonitor: FC<Props> = ({
         if (receipt) {
           setBlockNumber(receipt.blockNumber)
           web3.eth.getBlockNumber((error, blockNum) => {
-            console.log(blockNum)
+            //console.log(blockNum)
             setConfirmations(Math.max(0, blockNum - receipt.blockNumber))
             setReceipt(receipt)
             if (blockNum - receipt.blockNumber <= 0)
@@ -90,7 +89,7 @@ const TransactionMonitor: FC<Props> = ({
       }
       setCounter(counter + 2)
     }, 2000)
-  })
+  }, [counter])
 
   return (
     <div className="transaction-card">
@@ -98,12 +97,12 @@ const TransactionMonitor: FC<Props> = ({
         <div className="row">
           <div className="col-4 text-center align-items-center">
             {/* <i className="file outline massive icon align-self-center"></i> */}
-            {error && <Icon icon={faExclamation} size="3x" />}
-            {!exists && !error && <Icon icon={faEnvelopeOpen} size="3x" />}
+            {error && <Exclamation size={48}></Exclamation>}
+            {!exists && !error && <HourglassTop size={48}></HourglassTop>}
             {exists && !confirmations && !error && (
-              <Icon icon={faEnvelope} size="3x" />
+              <HourglassSplit size={48}></HourglassSplit>
             )}
-            {confirmations > 0 && !error && <Icon icon={faCheck} size="3x" />}
+            {confirmations > 0 && !error && <Check size={48}></Check>}
           </div>
           <div className="col-8">
             <div className="small">
@@ -122,7 +121,7 @@ const TransactionMonitor: FC<Props> = ({
               </a>{' '}
             </div>
             <div className="small" style={{ display: 'inline', float: 'left' }}>
-              <Icon icon={faClock} size="1x" spin={true} />
+              <Clock />
               &nbsp;{counter} seconds
             </div>
           </div>

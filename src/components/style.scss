@@ -1,4 +1,4 @@
-@import '../../scss/colors.scss';
+@import '../scss/colors.scss';
 
 .btn-icon {
   border-radius: 30px;
@@ -27,3 +27,119 @@
 //   width: 60vh;
 //   height: 60vh;
 // }
+
+.container-sg {
+  margin: 0 !important;
+  margin-top: -40px !important;
+  padding: 0;
+
+  left: 0;
+
+  max-width: 100vw;
+  max-height: 80vh;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  .no-account-display {
+    margin: 15vh auto;
+    height: 100%;
+
+    .title {
+      font-size: 2.25rem;
+      font-weight: 400 !important;
+      line-height: 1.25;
+      margin: 25px 0;
+      background: -webkit-linear-gradient(#6369f9, #b441d1);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+
+      a {
+        display: block;
+        padding-top: 10px;
+        font-size: 1rem;
+        line-height: 0;
+        background: white;
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: white;
+        margin-top: 7px;
+
+        -webkit-animation: glow 1s ease-in-out infinite alternate;
+        -moz-animation: glow 1s ease-in-out infinite alternate;
+        animation: glow 1s ease-in-out infinite alternate;
+      }
+
+      a:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  .timer {
+    max-width: 650px;
+    width: 65vw;
+
+    margin: 50px auto;
+
+    .text-wrapper {
+      text-align: center;
+
+      .info-card-title {
+        height: 63px;
+        margin: 0;
+        padding-top: 5px;
+        font-size: 3rem;
+      }
+      p {
+        height: auto;
+        font-size: 1.35rem;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .container-sg {
+    .no-account-display {
+      .title {
+        font-size: 1.75rem;
+      }
+      .timer {
+        .text-wrapper {
+          .info-card-title {
+            height: 63px;
+            margin: 0;
+            padding-top: 5px;
+            font-size: 1.5rem;
+          }
+          p {
+            height: auto;
+            font-size: 0.9rem;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 460px) {
+  .container-sg {
+    margin: 0 !important;
+    margin-top: -15px !important;
+
+    max-height: 100vh;
+
+    .no-account-display {
+      .title {
+        font-size: 1.4rem;
+      }
+      .timer {
+        width: 85vw;
+      }
+    }
+  }
+}

@@ -11,18 +11,8 @@ module.exports = {
   plugins: [
     {
       resolve: `gatsby-plugin-create-client-paths`,
-      options: { prefixes: [`/token/*`, `/dashpanel/entity/*`] },
-    },
-    {
-      resolve: 'gatsby-plugin-firebase',
       options: {
-        credentials: {
-          apiKey: 'AIzaSyDfskU_rkwnxDQ83BoZt4bnhPw_uV2fBao',
-          authDomain: 'otoco-281518.firebaseapp.com',
-          databaseURL: 'https://otoco-281518.firebaseio.com',
-          storageBucket: 'otoco-281518.appspot.com',
-          projectID: 'otoco-281518',
-        },
+        prefixes: [`/token/*`, `/dashpanel/entity/*`, `/launchpool/*`],
       },
     },
     {
@@ -96,6 +86,14 @@ module.exports = {
         mergeSecurityHeaders: true,
         mergeLinkHeaders: true,
         mergeCachingHeaders: true,
+      },
+    },
+    {
+      resolve: 'gatsby-plugin-react-svg',
+      options: {
+        rule: {
+          include: /\.inline\.svg$/,
+        },
       },
     },
     // {

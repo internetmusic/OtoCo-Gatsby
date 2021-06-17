@@ -1,5 +1,4 @@
 // DOCS => https://docs.sendwyre.com/v3/docs/wyre-checkout-hosted-dialog
-import { faWindowRestore } from '@fortawesome/free-solid-svg-icons'
 import axios from 'axios'
 import Wyre from './wyre-core'
 

@@ -7,7 +7,7 @@ import { connect } from 'react-redux'
 import { IState } from '../../state/types'
 import Web3Integrate from '../../services/web3-integrate'
 
-import { faChevronLeft } from '@fortawesome/free-solid-svg-icons'
+import { ChevronLeft } from 'react-bootstrap-icons'
 import Icon from '../icon/icon'
 import AddressWidget from '../addressWidget/addressWidget'
 import TransactionMonitor from '../transactionMonitor/transactionMonitor'
@@ -255,7 +255,7 @@ const Token: FC<Props> = ({
           className="btn btn-back btn-primary-outline btn-sm"
           to={`/dashpanel/entity/${managing?.contract}`}
         >
-          <Icon icon={faChevronLeft} />
+          <ChevronLeft />
           <span style={{ paddingLeft: '10px' }}>Back to Entity</span>
         </Link>
       )}
@@ -264,7 +264,7 @@ const Token: FC<Props> = ({
           className="btn btn-back btn-primary-outline btn-sm"
           to={`/dashpanel/`}
         >
-          <Icon icon={faChevronLeft} />
+          <ChevronLeft />
           <span style={{ paddingLeft: '10px' }}>Back to Dashpanel</span>
         </Link>
       )}

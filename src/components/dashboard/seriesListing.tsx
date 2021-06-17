@@ -1,7 +1,5 @@
 import React, { Dispatch, FC } from 'react'
 import { connect } from 'react-redux'
-// import Icon from '../icon/icon'
-// import { faCog } from '@fortawesome/free-solid-svg-icons'
 import { Gear } from 'react-bootstrap-icons'
 import { ShieldLock } from 'react-bootstrap-icons'
 import { IState } from '../../state/types'

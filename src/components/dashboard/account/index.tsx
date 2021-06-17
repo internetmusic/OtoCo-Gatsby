@@ -5,7 +5,7 @@ import { IState } from '../../../state/types'
 import Textile from '../../../services/textile'
 import { PrivateKey } from '@textile/hub'
 import NotificationForm from '../welcomeForm'
-import { faChevronLeft } from '@fortawesome/free-solid-svg-icons'
+import { ChevronLeft } from 'react-bootstrap-icons'
 import Icon from '../../icon/icon'
 
 import {
@@ -69,7 +69,7 @@ const Account: FC<Props> = ({
         className="btn btn-back btn-primary-outline btn-sm"
         to={`/dashpanel/`}
       >
-        <Icon icon={faChevronLeft} />
+        <ChevronLeft />
         <span style={{ paddingLeft: '10px' }}>Back</span>
       </Link>
       {account && !privatekey && <NotificationForm></NotificationForm>}

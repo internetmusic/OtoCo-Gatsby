@@ -1,0 +1,19 @@
+<svg class = "button" expanded = "true" height = "90px" width = "90px">
+  <circle class = "innerCircle" cx = "50%" cy = "50%" r = "4%" fill = "none" stroke = "cyan" stroke-width = "4%">
+    <animate attributeType="SVG" id="first" attributeName="r" begin="0s" dur="6s" repeatCount="indefinite" from="5%" to="20%" fill="freeze"/>
+    <animate attributeType="CSS" attributeName="stroke-width" begin="0s"  dur="6s" repeatCount="indefinite" from="3%" to="0%" fill="freeze"/>
+    <animate attributeType="CSS" attributeName="opacity" begin="0s"  dur="6s" repeatCount="indefinite" from="1" to="0" fill="freeze"/>
+  </circle>
+  <circle class = "innerCircle" cx = "50%" cy = "50%" r = "4%" fill = "none" stroke = "cyan" stroke-width = "4%">
+    <animate attributeType="SVG" id="second" attributeName="r" begin="2s" dur="6s" repeatCount="indefinite" from="5%" to="20%" fill="freeze"/>
+    <animate attributeType="CSS" attributeName="stroke-width" begin="2s"  dur="6s" repeatCount="indefinite" from="3%" to="0%" fill="freeze"/>
+    <animate attributeType="CSS" attributeName="opacity" begin="2s"  dur="6s" repeatCount="indefinite" from="1" to="0" fill="freeze"/>
+  </circle>
+  <circle class = "innerCircle" cx = "50%" cy = "50%" r = "4%" fill = "none" stroke = "cyan" stroke-width = "4%">
+    <animate attributeType="SVG" id="third" attributeName="r" begin="4s" dur="6s" repeatCount="indefinite" from="5%" to="20%" fill="freeze"/>
+    <animate attributeType="CSS" attributeName="stroke-width" begin="4s"  dur="6s" repeatCount="indefinite" from="3%" to="0%" fill="freeze"/>
+    <animate attributeType="CSS" attributeName="opacity" begin="4s"  dur="6s" repeatCount="indefinite" from="1" to="0" fill="freeze"/>
+  </circle>
+  <circle class = "innerCircle" cx = "50%" cy = "50%" r = "4%" fill = "cyan" stroke = "cyan" stroke-width = "5%">
+  </circle>
+</svg>

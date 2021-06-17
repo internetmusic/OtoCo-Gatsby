@@ -1,0 +1,141 @@
+.info-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 12px;
+
+  width: 100%;
+  max-width: 275px;
+  height: 135px;
+
+  background: #151938;
+
+  z-index: 1001;
+
+  font-size: 2rem;
+
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+
+  .text-wrapper {
+    width: 80%;
+    height: 80%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    text-align: left;
+    font-family: IBM Plex Sans;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 30px;
+
+    .info-card-title {
+      font-family: IBM Plex Sans;
+      font-style: normal;
+      font-weight: normal;
+      line-height: 30px;
+      font-weight: 400 !important;
+      font-size: 1.5rem;
+
+      margin-bottom: 10px;
+    }
+
+    p {
+      margin-bottom: 0;
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 0.99rem;
+      line-height: 24px;
+    }
+
+    .graident-text {
+      background: -webkit-linear-gradient(#6369f9, #b441d1);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  }
+}
+.graident-background {
+  background: linear-gradient(158.43deg, #6369f9 4.89%, #b441d1 83.82%);
+}
+@media screen and (max-width: 900px) {
+  .info-card {
+    max-height: 85px;
+    max-width: 30vw;
+
+    margin: 0 1.5vw;
+
+    display: flex;
+    align-items: space-between;
+
+    .text-wrapper {
+      line-height: 1;
+      .info-card-title {
+        font-family: IBM Plex Sans;
+        font-style: normal;
+        font-weight: 400 !important;
+        line-height: 1;
+        font-size: 1rem;
+
+        margin: 0;
+        margin-bottom: 10px;
+      }
+      p {
+        font-size: 0.75rem;
+        margin: 0;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 460px) {
+  .info-card {
+    max-height: 85px;
+    max-width: 40vw;
+
+    margin: 2px 2.5vw;
+
+    display: flex;
+    align-items: space-between;
+
+    .text-wrapper {
+      line-height: 13px;
+      .info-card-title {
+        font-family: IBM Plex Sans;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 1rem;
+        font-weight: 400 !important;
+
+        margin: 0;
+
+        z-index: 1004;
+      }
+      p {
+        font-size: 0.9rem;
+        line-height: 1rem;
+        margin: 0;
+      }
+    }
+  }
+  .graident-background {
+    min-width: 85vw;
+
+    .text-wrapper {
+      line-height: 1;
+      h1 {
+        font-size: 1.2rem;
+      }
+      p {
+        font-size: 0.85rem;
+      }
+    }
+  }
+}
