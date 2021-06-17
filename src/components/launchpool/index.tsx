@@ -268,7 +268,6 @@ const LaunchPool: FC<Props> = ({ id, account }: Props) => {
     if (!stakes) return
     if (!poolInfo) return
     if (!allowedTokens) return
-    if (err) return console.log(err.message)
     // In case of duplicated events
     if (parseInt(stakeEvent.returnValues[0]) < stakes.length) return
     const token = allowedTokens.find(
@@ -303,7 +302,6 @@ const LaunchPool: FC<Props> = ({ id, account }: Props) => {
     if (!stakes) return
     if (!poolInfo) return
     if (!allowedTokens) return
-    if (err) return console.log(err.message)
     if (stakes[parseInt(unstakeEvent.returnValues[0])].eq(new BN(0))) return
     setStakes((prevState) => {
       if (!prevState) return []
