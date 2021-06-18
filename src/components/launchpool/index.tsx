@@ -10,6 +10,8 @@ import LaunchPoolContract from '../../smart-contracts/LaunchPool'
 import ERC20Contract from '../../smart-contracts/OtocoToken'
 import '../style.scss'
 
+import Logo from '../logo/logo'
+
 import StakeDisplay from './stakeGraph/StakeDisplay/StakeDisplay'
 import TimerCard from './stakeGraph/TimerCard/TimerCard'
 
@@ -418,9 +420,9 @@ const LaunchPool: FC<Props> = ({ id, account }: Props) => {
   return (
     <div className="container-sm content container-sg">
       <Link className="btn btn-back btn-primary-outline btn-sm" to={`/`}>
-        <ChevronLeft></ChevronLeft>
-        <span style={{ paddingLeft: '10px' }}>Back</span>
+        <Logo />
       </Link>
+
       {!error && account && !loading && poolInfo && allowedTokens && (
         <StakeDisplay
           infos={poolInfo}
