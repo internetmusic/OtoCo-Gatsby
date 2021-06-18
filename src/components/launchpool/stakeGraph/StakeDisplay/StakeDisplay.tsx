@@ -88,6 +88,7 @@ const StakeDisplay: FC<Props> = ({
             })}`}
             infoText={`tokens currently pre-ordered by ${stakesCount} stakers`}
             useGraidentText={true}
+            infoLink={'URL for stats page goes here'}
           />
           <TimerCard
             startDate={infos.startTimestamp}
