@@ -101,20 +101,34 @@ const UnstakeWidget: FC<Props> = ({
               <table className="table table-hover mb-5">
                 <thead>
                   <tr>
-                    <th scope="col">Queue</th>
-                    <th scope="col" className="text-end d-none d-md-table-cell">
+                    <th scope="col" className={'table-header'}>
+                      Queue
+                    </th>
+                    <th
+                      scope="col"
+                      className="text-end d-none d-md-table-cell table-header"
+                    >
                       Amount
                     </th>
-                    <th scope="col" className="text-end d-none d-md-table-cell">
-                      Current Price
+                    <th
+                      scope="col"
+                      className="text-end d-none d-md-table-cell table-header"
+                    >
+                      Your Purchase Price
                     </th>
-                    <th scope="col" className="text-end d-none d-md-table-cell">
-                      Shares
+                    <th
+                      scope="col"
+                      className="text-end d-none d-md-table-cell table-header"
+                    >
+                      Number of Tokens
                     </th>
-                    <th scope="col" className="text-end d-table-cel d-md-none">
+                    <th
+                      scope="col"
+                      className="text-end d-table-cel d-md-none table-header"
+                    >
                       Info
                     </th>
-                    <th scope="col" className="text-end">
+                    <th scope="col" className="text-end table-header">
                       Unstake
                     </th>
                   </tr>
