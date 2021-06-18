@@ -102,14 +102,17 @@ const UnstakeWidget: FC<Props> = ({
                 <thead>
                   <tr>
                     <th scope="col">Queue</th>
-                    <th scope="col" className="text-end">
+                    <th scope="col" className="text-end d-none d-md-table-cell">
                       Amount
                     </th>
-                    <th scope="col" className="text-end">
+                    <th scope="col" className="text-end d-none d-md-table-cell">
                       Current Price
                     </th>
-                    <th scope="col" className="text-end">
+                    <th scope="col" className="text-end d-none d-md-table-cell">
                       Shares
+                    </th>
+                    <th scope="col" className="text-end d-table-cel d-md-none">
+                      Info
                     </th>
                     <th scope="col" className="text-end">
                       Unstake

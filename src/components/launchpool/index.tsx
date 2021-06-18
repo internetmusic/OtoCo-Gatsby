@@ -128,11 +128,13 @@ const LaunchPool: FC<Props> = ({ id, account }: Props) => {
   >()
   const [titleText, setTitleText] = useState<string>('')
 
-  const openStakeModal = () => {
+  const openStakeModal = async () => {
+    await refreshAccountStakes()
     setStakeModalOpen(true)
   }
 
-  const openUnstakeModal = () => {
+  const openUnstakeModal = async () => {
+    await refreshAccountStakes()
     setUnstakeModalOpen(true)
   }
 
