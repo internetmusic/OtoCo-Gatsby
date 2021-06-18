@@ -235,12 +235,9 @@ const StakeWidget: FC<Props> = ({
                     />
                     <div className="input-group-append">
                       <button
-                        className={
-                          'btn btn-primary ' +
-                          (transaction || error || !amountInput
-                            ? 'disabled'
-                            : '')
-                        }
+                        className={`btn btn-primary ${
+                          transaction || error || !amountInput ? 'disabled' : ''
+                        } payment-approve`}
                         onClick={handleApprove}
                       >
                         Approve

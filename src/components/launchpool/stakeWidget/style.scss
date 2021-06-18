@@ -25,6 +25,9 @@
 @media (max-width: 640px) {
   .modal-content {
     width: 80%;
+    .payment-approve {
+      min-width: 115px !important;
+    }
   }
 }
 
