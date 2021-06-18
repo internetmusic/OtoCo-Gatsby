@@ -106,10 +106,10 @@ const UnstakeWidget: FC<Props> = ({
                       Amount
                     </th>
                     <th scope="col" className="text-end d-none d-md-table-cell">
-                      Current Price
+                      Your Purchase Price
                     </th>
                     <th scope="col" className="text-end d-none d-md-table-cell">
-                      Shares
+                      Number of Tokens
                     </th>
                     <th scope="col" className="text-end d-table-cel d-md-none">
                       Info
