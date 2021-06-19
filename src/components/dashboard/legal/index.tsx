@@ -1,7 +1,6 @@
 import React, { Dispatch, FC, useState } from 'react'
 import { connect } from 'react-redux'
-import { PDFAssembler } from 'pdfassembler'
-import fileSaver from 'file-saver'
+import { PDFDocument, StandardFonts } from 'pdf-lib'
 import {
   SeriesType,
   ManagementActionTypes,
@@ -17,24 +16,13 @@ interface Props {
 const pdfs = {
   de: {
     agreement: require('../../../../static/pdfs/DOA_de.pdf'),
-    page1: require('../../../../static/pdfs/page1_de.pdf'),
-    page21: require('../../../../static/pdfs/page21_de.pdf'),
-    page22: require('../../../../static/pdfs/page22_de.pdf'),
   },
   wy: {
     agreement: require('../../../../static/pdfs/DOA_wy.pdf'),
-    page1: require('../../../../static/pdfs/page1_wy.pdf'),
-    page21: require('../../../../static/pdfs/page21_wy.pdf'),
-    page22: require('../../../../static/pdfs/page22_wy.pdf'),
   },
 }
 
-const SeriesDocuments: FC<Props> = ({
-  account,
-  network,
-  managing,
-  dispatch,
-}: Props) => {
+const SeriesDocuments: FC<Props> = ({ managing, dispatch }: Props) => {
   const toUnicode = (str: string) => {
     return str
       .split('')
@@ -54,75 +42,59 @@ const SeriesDocuments: FC<Props> = ({
       .replace(/[\u0300-\u036f]/g, '')
   }
 
+  function saveByteArray(reportName, byte) {
+    const blob = new Blob([byte], { type: 'application/pdf' })
+    const link = document.createElement('a')
+    link.href = window.URL.createObjectURL(blob)
+    const fileName = reportName
+    link.download = fileName
+    link.click()
+  }
+
   const exportPDF = async () => {
     if (!managing) return
     console.log(managing)
     const prefix = managing.jurisdiction.substring(0, 2).toLowerCase()
-    const blob = await fetch(pdfs[prefix].agreement).then((r) => r.blob())
-    let page1 = await fetch(pdfs[prefix].page1).then((r) => r.text())
-    let page21 = await fetch(pdfs[prefix].page21).then((r) => r.text())
-    let page22 = await fetch(pdfs[prefix].page22).then((r) => r.text())
-    // Replace texts on placeholders
-    if (prefix === 'de')
-      page1 = page1.replace(
-        '{SERIES}',
-        managing.name.length * 300 - 3000 + ' ( ' + removeSpecial(managing.name)
-      )
+    const existingPdfBytes = await fetch(pdfs[prefix].agreement).then((res) =>
+      res.arrayBuffer()
+    )
+    let seriesName = removeSpecial(managing.name)
     if (prefix === 'wy')
-      page1 = page1.replace(
-        'OTOCO WY LLC - {SERIES}',
-        managing.name.length * 300 -
-          3000 +
-          ' (OTOCO WY LLC - ' +
-          removeSpecial(managing.name)
+      seriesName = 'OTOCO WY LLC - ' + removeSpecial(managing.name)
+
+    const pdfDoc = await PDFDocument.load(existingPdfBytes)
+    const form = pdfDoc.getForm()
+    const TimesBold = await pdfDoc.embedFont(StandardFonts.TimesRomanBold)
+    const Times = await pdfDoc.embedFont(StandardFonts.TimesRoman)
+    form.getTextField('Series').setText(seriesName)
+    try {
+      form.getTextField('Address').setText(managing.contract)
+    } catch (err) {
+      console.log('Wyoming has no address field')
+    }
+    form
+      .getTextField('Date')
+      .setText(
+        managing.created.getUTCDate() +
+          '/' +
+          (managing.created.getUTCMonth() + 1) +
+          '/' +
+          managing.created.getUTCFullYear() +
+          ' ' +
+          managing.created.getUTCHours() +
+          ':' +
+          (managing.created.getUTCMinutes() < 10
+            ? '0' + managing.created.getUTCMinutes()
+            : managing.created.getUTCMinutes()) +
+          ' UTC'
       )
-    page1 = page1.replace(
-      '0xXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
-      managing.contract
-    )
-    page1 = page1.replace(
-      'DD/MM/YYYY',
-      managing.created.getUTCDate() +
-        '/' +
-        (managing.created.getUTCMonth() + 1) +
-        '/' +
-        managing.created.getUTCFullYear()
-    )
-    page1 = page1.replace(
-      'HH:MM',
-      managing.created.getUTCHours() +
-        ':' +
-        (managing.created.getUTCMinutes() < 10
-          ? '0' + managing.created.getUTCMinutes()
-          : managing.created.getUTCMinutes())
-    )
-    page21 = page21.replace(
-      '0xXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
-      managing.owner
-    )
-    page22 = page22.replace(
-      '0xXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
-      managing.owner
-    )
-    //console.log(page1)
-    // Create a new pdf based on Agreeement file
-    const newPdf = new PDFAssembler(blob)
-    newPdf.getPDFStructure().then(function (pdf) {
-      //console.log(pdf['/Root']['/Pages']['/Kids'][0]['/Contents']['stream'])
-      // console.log(pdf['/Root'])
-      // Replace agreement pages for new ones
-      // console.log(page1);
-      pdf['/Root']['/Pages']['/Kids'][0]['/Contents']['stream'] = page1
-      pdf['/Root']['/Pages']['/Kids'][20]['/Contents']['stream'] = page21
-      pdf['/Root']['/Pages']['/Kids'][21]['/Contents']['stream'] = page22
-      //Remove last page from Source file
-      pdf['/Root']['/Pages']['/Kids'].splice(-1)
-      newPdf
-        .assemblePdf('Series_Operating_Agreement.pdf')
-        .then(function (pdfFile) {
-          fileSaver.saveAs(pdfFile, 'Series_Operating_Agreement.pdf')
-        })
-    })
+    form.updateFieldAppearances(TimesBold)
+    form.getTextField('ByManager').setText('By ' + managing.owner + ', Manager')
+    form.getTextField('Owner').setText(managing.owner)
+    form.updateFieldAppearances(Times)
+    form.flatten()
+    const pdfBytes = await pdfDoc.save()
+    saveByteArray('Series_Operating_Agreement.pdf', pdfBytes)
   }
 
   return (
