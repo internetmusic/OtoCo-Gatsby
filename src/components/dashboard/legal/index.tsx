@@ -90,7 +90,7 @@ const SeriesDocuments: FC<Props> = ({ managing, dispatch }: Props) => {
       )
     form.updateFieldAppearances(TimesBold)
     form.getTextField('ByManager').setText('By ' + managing.owner + ', Manager')
-    form.getTextField('Owner').setText(managing.owner)
+    form.getTextField('Owner').setText('(' + managing.owner + ' - MEMBER)')
     form.updateFieldAppearances(Times)
     form.flatten()
     const pdfBytes = await pdfDoc.save()
